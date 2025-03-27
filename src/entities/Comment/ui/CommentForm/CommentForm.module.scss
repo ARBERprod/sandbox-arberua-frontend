@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  .area {
+    min-height: 145px;
+  }
+
+}
+
+.rating {
+  align-self: center;
+}

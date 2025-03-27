@@ -1,0 +1,15 @@
+.oldPrice {
+  text-decoration: line-through;
+
+  &.search {
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 400;
+  }
+}
+
+.title.search {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 400;
+}

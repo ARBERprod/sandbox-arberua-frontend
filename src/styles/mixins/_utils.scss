@@ -1,0 +1,67 @@
+$maxWidth: 1440;
+$containerWidth: 1375;
+
+
+@mixin square-size($size) {
+  width: $size;
+  min-width: $size;
+  height: $size;
+}
+
+@mixin rounded-centered() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+@mixin aspect-ratio-wrap($width, $height) {
+  height: 0;
+  position: relative;
+  padding-top: $height / $width * 100%;
+}
+
+@mixin aspect-ratio-image() {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+// If not working try to add min-width: 0; to some parent element;
+@mixin crop-text($max-width: 100%) {
+  white-space: nowrap;
+  max-width: #{$max-width};
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin cancel-crop-text() {
+  white-space: initial;
+  max-width: 100%;
+  text-overflow: initial;
+  overflow: initial;
+}
+
+@mixin adaptive-value($property, $startSize, $minSize) {
+  $addSize: $startSize - $minSize;
+  #{$property}: $startSize + px;
+
+  @media(max-width: #{$containerWidth + px}) {
+    #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 375px) / #{$containerWidth - 360}))
+  }
+}
+
+@mixin hover-mouse() {
+  &:hover {
+    @media (hover: hover) and (pointer: fine) {
+      @content;
+    }
+  }
+}
+
+._hidden {
+  display: none !important;
+}

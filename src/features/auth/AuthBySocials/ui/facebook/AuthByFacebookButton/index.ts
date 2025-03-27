@@ -1,0 +1,1 @@
+export { AuthByFacebookButton } from './AuthByFacebookButton';

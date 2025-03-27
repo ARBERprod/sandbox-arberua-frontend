@@ -1,0 +1,18 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  .button {
+    display: flex;
+    margin-bottom: 20px;
+    position: relative;
+    left: var(--main-menu-back-btn-offset);
+  }
+
+  .list {
+    padding-top: 22px;
+  }
+}
+.loader {
+  align-self: center;
+  overflow: hidden;
+}

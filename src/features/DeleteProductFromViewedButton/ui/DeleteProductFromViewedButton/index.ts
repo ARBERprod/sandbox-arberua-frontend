@@ -1,0 +1,1 @@
+export { DeleteProductFromViewedButton } from './DeleteProductFromViewedButton';

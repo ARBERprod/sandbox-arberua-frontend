@@ -1,0 +1,54 @@
+@import "@/styles/mixins/index";
+
+.root {
+  background-color: var(--white);
+  .wrapper {
+    position: relative;
+    flex-grow: 1;
+    background-color: var(--white);
+  }
+
+  .input-wrapper {
+    display: block;
+  }
+
+  .icon-wrapper {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
+
+    &-close {
+      right: 0;
+    }
+
+    &-search {
+      left: 0;
+    }
+  }
+}
+
+.voice {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 5px;
+  right: 32px;
+}
+
+.bg {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  width: calc(100vw - 9px);
+  height: calc(100vh - 45px);
+  background: rgba(0, 0, 0, .6);
+  z-index: 0;
+
+  @include breakpoint(tablet) {
+    display: block;
+    top: 60px;
+  }
+}

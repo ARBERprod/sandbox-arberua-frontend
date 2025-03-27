@@ -1,0 +1,22 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 28px 0 120px;
+
+  @include breakpoint(tablet) {
+    padding-bottom: 160px;
+  }
+
+  .title {
+    padding: 0 0 28px;
+
+    @include breakpoint(tablet) {
+      padding-top: 28px;
+    }
+  }
+
+  .inner {
+    width: 100%;
+    max-width: 840px;
+  }
+}

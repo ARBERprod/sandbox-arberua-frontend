@@ -1,0 +1,174 @@
+@import '@/styles/mixins';
+
+.root {
+
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+.sliders {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  background-color: #fff;
+  position: relative;
+  flex-direction: column-reverse;
+  height: 100%;
+  padding: 36px 0 12px 0;
+
+  @include breakpoint(desktop) {
+    flex-direction: row;
+    max-height: 720px;
+    padding: 0 12px;
+  }
+}
+
+.mainSlider {
+  max-width: 100vw;
+  max-height: 480px;
+  @include breakpoint(desktop) {
+    height: 100%;
+    margin-left: 0;
+    max-width: 565px;
+    max-height: 100%;
+  }
+}
+
+.mainSlide {
+  max-width: 100vw;
+  @include breakpoint(desktop) {
+    max-width: 565px;
+  }
+  height: 100%;
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+}
+
+.nav {
+  background-color: var(--grey-light-2);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  @include square-size(32px);
+  @include rounded-centered;
+  z-index: 1;
+
+  @include breakpoint(tablet) {
+    @include square-size(48px);
+  }
+}
+
+.navPrev {
+  left: 12px;
+}
+
+.navNext {
+  right: 12px;
+}
+
+.closeBtn {
+  top: 8px;
+  right: 8px;
+
+  @include breakpoint(tablet) {
+    top: 16px;
+    right: 16px;
+  }
+  position: absolute;
+  z-index: 1;
+}
+
+
+.thumbSlider {
+  max-height: 100%;
+  min-width: 0;
+  flex-shrink: 0;
+  @include breakpoint(tablet) {
+    padding: 16px 0;
+  }
+  @include breakpoint(desktop) {
+    margin-right: 0;
+  }
+
+  [class*=swiper-wrapper] {
+    padding: 1px;
+  }
+
+  [class*=swiper-slide] {
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 2px;
+    max-height: 125px;
+
+    max-width: 65px;
+    @include breakpoint(tablet) {
+      max-width: 100px;
+      min-height: 125px;
+
+    }
+  }
+
+  [class*=swiper-slide-thumb-active] {
+    .thumbSlide {
+      box-shadow: 0 0 0 1px var(--grey-dark);
+    }
+
+    .thumbSlide .backdrop {
+      display: none;
+    }
+  }
+}
+
+
+.thumbSlide {
+  max-width: 104px;
+  max-height: 129px;
+  height: 100%;
+  border-radius: 2px;
+  position: relative;
+
+  .backdrop {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+
+  img {
+    height: 100%;
+    max-width: 100%;
+    border-radius: 2px;
+    width: 100%;
+  }
+}
+
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, .45);
+}
+
+
+.activeSlideSpan {
+  position: fixed;
+  opacity: 0;
+}

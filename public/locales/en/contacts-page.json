@@ -1,0 +1,18 @@
+{
+  "contact.title": "Contacts",
+  "contact.tel.text": "Telephone:",
+  "contact.tel": "+38 0800 333 083",
+  "contact.mail.text": "Email:",
+  "contact.mail": "ecommerce@arber.ua",
+  "contact.schedule.text": "Work schedule:",
+  "contact.schedule": "Mon-Sun 09:00-19:00",
+  "contact.social.text": "Social networks:",
+  "contact.question": "Do you have any questions?",
+  "contact.form.text": "Name",
+  "contact.form.text1": "Enter a name",
+  "contact.form.text2": "Email",
+  "contact.form.text3": "Enter email",
+  "contact.form.text4": "Comment",
+  "contact.form.text5": "Enter a comment",
+  "contact.form.btn": "Send"
+}

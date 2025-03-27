@@ -1,0 +1,1 @@
+export { FaqTabList } from './FaqTabList';

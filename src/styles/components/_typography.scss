@@ -1,0 +1,109 @@
+@import '../mixins/media';
+
+.title-1 {
+  font-size: var(--title-1-font-size-mobile);
+  font-weight: var(--title-1-font-weight-mobile);
+  line-height: var(--title-1-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--title-1-font-size-desktop);
+    font-weight: var(--title-1-font-weight-desktop);
+    line-height: var(--title-1-line-height-desktop);
+  }
+}
+
+.title-2 {
+  font-size: var(--title-2-font-size-mobile);
+  font-weight: var(--title-2-font-weight-mobile);
+  line-height: var(--title-2-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--title-2-font-size-desktop);
+    font-weight: var(--title-2-font-weight-desktop);
+    line-height: var(--title-2-line-height-desktop);
+  }
+}
+
+.title-3 {
+  font-size: var(--title-3-font-size-mobile);
+  font-weight: var(--title-3-font-weight-mobile);
+  line-height: var(--title-3-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--title-3-font-size-desktop);
+    font-weight: var(--title-3-font-weight-desktop);
+    line-height: var(--title-3-line-height-desktop);
+  }
+}
+
+.title-4 {
+  font-size: var(--title-4-font-size-mobile);
+  font-weight: var(--title-4-font-weight-mobile);
+  line-height: var(--title-4-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--title-4-font-size-desktop);
+    font-weight: var(--title-4-font-weight-desktop);
+    line-height: var(--title-4-line-height-desktop);
+  }
+}
+
+.title-5 {
+  font-size: var(--title-5-font-size-mobile);
+  font-weight: var(--title-5-font-weight-mobile);
+  line-height: var(--title-5-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--title-5-font-size-desktop);
+    font-weight: var(--title-5-font-weight-desktop);
+    line-height: var(--title-5-line-height-desktop);
+  }
+}
+
+.title-6 {
+  font-size: var(--title-6-font-size-mobile);
+  font-weight: var(--title-6-font-weight-mobile);
+  line-height: var(--title-6-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--title-6-font-size-desktop);
+    font-weight: var(--title-6-font-weight-desktop);
+    line-height: var(--title-6-line-height-desktop);
+  }
+}
+
+.body-1 {
+  font-size: var(--body-1-font-size-mobile);
+  font-weight: var(--body-1-font-weight-mobile);
+  line-height: var(--body-1-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--body-1-font-size-desktop);
+    font-weight: var(--body-1-font-weight-desktop);
+    line-height: var(--body-1-line-height-desktop);
+  }
+}
+
+.body-2 {
+  font-size: var(--body-2-font-size-mobile);
+  font-weight: var(--body-2-font-weight-mobile);
+  line-height: var(--body-2-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--body-2-font-size-desktop);
+    font-weight: var(--body-2-font-weight-desktop);
+    line-height: var(--body-2-line-height-desktop);
+  }
+}
+
+.body-3 {
+  font-size: var(--body-3-font-size-mobile);
+  font-weight: var(--body-3-font-weight-mobile);
+  line-height: var(--body-3-line-height-mobile);
+
+  @include breakpoint(desktop) {
+    font-size: var(--body-3-font-size-desktop);
+    font-weight: var(--body-3-font-weight-desktop);
+    line-height: var(--body-3-line-height-desktop);
+  }
+}

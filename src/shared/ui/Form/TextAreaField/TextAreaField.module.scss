@@ -1,0 +1,26 @@
+@import "@/styles/mixins/index";
+
+.root {
+   &.error {
+      .textarea, .textarea:hover {
+         border-color: var(--red);
+      }
+   }
+  .textarea {
+    padding: 12px;
+    @include font(14px, var(--black));
+    width: 100%;
+    outline: none;
+    background: transparent;
+    @include form-field-border();
+    min-height: 92px;
+    resize: none;
+    transition: var(--transition-default);
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}

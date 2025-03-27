@@ -1,0 +1,1 @@
+export { VacancyView } from './VacancyView';

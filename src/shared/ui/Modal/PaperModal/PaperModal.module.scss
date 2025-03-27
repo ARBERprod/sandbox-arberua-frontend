@@ -1,0 +1,22 @@
+@import '@/styles/mixins';
+
+.root {
+  position: relative;
+  background-color: var(--white);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 16px 40px;
+  width: 100%;
+
+  @include breakpoint(desktop) {
+    padding-bottom: 60px;
+  }
+}
+
+.closeBtn {
+  top: 20px;
+  right: 20px;
+  position: absolute;
+  z-index: 1;
+}

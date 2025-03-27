@@ -1,0 +1,1 @@
+export { EditConsultation } from './EditConsultation';

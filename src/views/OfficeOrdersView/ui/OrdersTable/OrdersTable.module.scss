@@ -1,0 +1,14 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.filterSelect {
+  max-width: 250px;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  align-self: center;
+  margin-top: 40px;
+}

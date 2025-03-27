@@ -1,0 +1,52 @@
+@import "@/styles/mixins";
+
+.root {
+
+  @include container-indents-negative();
+
+  @include breakpoint(tablet) {
+  }
+
+  .slide {
+    position: relative;
+
+    &_inner {
+      position: relative;
+      height: 0;
+      padding-top: 89.33%;
+
+      @include breakpoint(tablet) {
+        padding-top: 45.13%;
+      }
+    }
+
+    .image {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 100%;
+      width: auto;
+
+      @include breakpoint(tablet) {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  .bullet {
+    background-color: var(--white);
+    opacity: 0.5;
+    margin: 0 3px !important;
+    cursor: pointer;
+
+    &[class*=swiper-pagination-bullet-active] {
+      opacity: 1;
+    }
+  }
+
+  [class*=swiper-pagination-bullets] {
+    bottom: 7px;
+  }
+}

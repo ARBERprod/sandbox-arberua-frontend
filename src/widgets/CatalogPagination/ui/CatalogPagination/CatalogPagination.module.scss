@@ -1,0 +1,21 @@
+@import '@/styles/mixins';
+
+.root {
+
+}
+
+.paginate {
+  margin-top: 16px;
+  @include breakpoint(tablet) {
+    margin-top: 20px;
+  }
+}
+
+
+.btn {
+  height: 42px;
+  width: 176px;
+  @include breakpoint(tablet) {
+    width: 158px;
+  }
+}

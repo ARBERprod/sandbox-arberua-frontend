@@ -1,0 +1,10 @@
+@import '@/styles/mixins';
+
+.root {
+  display: flex;
+  flex-direction: column;
+
+  @include breakpoint(desktop) {
+     border-top: 1px solid var(--grey-light);
+  }
+}

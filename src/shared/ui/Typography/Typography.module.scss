@@ -1,0 +1,35 @@
+@import '@/styles/components/typography';
+
+.root {
+  --color: var(--font-base-color);
+  color: var(--color);
+}
+
+.title-1 {
+  @extend .title-1;
+}
+.title-2 {
+  @extend .title-2;
+}
+.title-3 {
+  @extend .title-3;
+}
+.title-4 {
+  @extend .title-4;
+}
+.title-5 {
+  @extend .title-5;
+}
+.title-6 {
+  @extend .title-6;
+}
+
+.body-1 {
+  @extend .body-1;
+}
+.body-2 {
+  @extend .body-2;
+}
+.body-3 {
+  @extend .body-3;
+}

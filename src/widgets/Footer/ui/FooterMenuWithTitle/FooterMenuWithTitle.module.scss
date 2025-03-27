@@ -1,0 +1,23 @@
+@import "@/styles/mixins";
+
+.root {
+  .header {
+    padding: 19px 0 17px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    @include breakpoint(desktop) {
+      padding-top: 0;
+      padding-bottom: 12px;
+      cursor: auto;
+    }
+
+    .icon {
+      @include breakpoint(desktop) {
+        display: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.root {
+  --size: 40px;
+  background-color: var(--grey-light, transparent);
+  width: var(--size);
+  height: var(--size);
+  min-width: var(--size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @screen mobile {
+    --size: 48px;
+  }
+
+}

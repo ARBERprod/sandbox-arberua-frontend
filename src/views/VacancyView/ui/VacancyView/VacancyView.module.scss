@@ -1,0 +1,108 @@
+@import '@/styles/mixins';
+
+.root {
+  padding-top: 20px;
+  padding-bottom: 120px;
+
+  @include breakpoint(desktop) {
+    padding-top: 28px;
+    padding-bottom: 160px;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1224px;
+}
+
+.breadcrumps {
+  align-self: center;
+}
+
+.title {
+  align-self: center;
+  margin: 16px 0;
+  @include breakpoint(desktop) {
+    margin: 28px 0 20px;
+  }
+}
+
+.select {
+  align-self: center;
+  width: 100%;
+  max-width: 310px;
+}
+
+.left {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+
+  @include breakpoint(desktop) {
+    flex-direction: column;
+  }
+}
+
+.right {
+  flex: 1;
+  display: none;
+  @include breakpoint(desktop) {
+    display: block;
+  }
+}
+
+.info {
+  margin-bottom: 28px;
+  @include breakpoint(desktop) {
+    margin-bottom: 0;
+    margin-top: 40px;
+  }
+}
+
+.body {
+  margin-top: 16px;
+  @include breakpoint(desktop) {
+    margin-top: 32px;
+  }
+}
+
+.vacancyItem {
+  display: flex;
+  padding: 24px 12px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--grey-light);
+  width: 100%;
+}
+
+
+.desktopList {
+  display: none;
+  @include breakpoint(desktop) {
+    display: block;
+    border-top: 1px solid var(--grey-light);
+  }
+}
+
+.mobileList {
+  border-top: 1px solid var(--grey-light);
+  display: block;
+  @include breakpoint(desktop) {
+    display: none;
+  }
+}
+
+.text {
+  margin-bottom: 8px;
+  max-width: 450px;
+}
+
+.loader {
+  margin-top: 16px;
+  @include breakpoint(desktop) {
+    margin-top: 32px;
+  }
+  margin-right: auto;
+  margin-left: auto;
+}

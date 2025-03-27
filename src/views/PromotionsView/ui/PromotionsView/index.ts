@@ -1,0 +1,1 @@
+export { PromotionsView } from './PromotionsView';

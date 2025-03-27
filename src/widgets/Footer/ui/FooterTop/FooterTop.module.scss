@@ -1,0 +1,107 @@
+@import "@/styles/mixins";
+
+.root {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  padding: 24px 0 0;
+
+  @include breakpoint(desktop) {
+    flex-direction: row;
+    padding-top: 44px;
+  }
+
+  .item {
+    flex-grow: 1;
+    border-bottom: var(--border-delimiter-footer);
+
+    &.fifth {
+      border-bottom: none;
+    }
+
+    &.first {
+      order: 1;
+
+      @include breakpoint(desktop) {
+        order: 0;
+      }
+    }
+
+    &.fifth {
+      order: 2;
+      padding-bottom: 8px;
+      padding-top: 20px;
+
+      @include breakpoint(desktop) {
+        padding-top: 0;
+        max-width: 300px;
+        order: 0;
+      }
+    }
+
+    &.second {
+      order: 3;
+
+      @include breakpoint(desktop) {
+        order: 0;
+      }
+    }
+
+    &.third {
+      order: 4;
+
+      @include breakpoint(desktop) {
+        order: 0;
+      }
+    }
+
+    &.fourth {
+      order: 5;
+
+      @include breakpoint(desktop) {
+        padding-top: 33px;
+        order: 0;
+      }
+    }
+
+    @include breakpoint(desktop) {
+      padding-right: 10px;
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+  }
+
+  .logo {
+    margin: 0 auto 20px;
+    width: 115px;
+    height: 22px;
+
+    @include breakpoint(desktop) {
+      margin-bottom: 40px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    @include breakpoint(desktop) {
+      margin-bottom: 40px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .contacts {
+    padding: 0 0 10px;
+  }
+
+  .socials {
+    display: none;
+    padding: 0 0 25px;
+
+    @include breakpoint(desktop) {
+      display: flex;
+    }
+  }
+}

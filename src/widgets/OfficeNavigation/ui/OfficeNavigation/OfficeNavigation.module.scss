@@ -1,0 +1,33 @@
+.root {
+  background-color: var(--grey-light-9);
+  padding: 30px 0;
+  max-width: 100%;
+}
+
+.button {
+  white-space: nowrap;
+  &.current {
+    color: var(--white);
+    background-color: var(--black);
+  }
+  &:not(.current):hover {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--grey-dark);
+  }
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  max-width: 1110px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

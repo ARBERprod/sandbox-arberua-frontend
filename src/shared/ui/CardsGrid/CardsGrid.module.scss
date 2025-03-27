@@ -1,0 +1,73 @@
+@import '@/styles/mixins';
+
+.root {
+  display: flex;
+  flex-wrap: wrap;
+
+  .product {
+    width: 100%;
+  }
+
+  &.big {
+    row-gap: 28px;
+
+    @include breakpoint(tablet) {
+      row-gap: 48px;
+      margin-right: -8px;
+      margin-left: -8px;
+    }
+
+    .product {
+      max-width: 100%;
+
+      @include breakpoint(tablet) {
+        max-width: calc(100% / 3);
+        padding: 0 8px;
+      }
+    }
+  }
+
+  &.normal {
+    row-gap: 28px;
+    margin-right: -4px;
+    margin-left: -4px;
+
+    @include breakpoint(tablet) {
+      row-gap: 40px;
+      margin-right: -8px;
+      margin-left: -8px;
+    }
+
+    .product {
+      max-width: calc(100% / 2);
+      padding: 0 4px;
+
+      @include breakpoint(tablet) {
+        max-width: calc(100% / 4);
+        padding: 0 8px;
+      }
+    }
+  }
+
+  &.small {
+    row-gap: 4px;
+    margin-right: -2px;
+    margin-left: -2px;
+
+    @include breakpoint(tablet) {
+      row-gap: 10px;
+      margin-right: -5px;
+      margin-left: -5px;
+    }
+
+    .product {
+      max-width: calc(100% / 4);
+      padding: 0 2px;
+
+      @include breakpoint(tablet) {
+        max-width: calc(100% / 6);
+        padding: 0 5px;
+      }
+    }
+  }
+}

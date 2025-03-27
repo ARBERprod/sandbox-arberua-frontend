@@ -1,0 +1,1 @@
+export { ManLightTopSizesTable } from './ManLightTopSizesTable';

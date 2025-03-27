@@ -1,0 +1,1 @@
+export { EditConsultationSuccessModal } from './EditConsultationSuccessModal';

@@ -1,0 +1,13 @@
+.root {
+  .list {
+    padding: 10px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+
+  .item {
+    margin-bottom: 8px;
+  }
+}

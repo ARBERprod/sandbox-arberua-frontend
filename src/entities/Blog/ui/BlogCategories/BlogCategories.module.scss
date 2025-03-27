@@ -1,0 +1,34 @@
+@import '@/styles/mixins';
+
+.root {
+  margin-left: 0;
+  margin-right: 0;
+  max-width: 100%;
+}
+
+.btn {
+  @include crop-text();
+  height: 36px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 42px;
+  box-shadow: 0 0 0 1px var(--grey-light);
+  color: var(--grey-dark);
+  transition: .3s ease;
+
+
+  &.active,
+  &:hover {
+    box-shadow: 0 0 0 1px var(--grey-light-2);
+    background-color: var(--grey-light-2);
+    color: var(--black);
+  }
+}
+
+.slide {
+  max-width: fit-content;
+  height: fit-content;
+  padding: 2px;
+}

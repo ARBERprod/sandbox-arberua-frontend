@@ -1,0 +1,17 @@
+@import '@/styles/mixins';
+.btn {
+  max-width: 147px;
+  width: 100%;
+  white-space: nowrap;
+}
+.preorderBtn {
+  max-width: fit-content;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.smallView {
+  @include breakpoint(only-mobile) {
+    display: none;
+  }
+}

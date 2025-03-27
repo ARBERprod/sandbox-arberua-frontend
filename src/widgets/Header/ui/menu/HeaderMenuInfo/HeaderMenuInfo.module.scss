@@ -1,0 +1,8 @@
+.root {
+  .button {
+    display: flex;
+    margin-bottom: 34px;
+    position: relative;
+    left: var(--main-menu-back-btn-offset);
+  }
+}

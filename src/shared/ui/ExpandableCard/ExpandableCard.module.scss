@@ -1,0 +1,22 @@
+.root {
+  border-radius: 4px;
+  border: 1px solid var(--grey-light);
+  padding: 20px;
+  position: relative;
+  background-color: var(--white);
+  transition: background-color .3s ease;
+
+  &.expanded {
+    background-color: #fafafa;
+  }
+}
+
+.btn {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+}
+
+.expandedContent {
+  padding-top: 16px;
+}

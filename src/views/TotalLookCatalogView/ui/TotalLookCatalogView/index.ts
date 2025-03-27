@@ -1,0 +1,1 @@
+export { TotalLookCatalogView } from './TotalLookCatalogView';

@@ -1,0 +1,1 @@
+export { SeparatedTable } from './SeparatedTable';

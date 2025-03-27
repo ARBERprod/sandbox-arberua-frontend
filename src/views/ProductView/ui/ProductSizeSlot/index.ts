@@ -1,0 +1,1 @@
+export { ProductSizeSlot } from './ProductSizeSlot';

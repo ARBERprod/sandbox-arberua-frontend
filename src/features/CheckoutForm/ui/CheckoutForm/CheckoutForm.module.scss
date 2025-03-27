@@ -1,0 +1,16 @@
+@import '@/styles/mixins';
+.root {
+}
+
+
+.slot {
+  margin-top: 32px;
+}
+
+.button {
+  margin-top: 24px;
+  margin-bottom: 20px;
+  @include breakpoint(tablet) {
+    margin-top: 20px;
+  }
+}

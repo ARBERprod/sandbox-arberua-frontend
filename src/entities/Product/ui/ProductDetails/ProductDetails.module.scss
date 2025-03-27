@@ -1,0 +1,52 @@
+@import '@/styles/mixins';
+
+.root {}
+
+.title {
+  margin-bottom: 12px;
+  @include breakpoint(tablet) {
+    margin-bottom: 6px;
+  }
+}
+
+.article {
+  margin-bottom: 12px;
+  @include breakpoint(tablet) {
+    margin-bottom: 6px;
+  }
+}
+
+.priceInfo {
+  gap: 8px;
+  @include breakpoint(desktop) {
+    gap: 24px;
+  }
+}
+
+.priceAdditional {
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: var(--green-light);
+  display: flex;
+  gap: 16px;
+  white-space: nowrap;
+}
+.fw500 {
+  font-weight: 500;
+}
+
+.details {
+  margin-top: 44px;
+  @include breakpoint(desktop) {
+    margin-top: 52px;
+  }
+}
+
+.rating {
+  display: none;
+  margin-bottom: 16px;
+
+  @include breakpoint(tablet) {
+    display: flex;
+  }
+}

@@ -1,0 +1,1 @@
+export { BuyInOneClickButton } from './BuyInOneClickButton';

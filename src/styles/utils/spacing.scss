@@ -1,0 +1,36 @@
+$directions: ('t': top, 'b': bottom, 'l': left, 'r': right);
+
+
+@for $i from 1 through 15 {
+  .m-#{$i} {
+    margin: #{$i * 4 / 16}rem;
+  }
+  .p-#{$i} {
+    padding: #{$i * 4 / 16}rem;
+  }
+  .mx-#{$i} {
+    margin-left: #{$i * 4 / 16}rem;
+    margin-right: #{$i * 4 / 16}rem;
+  }
+  .px-#{$i} {
+    padding-left: #{$i * 4 / 16}rem;
+    padding-right: #{$i * 4 / 16}rem;
+  }
+
+  .my-#{$i} {
+    margin-top: #{$i * 4 / 16}rem;
+    margin-bottom: #{$i * 4 / 16}rem;
+  }
+  .py-#{$i} {
+    padding-top: #{$i * 4 / 16}rem;
+    padding-bottom: #{$i * 4 / 16}rem;
+  }
+  @each $directionName, $directionValue in $directions {
+    .m#{$directionName}-#{$i} {
+      margin-#{$directionValue}: #{$i * 4 / 16}rem;
+    }
+    .p#{$directionName}-#{$i} {
+      padding-#{$directionValue}: #{$i * 4 / 16}rem;
+    }
+  }
+}

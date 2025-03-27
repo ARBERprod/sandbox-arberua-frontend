@@ -1,0 +1,1 @@
+export { GalleryMobileSlider } from './GalleryMobileSlider';

@@ -1,0 +1,42 @@
+@import "@/styles/mixins";
+
+$item-height: 100px;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @include scrollbar();
+  overflow-y: auto;
+  overflow-x: visible;
+  max-height: calc(($item-height * 3) + (16px * 2));
+
+  @include breakpoint(tablet) {
+    gap: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    max-height: calc(($item-height * 3) + (20px * 2));
+    margin-bottom: 20px;
+  }
+
+  @media screen and (orientation: landscape) and (max-height :500px) {
+    max-height: calc(($item-height * 2) + (16px * 1));
+  }
+
+  .item {
+    width: 100%;
+    flex-grow: 1;
+
+    @include breakpoint(tablet) {
+      width: calc(50% - 10px);
+    }
+  }
+
+  .image {
+    width: 79px;
+    height: $item-height;
+  }
+}

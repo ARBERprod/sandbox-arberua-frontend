@@ -1,0 +1,53 @@
+@import '@/styles/mixins';
+
+.root {
+}
+
+.imageWrap {
+  position: relative;
+  @include aspect-ratio-wrap(680px, 370px);
+
+  &:hover {
+    .backdrop {
+      opacity: .2;
+    }
+  }
+}
+
+.image {
+  @include aspect-ratio-image;
+}
+
+.label {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 2px 6px;
+  min-width: 50px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 4px 2px 0;
+  background-color: var(--white);
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  background-color: var(--white);
+  z-index: 1;
+}

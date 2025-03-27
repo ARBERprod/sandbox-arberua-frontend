@@ -1,0 +1,41 @@
+@import "@/styles/mixins";
+
+.root {
+  background-color: #fff;
+  position: relative;
+  padding: 48px 16px 48px;
+
+  @include breakpoint(tablet) {
+    width: 100%;
+    max-width: 1064px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 76px 56px 62px;
+  }
+
+  .button {
+    width: 165px;
+  }
+
+  .title {
+    padding: 0 0 24px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 44px;
+    }
+  }
+
+  .subtitle {
+    padding: 0 0 20px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 24px;
+    }
+  }
+
+  .close_btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+}

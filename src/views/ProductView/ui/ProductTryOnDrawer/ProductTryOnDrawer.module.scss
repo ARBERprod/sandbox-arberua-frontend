@@ -1,0 +1,36 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 0 16px;
+
+  @include breakpoint(tablet) {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .header {
+    padding: 28px 60px 9px;
+    border-bottom: 1px solid var(--grey-light);
+
+    @include breakpoint(tablet) {
+      padding-top: 40px;
+      padding-bottom: 16px;
+    }
+  }
+
+  .text {
+    padding-top: 16px;
+
+    @include breakpoint(tablet) {
+      padding-top: 24px;
+    }
+  }
+
+  .actions {
+    padding-top: 12px;
+
+    @include breakpoint(tablet) {
+      padding-top: 0;
+    }
+  }
+}

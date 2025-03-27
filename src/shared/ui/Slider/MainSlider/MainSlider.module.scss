@@ -1,0 +1,99 @@
+@import '@/styles/mixins';
+
+.root {
+  position: relative;
+
+  .wrapper {
+    margin: 0 calc(var(--container-padding) * -1);
+    padding-bottom: 16px;
+
+    &.not_full_width_on_mobile {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    @include breakpoint(desktop) {
+      padding-bottom: 0;
+      margin: 0;
+    }
+  }
+
+  .navigation {
+    display: none;
+
+    @include breakpoint(desktop) {
+      display: block;
+    }
+    [class*=swiper-button-disabled] {
+      display: none;
+    }
+  }
+
+  [class*=swiper-button-disabled] .navBtn {
+    cursor: default;
+  }
+
+  [class*=swiper-scrollbar] {
+    @include breakpoint(desktop) {
+      display: none;
+    }
+
+    height: 4px;
+    background-color: var(--grey-light-2);
+    border-radius: 32px;
+    bottom: 0;
+
+    [class*=swiper-scrollbar-drag] {
+      background-color: var(--black);
+      border-radius: 32px;
+    }
+  }
+
+  .navBtn {
+    @include square-size(24px);
+    @include rounded-centered;
+    display: none;
+    background-color: var(--grey-light-2);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &_offset_top {
+      top: calc(50% - 26px)
+    }
+
+    @include breakpoint(desktop) {
+      display: flex;
+    }
+  }
+
+  .prevBtn {
+    left: -24px;
+
+    @include breakpoint(desktop) {
+      left: -26px;
+
+      &_wide {
+        left: -36px;
+      }
+    }
+  }
+
+  .nextBtn {
+    right: -24px;
+
+    @include breakpoint(desktop) {
+      right: -26px;
+
+      &_wide {
+        right: -36px;
+      }
+    }
+
+  }
+
+
+  .storySliderSlide {
+    max-width: min-content;
+  }
+}

@@ -1,0 +1,15 @@
+@import "@/styles/mixins";
+
+.root {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .card {
+    gap: 10px;
+
+    @include breakpoint(tablet) {
+      gap: 12px;
+    }
+  }
+}

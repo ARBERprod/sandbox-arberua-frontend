@@ -1,0 +1,68 @@
+@import "@/styles/mixins";
+
+.root {
+  position: absolute;
+  top: calc(100% - 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  right: 0;
+  background-color: var(--white);
+  width: 100vw;
+
+  @include breakpoint(tablet) {
+    min-width: 700px;
+    top: 100%;
+    width: 100%;
+  }
+
+  @include breakpoint(desktop) {
+    min-width: 900px;
+    transform: translateX(-70%);
+  }
+  .title {
+    text-transform: uppercase;
+    padding: 0 0 16px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 18px;
+    }
+  }
+
+  .inner {
+    display: flex;
+  }
+
+  .item {
+    padding: 16px 16px 28px;
+
+    @include breakpoint(tablet) {
+      padding: 20px 20px 24px;
+    }
+
+    &.first {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+
+    &.second {
+      background-color: var(--grey-light-2);
+      display: none;
+      flex-grow: 0;
+      flex-shrink: 0;
+      width: 250px;
+      padding: 20px;
+
+      @include breakpoint(tablet) {
+        display: block;
+      }
+    }
+  }
+
+  .products {
+    padding: 0 0 16px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 20px;
+    }
+  }
+}

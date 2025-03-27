@@ -1,0 +1,64 @@
+@import "@/styles/mixins";
+
+.root {
+
+  @include breakpoint(tablet) {
+    padding-top: 100px;
+  }
+
+  .title {
+    padding-bottom: 16px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 24px;
+    }
+  }
+
+  .inner {
+    max-width: 880px;
+    flex-grow: 1;
+
+    &.fullwidth {
+      max-width: 100%;
+    }
+  }
+
+  .item {
+    border: 1px solid var(--grey-light);
+    border-radius: 3px;
+    flex-grow: 1;
+    padding: 20px 12px;
+
+    &:hover {
+      background-color: var(--grey-light-2);
+    }
+
+    @include breakpoint(tablet) {
+      padding-top: 40px;
+      padding-bottom: 32px;
+    }
+
+    &_title {
+      padding-bottom: 16px;
+    }
+
+    &_subtitle {
+      padding-bottom: 16px;
+
+      @include breakpoint(tablet) {
+        padding-bottom: 22px;
+      }
+    }
+  }
+
+  .button {
+    flex-grow: 1;
+    max-width: 100%;
+    align-self: stretch;
+
+    @include breakpoint(tablet) {
+      width: 210px;
+      align-self: center;
+    }
+  }
+}

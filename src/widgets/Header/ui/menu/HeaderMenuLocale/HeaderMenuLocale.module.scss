@@ -1,0 +1,15 @@
+@import "@/styles/mixins";
+
+.root {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+
+  &.expanded {
+    border-color: var(--grey-light);
+    transition: var(--transition-border-appearing-menu);
+
+    @include breakpoint(tablet) {
+      border-color: transparent;
+    }
+  }
+}

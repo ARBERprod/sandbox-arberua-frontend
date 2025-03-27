@@ -1,0 +1,38 @@
+@import '@/styles/mixins/index';
+
+.root {
+  --slide-count: 3;
+
+}
+
+.product {
+  min-width: 175px;
+
+  &_primary {
+    min-width: 0;
+  }
+
+  @include breakpoint(tablet) {
+
+    &_primary {
+      min-width: 0;
+    }
+  }
+}
+
+.slide {
+  height: auto;
+  max-width: 175px;
+
+  &_primary {
+    max-width: none;
+  }
+
+  @include breakpoint(tablet) {
+    max-width: calc(100% / var(--slide-count) - 12px);
+
+    &_primary {
+      max-width: none;
+    }
+  }
+}

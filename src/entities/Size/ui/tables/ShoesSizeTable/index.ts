@@ -1,0 +1,1 @@
+export { ShoesSizeTable } from './ShoesSizeTable';

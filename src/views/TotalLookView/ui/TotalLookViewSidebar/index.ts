@@ -1,0 +1,1 @@
+export { TotalLookViewSidebar } from './TotalLookViewSidebar';

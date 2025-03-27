@@ -1,0 +1,63 @@
+@import "@/styles/mixins/index";
+
+.input {
+  position: absolute;
+  display: none;
+  height: 0;
+  width: 0;
+  appearance: none;
+}
+
+.wrap {
+  position: relative;
+}
+
+.label {
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  @include font(12px, var(--grey-dark));
+}
+
+.icon {
+  &_wrap {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--grey);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    transition: var(--transition-default);
+
+    .label:hover & {
+      border-color: var(--grey-dark);
+    }
+  }
+}
+
+.checkbox {
+  border-radius: 2px;
+}
+
+.radio {
+  border-radius: 50%;
+}
+
+.content {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 0 0 8px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin: 0 14px 0 6px;
+  border: 1px solid transparent;
+  flex-shrink: 0;
+
+  background-color: var(--color);
+  border-color: var(--border-color);
+}

@@ -1,0 +1,28 @@
+@import '@/styles/mixins';
+
+.root {
+  --size: 40px;
+  z-index: 1;
+
+  @include square-size(var(--size));
+  @include rounded-centered;
+  position: fixed;
+  box-shadow: 0 2px 4px rgba(32, 35, 39, 0.25);
+  bottom: 12px;
+  right: 12px;
+  background-color: var(--white);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+
+  @include breakpoint(desktop) {
+    --size: 36px;
+    bottom: 32px;
+    right: 32px;
+  }
+
+  &.visible {
+    opacity: 1;
+  }
+
+}

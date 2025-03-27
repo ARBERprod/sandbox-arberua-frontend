@@ -1,0 +1,11 @@
+@import "@/styles/mixins";
+
+
+.container {
+  width: 100%;
+  @include breakpoint(tablet) {
+    max-width: 342px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

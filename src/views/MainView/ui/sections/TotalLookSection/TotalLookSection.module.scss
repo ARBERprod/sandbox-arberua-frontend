@@ -1,0 +1,35 @@
+@import '@/styles/mixins';
+
+.root {
+  .manShadow {
+    right: -100px;
+
+    @include breakpoint(desktop) {
+      right: -145px;
+
+    }
+  }
+
+  .womanShadow {
+    left: -80px;
+
+    @include breakpoint(desktop) {
+      left: -100px;
+    }
+  }
+
+  .manWrap {
+    @include breakpoint(desktop) {
+      left: 80px;
+    }
+  }
+
+  .womanWrap {
+    @include breakpoint(desktop) {
+      left: -25px;
+    }
+  }
+
+}
+
+

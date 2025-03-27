@@ -1,0 +1,43 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 0 0 120px;
+
+  @include breakpoint(tablet) {
+    padding-bottom: 160px;
+  }
+
+  .display_actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 0;
+  }
+
+  .title {
+    text-align: center;
+    padding: 0 0 12px;
+
+    @include breakpoint(tablet) {
+      padding-top: 32px;
+    }
+  }
+
+  .subtitle {
+    text-align: center;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 12px;
+    }
+  }
+}
+
+.pagination {
+  align-self: center;
+  margin-top: 24px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,92 @@
+@import '@/styles/mixins';
+
+.root {
+  padding-top: 28px;
+  padding-bottom: 120px;
+
+  @include breakpoint(desktop) {
+    padding-bottom: 160px;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.breadcrumbs {
+  align-self: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  display: none;
+
+  @include breakpoint(desktop) {
+    display: block;
+  }
+
+  &.secondary {
+    display: block;
+
+    @include breakpoint(desktop) {
+      display: none;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 24px;
+
+  @include breakpoint(desktop) {
+    flex-direction: row;
+    gap: 60px;
+  }
+}
+
+.left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.right {
+  flex: 1;
+}
+
+.map_wrapper {
+  height: 335px;
+  margin-left: calc(var(--container-padding) * -1);
+  margin-right: calc(var(--container-padding) * -1);
+
+  @include breakpoint(desktop) {
+    margin-right: calc(var(--container-padding) * -1);
+    margin-left: 0;
+    position: sticky;
+    top: calc(var(--header-height) + 16px);
+    height: 0;
+    padding-top: 89.444444%;
+  }
+
+
+  .map {
+    @include breakpoint(desktop) {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+
+.paginate {
+  margin-top: 20px;
+  align-self: center;
+  min-width: 158px;
+
+  @include breakpoint(desktop) {
+    margin-top: 36px;
+  }
+}

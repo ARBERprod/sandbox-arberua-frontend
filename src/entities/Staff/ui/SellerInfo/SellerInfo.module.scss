@@ -1,0 +1,43 @@
+@import "@/styles/mixins";
+
+.root {
+  .title {
+    margin: 0 0 8px;
+  }
+
+  .subtitle {
+    margin: 0 0 8px;
+  }
+
+  .details {
+    margin: 0 0 14px;
+    @include underline-hover-animation(var(--black));
+  }
+
+  .image_wrap {
+    width: 100%;
+    max-width: 518px;
+    background-color: #ccc;
+
+    @include breakpoint(tablet) {
+      width: 518px;
+    }
+  }
+
+  .image_inner {
+    height: 0;
+    padding-top: 127.99%;
+    position: relative;
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    object-fit: cover;
+    overflow: hidden;
+  }
+}

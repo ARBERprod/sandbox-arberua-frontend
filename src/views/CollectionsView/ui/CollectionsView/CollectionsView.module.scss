@@ -1,0 +1,33 @@
+@import '@/styles/mixins';
+.root {
+  padding-top: calc(20px + 8 * ((100vw - 375px) / 1015));
+
+  .switcher {
+    display: flex;
+    justify-content: center;
+    padding: 0 0 24px;
+  }
+
+  .section {
+    &:nth-child(even) {
+      background-color: var(--grey-light-2);
+    }
+  }
+
+  .bc {
+    margin-bottom: 16px;
+  }
+
+  .title {
+    margin-bottom: 20px;
+  }
+}
+
+.pagination {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  @include breakpoint(tablet) {
+    margin-top: 60px;
+    margin-bottom: 60px;
+  }
+}

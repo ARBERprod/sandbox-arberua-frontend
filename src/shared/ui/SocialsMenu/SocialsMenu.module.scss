@@ -1,0 +1,17 @@
+@import "@/styles/mixins";
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+
+  .socials_item,
+  .socials_link {
+    @include font-footer();
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

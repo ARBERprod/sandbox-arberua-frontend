@@ -1,0 +1,73 @@
+@import "@/styles/mixins";
+
+.wrapper {
+  display: flex;
+
+  .map {
+    flex-grow: 1;
+    display: none;
+
+    @include breakpoint(tablet) {
+      display: block;
+    }
+  }
+
+  .root {
+    padding: 28px 16px 36px;
+    min-width: 375px;
+    width: auto;
+    flex-grow: 1;
+
+    @include breakpoint(desktop) {
+      padding: 28px 40px 30px;
+      width: 510px;
+    }
+
+    .header {
+      text-align: center;
+      border-bottom: 1px solid var(--grey-light);
+      padding: 0 0 9px;
+      margin-bottom: 24px;
+
+      @include breakpoint(tablet) {
+        text-align: left;
+        padding-bottom: 25px;
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+    }
+
+    .qty {
+      border-bottom: 1px solid var(--grey-light);
+      padding: 24px 0 20px;
+
+      @include breakpoint(tablet) {
+        padding-bottom: 18px;
+      }
+    }
+
+    .list{
+      @include breakpoint(tablet){
+      max-height: 400px;
+      @include scrollbar();
+      overflow-y: auto;
+    }
+      }
+    .item:not(:last-child) {
+      border-bottom: 1px solid var(--grey-light);
+    }
+
+    .acc_item:not(:last-child) {
+      border-bottom: 1px solid var(--grey-light);
+    }
+
+    .item_header {
+      padding-top: 20px;
+    }
+
+    .warning {
+      padding-bottom: 6px;
+      padding-top: 12px;
+    }
+  }
+}

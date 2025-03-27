@@ -1,0 +1,18 @@
+.root {
+  width: var(--width);
+  height: var(--height);
+  &.stroke path {
+    stroke: var(--stroke);
+  }
+  &.fill path {
+    fill: var(--fill);
+  }
+
+}
+
+.storySvg {
+  path {
+    stroke: #6dc768;
+    fill: mediumvioletred;
+  }
+}

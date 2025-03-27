@@ -1,0 +1,83 @@
+@import "@/styles/mixins";
+
+
+.root {
+
+  &.opened {
+    .wrap {
+      display: block;
+    }
+  }
+
+  &.centered {
+    .wrap {
+      text-align: center;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 100%;
+        vertical-align: middle;
+        text-align: center;
+      }
+
+      @include breakpoint(only-mobile) {
+        &.fullScreenMobile {
+          &::before {
+            display: none;
+          }
+        }
+
+        .fullScreenMobileInner {
+          padding: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .modal {
+      display: inline-block;
+      vertical-align: middle;
+      text-align: start;
+    }
+  }
+
+  .modal {
+    margin: 0 auto;
+    padding: 24px 0;
+    position: relative;
+    max-width: 100vw;
+  }
+
+  .mask {
+    position: fixed;
+    top: 0;
+    inset-inline-end: 0;
+    bottom: 0;
+    inset-inline-start: 0;
+    z-index: var(--z-modal);
+    height: 100%;
+    background-color: rgba(0, 0, 0, .45);
+  }
+
+  .wrap {
+    position: fixed;
+    top: 0;
+    inset-inline-end: 0;
+    inset-inline-start: 0;
+    overflow: auto;
+    bottom: 0;
+    outline: 0;
+    z-index: var(--z-modal);
+    display: none;
+  }
+
+  .focusCatcher {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    outline: none;
+  }
+}

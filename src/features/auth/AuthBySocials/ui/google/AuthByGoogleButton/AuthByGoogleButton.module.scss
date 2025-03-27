@@ -1,0 +1,9 @@
+@import '@/styles/mixins';
+.root {}
+
+.iconBtn {
+  cursor: pointer;
+  @include rounded-centered;
+  @include square-size(40px);
+  background-color: var(--grey-light-2);
+}

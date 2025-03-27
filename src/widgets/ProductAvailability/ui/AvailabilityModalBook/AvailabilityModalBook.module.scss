@@ -1,0 +1,35 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 28px 16px 36px;
+  min-width: 375px;
+  width: auto;
+
+  @include breakpoint(desktop) {
+    padding: 28px 40px 30px;
+    width: 510px;
+  }
+
+  .header {
+    text-align: center;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 0 0 9px;
+    position: relative;
+
+    @include breakpoint(tablet) {
+      text-align: left;
+      padding-bottom: 25px;
+      border-bottom: none;
+    }
+  }
+
+  .backBtn {
+    position: absolute;
+    top: -15px;
+    left: 0;
+  }
+
+  .inner {
+    padding-top: 24px;
+  }
+}

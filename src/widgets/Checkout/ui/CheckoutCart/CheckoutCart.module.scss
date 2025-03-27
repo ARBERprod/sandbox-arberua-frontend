@@ -1,0 +1,48 @@
+@import '@/styles/mixins/index';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 12px 16px;
+  background: var(--grey-light-11);
+
+  @include breakpoint(desktop) {
+    padding: 20px 28px 24px;
+  }
+
+  @include breakpoint(tablet) {
+    min-height: 700px;
+  }
+
+  .control {
+    background-color: var(--white);
+  }
+
+}
+
+.body {
+  flex-grow: 1;
+  margin-top: 16px;
+
+  @include breakpoint(desktop) {
+    margin-top: 28px;
+  }
+}
+
+.label {
+  white-space: nowrap;
+}
+
+.footer {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+.list {
+  max-height: 258px;
+  overflow-y: auto;
+  @include scrollbar;
+}

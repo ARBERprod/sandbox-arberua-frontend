@@ -1,0 +1,17 @@
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    .svg {
+      path {
+        fill: var(--grey-dark-2);
+      }
+    }
+  }
+
+  .qty {
+    padding: 0 6px 0 0;
+  }
+}

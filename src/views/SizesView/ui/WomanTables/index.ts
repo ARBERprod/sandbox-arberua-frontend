@@ -1,0 +1,1 @@
+export { WomanTables } from './WomanTables';

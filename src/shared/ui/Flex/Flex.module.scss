@@ -1,0 +1,65 @@
+@import '@/styles/mixins';
+
+$align: ('start': flex-start, 'end': flex-end, 'center': center, 'stretch': stretch, 'baseline': baseline);
+$justify: ('start': flex-start, 'end': flex-end, 'center': center, 'between': space-between, 'around': space-around);
+$direction: ('row': row, 'column': column, 'row-reverse': row-reverse, 'column-reverse': column-reverse);
+$gaps: 0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 28, 30, 32, 36, 40, 48;
+
+@each $gap in $gaps {
+  .gap#{$gap} {
+    gap: #{$gap}px;
+  }
+}
+
+@each $align-prop, $align-value in $align {
+  .align-#{$align-prop} {
+    align-items: $align-value;
+  }
+}
+
+@each $justify-prop, $justify-value in $justify {
+  .justify-#{$justify-prop} {
+    justify-content: $justify-value;
+  }
+}
+
+@each $direction-prop, $direction-value in $direction {
+  .direction-#{$direction-prop} {
+    flex-direction: $direction-value;
+  }
+}
+
+
+@each $bpName, $bpValue in $breakpoints {
+
+  @each $align-prop, $align-value in $align {
+    .#{$bpName}-align-#{$align-prop} {
+      @include breakpoint($bpName) {
+        align-items: $align-value;
+      }
+    }
+  }
+  @each $justify-prop, $justify-value in $justify {
+    .#{$bpName}-justify-#{$justify-prop} {
+      @include breakpoint($bpName) {
+        justify-content: $justify-value;
+      }
+    }
+  }
+  @each $direction-prop, $direction-value in $direction {
+    .#{$bpName}-direction-#{$direction-prop} {
+      @include breakpoint($bpName) {
+        flex-direction: $direction-value;
+      }
+    }
+  }
+}
+
+.root {
+  display: flex;
+}
+
+
+.fullWidth {
+  width: 100%;
+}

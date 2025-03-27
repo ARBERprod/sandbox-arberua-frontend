@@ -1,0 +1,1 @@
+export { SizesTableProxy } from './SizesTableProxy';

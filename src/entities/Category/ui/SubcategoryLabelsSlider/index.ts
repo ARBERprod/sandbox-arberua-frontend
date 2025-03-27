@@ -1,0 +1,1 @@
+export { SubcategoryLabelsSlider } from './SubcategoryLabelsSlider';

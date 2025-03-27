@@ -1,0 +1,1 @@
+export { EditConsultationTrigger } from './EditConsultationTrigger';

@@ -1,0 +1,49 @@
+@import "@/styles/mixins";
+
+.root {
+  width: 100%;
+
+  .header {
+    padding-bottom: 24px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 12px;
+    }
+  }
+
+  .header_inner {
+    flex-wrap: wrap;
+
+    @include breakpoint(tablet) {
+      flex-wrap: nowrap;
+    }
+  }
+
+  .title {
+    width: 100%;
+
+    @include breakpoint(tablet) {
+      width: auto;
+    }
+  }
+
+  .button {
+    margin-right: auto;
+    margin-top: 20px;
+
+    @include breakpoint(tablet) {
+      margin-top: 0;
+      margin-right: 0;
+    }
+
+    min-width: 148px;
+  }
+
+  .content {
+    margin-left: -76px;
+
+    @include breakpoint(tablet) {
+      margin-left: 0;
+    }
+  }
+}

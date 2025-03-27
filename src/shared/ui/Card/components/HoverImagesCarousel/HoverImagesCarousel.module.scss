@@ -1,0 +1,57 @@
+.root {
+  width: 100%;
+  height: 100%;
+
+  [class*=swiper-pagination-bullets] {
+    width: 100%;
+    display: flex;
+    bottom: 0;
+    top: 0;
+    z-index: 1;
+    position: absolute;
+  }
+}
+
+.slide {
+  height: auto;
+
+  img {
+    object-fit: cover;
+    object-position:top;
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.bullet {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  display: block;
+  width: 20%;
+  z-index: 1;
+
+  &[class*=swiper-pagination-bullet-active] {
+    .runner {
+      opacity: 1;
+    }
+  }
+
+  .runner {
+    opacity: 0;
+    position: absolute;
+    width: calc(100% - 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    height: 3px;
+    bottom: 1px;
+    background: var(--white);
+    z-index: 1;
+    transition: opacity .1s ease-in-out;
+  }
+}
+
+.slider {
+  height: 100%;
+}

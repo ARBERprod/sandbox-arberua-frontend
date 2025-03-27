@@ -1,0 +1,17 @@
+.root {
+  max-width: 390px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container {
+  margin-top: 24px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+}

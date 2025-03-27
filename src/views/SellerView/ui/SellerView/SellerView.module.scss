@@ -1,0 +1,30 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 16px 0 120px;
+
+  @include breakpoint(desktop) {
+    padding-bottom: 160px;
+    padding-top: 32px;
+  }
+
+  .container {
+    max-width: 976px;
+  }
+
+  .info {
+    padding: 0 0 60px;
+
+    @include breakpoint(desktop) {
+      padding-bottom: 100px;
+    }
+  }
+
+  .consultations {
+    padding: 0 0 60px;
+
+    @include breakpoint(desktop) {
+      padding-bottom: 96px;
+    }
+  }
+}

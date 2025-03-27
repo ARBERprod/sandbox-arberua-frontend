@@ -1,0 +1,15 @@
+.root {
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--grey-light);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+
+.arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}

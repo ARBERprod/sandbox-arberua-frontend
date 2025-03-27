@@ -1,0 +1,1 @@
+export { AboutBannerWithContentSection } from './AboutBannerWithContentSection';

@@ -1,0 +1,1 @@
+export { ConsultationsReviewTable } from './ConsultationsReviewTable';

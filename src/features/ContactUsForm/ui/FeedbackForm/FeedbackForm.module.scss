@@ -1,0 +1,38 @@
+@import "@/styles/mixins";
+
+.root {
+
+  .title {
+    padding: 0 0 16px;
+    text-align: center;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 20px;
+      text-align: left;
+    }
+  }
+
+  .subtitle {
+    padding: 0 0 24px;
+  }
+
+  .input {
+    margin: 0 0 16px;
+  }
+
+  .control {
+    height: 42px;
+
+    @include breakpoint(tablet) {
+      height: 46px;
+    }
+  }
+
+  .control_textarea {
+    height: 92px;
+  }
+
+  .button {
+    margin: 14px 0 0;
+  }
+}

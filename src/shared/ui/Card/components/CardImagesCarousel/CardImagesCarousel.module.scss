@@ -1,0 +1,15 @@
+@import '@/styles/mixins';
+
+.desktop {
+  display: none;
+
+  @include breakpoint(tablet) {
+    display: block;
+  }
+}
+
+.mobile {
+  @include breakpoint(tablet) {
+    display: none;
+  }
+}

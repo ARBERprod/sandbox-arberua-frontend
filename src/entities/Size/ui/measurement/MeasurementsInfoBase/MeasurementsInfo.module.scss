@@ -1,0 +1,15 @@
+@import '@/styles/mixins/index';
+.root {}
+
+.letter {
+  @include rounded-centered;
+  @include square-size(28px);
+  background-color: var(--grey-dark);
+}
+
+.title {
+  margin-bottom: 24px;
+  @include breakpoint(desktop) {
+    margin-bottom: 40px;
+  }
+}

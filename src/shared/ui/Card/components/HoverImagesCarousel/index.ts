@@ -1,0 +1,1 @@
+export { HoverImagesCarousel } from './HoverImagesCarousel';

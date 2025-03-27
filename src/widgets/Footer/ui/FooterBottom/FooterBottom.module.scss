@@ -1,0 +1,41 @@
+@import "@/styles/mixins";
+
+.root {
+  // height: 67px;
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--grey-light-7);
+
+    &_primary {
+      height: 54px;
+    }
+
+    &_secondary {
+      height: 64px;
+      border-top: none;
+
+      @include breakpoint(desktop) {
+        display: none;
+      }
+    }
+  }
+
+  .socials {
+    padding-left: 9px;
+  }
+
+  .copy {
+    @include font(12px, var(--black), 300);
+  }
+
+  .buttons_secondary {
+    display: none;
+
+    @include breakpoint(desktop) {
+      display: flex;
+    }
+  }
+}

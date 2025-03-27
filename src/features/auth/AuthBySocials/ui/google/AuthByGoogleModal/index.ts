@@ -1,0 +1,1 @@
+export { AuthByGoogleModal } from './AuthByGoogleModal';

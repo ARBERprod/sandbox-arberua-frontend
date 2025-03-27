@@ -1,0 +1,30 @@
+@import './colors';
+@import './typography';
+@import './common';
+@import './z-index';
+
+:root {
+  --transition-default: all .3s ease;
+  --rc-slider-width: 14px;
+  --header-height: 60px;
+  --header-left-right-items-indent: 18px;
+  --header-left-right-items-indent-sm: 14px;
+  --header-menu-btn-width: 24px;
+  --header-menu-btn-indent: calc(var(--header-menu-btn-width) + var(--header-left-right-items-indent));
+  --border-delimiter-footer: 1px solid var(--grey-light);
+  --transition-menu-duration: .7s;
+  --transition-menu-layout-delay: 0s;
+  --transition-menu-duration-desktop: .3s;
+  --transition-menu-icons-delay-desktop: .3s;
+  --transition-border-appearing-menu: border-color .1s ease var(--transition-menu-duration);
+  --menu-width: 300px;
+  --socials-height: 80px;
+  --locale-height: 54px;
+  --menu-padding-left: 32px;
+  --menu-padding-right: 44px;
+  --categorySlideWidth: 160px;
+  --categorySlideWidthMobile: 110px;
+  --subcategories-right-indent: 126px;
+  --subcategories-right-indent-desktop: 154px;
+  --main-menu-back-btn-offset: -10px;
+}

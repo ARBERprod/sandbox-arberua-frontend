@@ -1,0 +1,47 @@
+@import '@/styles/mixins';
+
+.root {
+  border-radius: 3px;
+  padding: 16px 10px 24px;
+  display: flex;
+  flex-direction: column;
+  background-color: #F6F6F6;
+
+  @include breakpoint(desktop) {
+    padding: 32px 36px 36px;
+  }
+}
+
+
+.subtitle {
+  margin-top: 0;
+  margin-bottom: 12px;
+  @include breakpoint(desktop) {
+    margin-top: 24px;
+  }
+}
+
+.responsibilities {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.disc {
+  background-color: var(--black);
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  border-radius: 50%;
+}
+
+.item {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}

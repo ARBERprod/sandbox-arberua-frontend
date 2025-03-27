@@ -1,0 +1,113 @@
+@mixin container-indents() {
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+
+  @include breakpoint (tablet) {
+    --container-padding: var(--container-padding-tablet);
+  }
+
+  @include breakpoint (desktop) {
+    --container-padding: var(--container-padding-desktop);
+  }
+
+  @include breakpoint (wide-desktop) {
+    --container-padding: var(--container-padding-desktop-wide);
+  }
+}
+
+@mixin container-indents-negative() {
+  margin-left: calc(var(--container-padding) * -1);
+  margin-right: calc(var(--container-padding) * -1);
+
+  @include breakpoint (tablet) {
+    margin-left: calc(var(--container-padding-tablet) * -1);
+    margin-right: calc(var(--container-padding-tablet) * -1);
+  }
+
+  @include breakpoint (desktop) {
+    margin-left: calc(var(--container-padding-desktop) * -1);
+    margin-right: calc(var(--container-padding-desktop) * -1);
+  }
+
+  @include breakpoint (wide-desktop) {
+    margin-left: calc(var(--container-padding-desktop-wide) * -1);
+    margin-right: calc(var(--container-padding-desktop-wide) * -1);
+  }
+}
+
+@mixin form-field-border() {
+  border: 1px solid var(--grey-light);
+  backdrop-filter: blur(2px);
+  border-radius: 1px;
+
+  &:hover {
+    border-color: var(--grey-light-6);
+  }
+}
+
+@mixin font($fontSize: 16px,
+  $fontColor: var(--grey-dark),
+  $fontWeight: 400,
+  $fontFamily: var(--font-base),
+  $fontStyle: normal,
+  $lineHeight: var(--font-line-height-base)) {
+  font-size: $fontSize;
+  color: $fontColor;
+  font-weight: $fontWeight;
+  font-family: $fontFamily;
+  font-style: $fontStyle;
+  line-height: $lineHeight;
+}
+
+@mixin font-footer() {
+  @include font(13px, var(--black), 300);
+}
+
+@mixin font-footer-secondary() {
+  @include font(14px, var(--black), 300);
+}
+
+@mixin font-footer-title() {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+@mixin scrollbar() {
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--grey-light-2);
+    border-radius: 32px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--black);
+    border-radius: 32px;
+  }
+}
+
+@mixin underline-hover-animation($color: var(--black)) {
+  position: relative;
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: transparent;
+    transition: var(--transition-default);
+  }
+
+  &:hover {
+    &:before {
+      background-color: $color;
+    }
+  }
+}

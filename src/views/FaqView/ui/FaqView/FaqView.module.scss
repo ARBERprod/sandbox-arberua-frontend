@@ -1,0 +1,36 @@
+@import "@/styles/mixins";
+
+.root {
+  padding-bottom: 96px;
+
+  @include breakpoint(tablet) {
+    padding-bottom: 160px;
+  }
+
+  .bc {
+    padding: 20px 0 0;
+
+    @include breakpoint(tablet) {
+      padding-top: 28px;
+    }
+  }
+
+  .title {
+    padding: 16px 0 28px;
+
+    @include breakpoint(tablet) {
+      padding-top: 28px;
+      padding-bottom: 35px;
+    }
+  }
+
+  .form {
+    margin-top: 68px;
+    width: 100%;
+    max-width: 680px;
+
+    @include breakpoint(tablet) {
+      margin-top: 100px;
+    }
+  }
+}

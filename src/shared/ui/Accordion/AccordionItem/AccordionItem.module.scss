@@ -1,0 +1,18 @@
+@import '@/styles/mixins';
+
+.root {
+  padding: 16px 6px;
+  width: 100%;
+  border-bottom: 1px solid var(--grey-light);
+
+}
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.content {
+  margin-top: 16px;
+}

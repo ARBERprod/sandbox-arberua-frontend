@@ -1,0 +1,33 @@
+@import "@/styles/mixins";
+
+.overlay {
+}
+
+.closeBtn {
+  position: absolute;
+  right: 22px;
+  top: 18px;
+}
+.title {
+  text-align: center;
+  margin-bottom: 33px;
+}
+.subtitle {
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 16px;
+}
+
+.btn {
+  max-width: 342px;
+  width: 100%;
+  height: 48px;
+  margin: 0 auto;
+}
+.wrapper {
+  padding: 28px;
+  display: block;
+}
+

@@ -1,0 +1,47 @@
+@import "@/styles/mixins";
+
+.root {}
+
+.hoverFooter {
+  .top {
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    background-color: transparent;
+  }
+
+  .bottom {
+    padding: 16px 14px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+
+    &.hide {
+      display: none;
+    }
+  }
+}
+
+.remove_button {
+  &:hover {
+    .remove_svg {
+      path {
+        fill: var(--grey-dark-2);
+      }
+    }
+  }
+}
+
+.card {
+  &.hasHover {
+    @include hover-mouse {
+      .primaryImage {
+        opacity: 0;
+      }
+      .hoverImage {
+        opacity: 1;
+      }
+    }
+  }
+}

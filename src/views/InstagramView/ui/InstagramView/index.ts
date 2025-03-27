@@ -1,0 +1,1 @@
+export { InstagramView } from './InstagramView';

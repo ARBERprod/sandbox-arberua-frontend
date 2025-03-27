@@ -1,0 +1,19 @@
+@import "@/styles/mixins";
+
+.root {
+  .contacts_item {
+    margin: 0 0 12px;
+    text-align: center;
+
+    @include breakpoint(desktop) {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+  }
+
+  .contacts_item,
+  .contacts_link {
+    @include font-footer-secondary();
+    text-decoration: none;
+  }
+}

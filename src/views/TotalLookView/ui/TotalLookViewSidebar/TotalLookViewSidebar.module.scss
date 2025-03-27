@@ -1,0 +1,40 @@
+@import '@/styles/mixins';
+
+.root {
+  .title {
+    padding: 0 0 8px;
+  }
+
+  .info {
+    padding: 20px 0 16px;
+
+    &_qty {
+      color: var(--grey-dark);
+      padding: 0 0 0 8px;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  @include breakpoint(desktop) {
+    gap: 8px;
+    flex-direction: row;
+  }
+}
+
+.subactions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  @include breakpoint(desktop) {
+    gap: 8px;
+  }
+}
+
+.btn {
+  min-width: 143px;
+}

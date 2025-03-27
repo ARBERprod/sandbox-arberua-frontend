@@ -1,0 +1,1 @@
+export { OfficeDataItemText } from './OfficeDataItemText';

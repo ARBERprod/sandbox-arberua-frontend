@@ -1,0 +1,1 @@
+export { ClothesGrid } from './ClothesGrid';

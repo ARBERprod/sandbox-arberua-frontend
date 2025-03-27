@@ -1,0 +1,77 @@
+@import '@/styles/mixins/index';
+
+.control {
+  border: 1px solid var(--grey-light) !important;
+  border-color:  var(--grey-light) !important;
+  border-radius: 1px !important;
+  height: 42px !important;
+  position: relative !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  &:hover {
+    border-color: var(--grey-light-6) !important;
+  }
+
+  &.focused {
+    border: 1px solid var(--grey-light) !important;
+    border-color: var(--grey-light) !important;
+    box-shadow: none !important;
+  }
+  &.error {
+    border: 1px solid var(--red) !important;
+  }
+  &.disabled {
+    background-color: var(--grey-light-2) !important;
+  }
+}
+
+.menu {
+  margin-top: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  z-index: theme('zIndex.dropdown') !important;
+  box-shadow: none !important;
+  border: 1px solid  hsla(0, 0%, 0%, 0.1);
+  border-top: none !important;
+}
+
+.menuList {
+  @include scrollbar;
+}
+
+
+.indicatorSeparator {
+  display: none !important;
+}
+
+
+
+.option {
+  color: var(--black) !important;
+  font-size: 16px !important;
+  font-family: var(--font-base) !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &.selected {
+    background-color: transparent !important;
+  }
+
+  &:hover,
+  &.focused,
+  &:active,
+  &:focus {
+    background-color: var(--grey-light) !important;
+  }
+}
+
+.placeholder {
+  color: var(--grey-dark-3) !important;
+  font-family: var(--font-base) !important;
+  font-size: 14px !important;
+}
+
+.label {
+  margin-bottom: 4px;
+}

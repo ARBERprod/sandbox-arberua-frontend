@@ -1,0 +1,1 @@
+export { PageControlFactory } from './PageControlFactory';

@@ -1,0 +1,14 @@
+.root {
+  margin-bottom: 20px;
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .description {
+    margin-bottom: 12px;
+  }
+}

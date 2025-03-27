@@ -1,0 +1,35 @@
+@import '@/styles/mixins';
+
+.root {
+
+
+}
+.page {
+  overflow-x: hidden;
+  padding-bottom: 120px;
+}
+
+.news {
+  @include adaptive-value(margin-top, 85, 40);
+}
+
+.collection {
+  @include adaptive-value(margin-top, 80, 60);
+}
+.populars {
+  @include adaptive-value(margin-top, 84, 60);
+
+}
+.about {
+  @include adaptive-value(margin-top, 80, 60);
+}
+.sales {
+  @include adaptive-value(margin-top, 86, 60);
+}
+.look {
+  @include adaptive-value(margin-top, 86, 60);
+}
+.feedback {
+  @include adaptive-value(margin-top, 92, 60);
+
+}

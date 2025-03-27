@@ -1,0 +1,1 @@
+export { AuthProposal } from './AuthProposal';

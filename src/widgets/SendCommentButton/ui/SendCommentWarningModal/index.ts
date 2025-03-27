@@ -1,0 +1,1 @@
+export { SendCommentWarningModal } from './SendCommentWarningModal';

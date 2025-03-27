@@ -1,0 +1,15 @@
+.root {}
+
+.form {
+  width: 100%;
+  align-self: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+}

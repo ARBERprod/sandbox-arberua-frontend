@@ -1,0 +1,1 @@
+export { RecoverPasswordSuccessModal } from './RecoverPasswordSuccessModal';

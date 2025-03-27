@@ -1,0 +1,1 @@
+export { RatedComment } from './RatedComment';

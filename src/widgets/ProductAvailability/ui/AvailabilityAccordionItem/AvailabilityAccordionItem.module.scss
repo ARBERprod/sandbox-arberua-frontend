@@ -1,0 +1,18 @@
+@import "@/styles/mixins";
+
+.root {
+  .item_content_header {
+    margin-bottom: 16px;
+    margin-top: 16px;
+    cursor: pointer;
+
+    @include breakpoint(tablet) {
+      margin-bottom: 12px;
+      margin-top: 12px;
+    }
+  }
+
+  .show {
+    cursor: pointer;
+  }
+}

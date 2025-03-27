@@ -1,0 +1,1 @@
+export { SingleTotalLookCard } from './SingleTotalLookCard';

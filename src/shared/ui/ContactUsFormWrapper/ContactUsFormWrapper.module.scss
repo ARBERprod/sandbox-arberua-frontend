@@ -1,0 +1,97 @@
+@import "@/styles/mixins";
+
+.root {
+  @include breakpoint(tablet) {
+    border: 1px solid var(--grey-light);
+    padding: 20px 0;
+  }
+
+  &.reverse {
+    padding-bottom: 30px;
+  }
+
+  &.grey {
+    @include breakpoint(tablet) {
+      background-color: var(--grey-light-10);
+    }
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+
+    @include breakpoint(tablet) {
+      flex-wrap: nowrap;
+    }
+
+    &.secondary {
+      @include breakpoint(only-mobile) {
+        .item:first-child {
+          padding-bottom: 30px;
+        }
+      }
+
+      @include breakpoint(tablet) {
+        .item:first-child {
+          padding-left: 36px;
+          padding-right: 48px;
+          padding-top: 0;
+          padding-bottom: 0;
+        }
+      }
+
+      @include breakpoint(tablet) {
+        .item:nth-child(2) {
+          padding-bottom: 0;
+          padding-top: 14px;
+        }
+      }
+    }
+  }
+
+  .title {
+    padding: 12px 36px 28px;
+    text-align: center;
+
+    &.secondary {
+      padding-bottom: 16px;
+
+      @include breakpoint(only-mobile) {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      @include breakpoint(tablet) {
+        padding-bottom: 28px;
+      }
+    }
+  }
+
+  .item {
+    width: 100%;
+    max-width: 100%;
+    flex-grow: 0;
+
+    @include breakpoint(tablet) {
+      width: 50%;
+      max-width: 50%;
+      padding: 18px 50px 30px;
+    }
+
+    &:first-child {
+      @include breakpoint(only-mobile) {
+        padding-bottom: 54px;
+      }
+
+      @include breakpoint(tablet) {
+        padding-left: 58px;
+      }
+    }
+
+    &:nth-child(2) {
+      @include breakpoint(tablet) {
+        border-left: 1px solid var(--grey-light);
+      }
+    }
+  }
+}

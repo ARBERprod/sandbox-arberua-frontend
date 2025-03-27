@@ -1,0 +1,1 @@
+export { AdditionalHeightTable } from './AdditionalHeightTable';

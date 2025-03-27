@@ -1,0 +1,28 @@
+@import '@/styles/mixins';
+.root {
+  position: relative;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  @include scrollbar;
+}
+
+
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.price {
+  font-weight: 500;
+}
+.divider {
+  margin-bottom: 10px;
+  margin-left: -12px;
+  width: var(--cart-width);
+}

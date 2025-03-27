@@ -1,0 +1,1 @@
+export { AuthBySocials } from './AuthBySocials';

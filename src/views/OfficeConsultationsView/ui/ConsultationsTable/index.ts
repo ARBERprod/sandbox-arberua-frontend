@@ -1,0 +1,1 @@
+export { ConsultationsTable } from './ConsultationsTable';

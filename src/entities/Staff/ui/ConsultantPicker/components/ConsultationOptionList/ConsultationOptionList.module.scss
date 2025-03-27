@@ -1,0 +1,13 @@
+@import "@/styles/mixins/index";
+
+.root {
+  max-height: 307px;
+  overflow-y: auto;
+  @include scrollbar();
+  margin: 8px 0;
+  padding: 0 24px;
+
+  @include breakpoint(tablet) {
+    max-height: 337px;
+  }
+}

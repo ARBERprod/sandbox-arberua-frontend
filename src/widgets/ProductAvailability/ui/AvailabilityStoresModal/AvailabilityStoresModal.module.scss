@@ -1,0 +1,30 @@
+@import "@/styles/mixins";
+
+.root {
+  max-width: 375px !important;
+
+  @include breakpoint(tablet) {
+    max-width: 750px !important;
+  }
+
+  @include breakpoint(desktop) {
+    max-width: 1020px !important;
+  }
+
+  .inner {
+    background-color: var(--white);
+    display: flex;
+    position: relative;
+  }
+
+  .close_btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 1;
+  }
+
+  .item {
+    flex-grow: 1;
+  }
+}

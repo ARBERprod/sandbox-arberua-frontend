@@ -1,0 +1,66 @@
+@import "@/styles/mixins/index";
+
+.textfield {
+  padding: 12px;
+  @include font(14px, var(--black));
+  width: 100%;
+  outline: none;
+  background: transparent;
+  @include form-field-border();
+  transition: var(--transition-default);
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.root {
+  .label {}
+
+  .control {
+    height: 42px;
+    width: 100%;
+    padding-right: 12px;
+    display: flex;
+    align-items: stretch;
+    @include form-field-border();
+    background: transparent;
+    transition: var(--transition-default);
+    gap: 8px;
+
+    &.big {
+      height: 48px;
+    }
+  }
+
+  .input {
+    outline: none;
+    width: 100%;
+    padding: 12px 0 12px 12px;
+    background: transparent;
+    @include font(14px, var(--black));
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  .error {}
+
+  .action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  &.error {
+    .control {
+      border-color: var(--red);
+    }
+  }
+}

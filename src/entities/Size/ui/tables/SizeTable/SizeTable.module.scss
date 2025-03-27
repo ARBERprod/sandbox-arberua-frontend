@@ -1,0 +1,14 @@
+@import '@/styles/mixins/index';
+
+.root {}
+
+.table {
+  @include breakpoint(only-mobile) {
+    margin-right: calc(var(--container-padding) * -1);
+    margin-left: calc(var(--container-padding) * -1);
+  }
+
+  table {
+    table-layout: fixed;
+  }
+}

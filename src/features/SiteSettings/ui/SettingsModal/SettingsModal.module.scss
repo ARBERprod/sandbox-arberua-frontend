@@ -1,0 +1,57 @@
+@import "@/styles/mixins";
+
+.root {
+  background-color: #fff;
+  position: relative;
+
+  @include breakpoint(tablet) {
+    width: 100%;
+    max-width: 1064px;
+    margin-right: auto;
+    margin-left: auto;
+
+    &.has_no_image {
+      max-width: 532px;
+    }
+  }
+
+  .close_btn {
+    position: absolute;
+    right: 22px;
+    top: 18px;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+
+    @include breakpoint(tablet) {
+      flex-wrap: nowrap;
+      flex-direction: row;
+    }
+  }
+
+  .image {
+    display: none;
+
+    @include breakpoint(tablet) {
+      display: block;
+      flex-grow: 1;
+      width: 50%;
+      max-width: 50%;
+    }
+  }
+
+  .form_wrap {
+    @include breakpoint(tablet) {
+      flex-grow: 1;
+      width: 50%;
+      max-width: 50%;
+
+      &.has_no_image {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+}

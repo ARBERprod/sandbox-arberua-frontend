@@ -1,0 +1,14 @@
+@import '@/styles/mixins';
+
+.color {
+  @include square-size(16px);
+  border-radius: 50%;
+  background-color: var(--color);
+  transition: box-shadow .3s ease;
+
+  &.active {
+    box-shadow: 0 0 0 0.5px #5c5c5c, 0 0 0 2px var(--white), 0 0 0 2.5px #5c5c5c;
+  }
+}
+
+

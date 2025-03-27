@@ -1,0 +1,1 @@
+export { AuthBySocialsModals } from './AuthBySocialsModals';

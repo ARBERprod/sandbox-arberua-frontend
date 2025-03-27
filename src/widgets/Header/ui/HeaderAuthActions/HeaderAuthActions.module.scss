@@ -1,0 +1,44 @@
+@import "@/styles/mixins";
+
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  &_item {
+    margin: 0 0 0 var(--header-left-right-items-indent-sm);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    @include breakpoint(tablet) {
+      margin-left: var(--header-left-right-items-indent);
+    }
+  }
+
+  .button {
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    width: 24px;
+    height: 24px;
+  }
+
+  .label {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(30%, -30%);
+  }
+}

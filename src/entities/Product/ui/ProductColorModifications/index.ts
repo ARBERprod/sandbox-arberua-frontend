@@ -1,0 +1,1 @@
+export { ProductColorModifications } from './ProductColorModifications';

@@ -1,0 +1,63 @@
+@import "@/styles/mixins/index";
+
+.searchInput {
+  width: 100%;
+  outline: none;
+  background: transparent;
+  transition: var(--transition-default);
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+    font-size: 14px;
+    border-bottom: 1px solid var(--grey);
+    padding: 4px 26px 4px 40px;
+
+    &:hover,
+    &:not(:placeholder-shown) {
+      border-bottom: 1px solid var(--grey-dark);
+    }
+}
+
+.wrapper {
+  position: relative;
+}
+
+.input-wrapper {
+  display: block;
+}
+
+.field {
+  &.lightColor {
+    border-bottom-color: var(--grey);
+  }
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  cursor: pointer;
+
+  &-close {
+    right: 0;
+  }
+
+  &-search {
+    left: 0;
+  }
+}

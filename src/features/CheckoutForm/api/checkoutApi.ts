@@ -1,0 +1,88 @@
+import { rtkApi } from '@/shared/api/rtkApi';
+import { checkoutOptionsMapper } from '../lib/checkoutOptionsMapper';
+import { RadioOption } from '@/shared/ui/Form/RadioField';
+import {
+  CheckoutDto,
+  CheckoutResponseDto,
+  DeliveryMethod,
+  DeliveryMethodsDto, LiqPayFormDto,
+  PaymentMethodsDto,
+  Warehouse,
+  WarehousesDto,
+  WayForPayFormDto,
+  XPayFormDto,
+} from './types';
+import { SuccessApiResponse } from '@/shared/types/api';
+
+const checkoutApi = rtkApi.injectEndpoints({
+  overrideExisting: true,
+  endpoints: (build) => ({
+    getPaymentMethods: build.query<RadioOption[], void>({
+      query: () => ({
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/payment-methods`,
+      }),
+      transformResponse: (response: PaymentMethodsDto) => response.data.map(
+        checkoutOptionsMapper.mapPaymentMethodToOptions,
+      ),
+    }),
+    getDeliveryMethods: build.query<DeliveryMethod[], void>({
+      query: () => ({
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/delivery-methods`,
+      }),
+      transformResponse: (response: DeliveryMethodsDto) => response.data,
+    }),
+    getWarehouses: build.query<Warehouse[], { type?: string; city_id?: string }>({
+      query: ({
+        type,
+        city_id,
+      }) => ({
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/warehouses`,
+        params: {
+          type,
+          is_city_id: city_id,
+        },
+      }),
+      transformResponse: (response: WarehousesDto) => response.data,
+    }),
+    checkout: build.mutation<CheckoutResponseDto, CheckoutDto>({
+      query: (body) => ({
+        method: 'POST',
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/orders`,
+        body,
+      }),
+      transformResponse: (response: SuccessApiResponse<CheckoutResponseDto>) => response.data,
+    }),
+    getWayForPayForm: build.query<string, { orderId: string }>({
+      query: ({ orderId }) => ({
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/payment-process/${orderId}/wayforpay`,
+      }),
+      transformResponse: (response: WayForPayFormDto) => response.data,
+    }),
+    getLiqPayForm: build.query<string, { orderId: string }>({
+      query: ({ orderId }) => ({
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/payment-process/${orderId}/liqpay`,
+      }),
+      transformResponse: (response: LiqPayFormDto) => response.data,
+    }),
+    getXPayForm: build.query<string, { orderId: string }>({
+      query: ({ orderId }) => ({
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/payment-process/${orderId}/xpay`,
+      }),
+      transformResponse: (response: XPayFormDto) => response.data,
+    }),
+  }),
+});
+
+export const {
+  endpoints: {
+    checkout,
+    getLiqPayForm,
+    getWayForPayForm,
+    getXPayForm,
+  },
+  useCheckoutMutation,
+  useGetDeliveryMethodsQuery,
+  useGetPaymentMethodsQuery,
+  useGetWarehousesQuery,
+
+} = checkoutApi;

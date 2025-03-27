@@ -1,0 +1,30 @@
+@import '@/styles/mixins';
+
+.root {
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.head {
+  background-color: var(--white);
+  position: relative;
+  padding: 20px 16px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.closeBtn {
+  top: 20px;
+  right: 20px;
+  position: absolute;
+  z-index: 1;
+}
+
+.map {
+  height: min(75vh, 420px);
+  @include breakpoint(desktop) {
+    height: 445px;
+  }
+}

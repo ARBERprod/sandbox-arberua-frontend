@@ -1,0 +1,28 @@
+@import '@/styles/mixins';
+
+.root {
+  .input {
+    outline: none;
+    width: 100%;
+    background: transparent;
+    @include font(14px, var(--black));
+    @include form-field-border();
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    transition: var(--transition-default);
+    gap: 8px;
+  }
+
+  &.error {
+    .input, .input:hover {
+      border-color: var(--red);
+    }
+  }
+}

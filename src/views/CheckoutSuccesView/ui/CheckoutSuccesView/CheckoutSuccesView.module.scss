@@ -1,0 +1,133 @@
+@import '@/styles/mixins';
+
+.root {
+  @include adaptive-value(padding-bottom, 200, 160);
+  @include adaptive-value(padding-top, 40, 32);
+
+  .title {
+    padding-top: 24px;
+
+    @include breakpoint(desktop) {
+      padding-top: 28px;
+    }
+  }
+
+  .title_sum {
+    @include breakpoint(mobile-tablet) {
+      margin-bottom: 0;
+    }
+  }
+
+  .text {
+    padding-top: 28px;
+
+    @include breakpoint(desktop) {
+      padding-top: 26px;
+    }
+  }
+
+  .icon {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+    @include breakpoint(desktop) {
+      flex-wrap: nowrap;
+      gap: 16px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .btn {
+    min-width: 267px;
+    margin-top: 28px;
+    width: 100%;
+    display: none;
+
+    @include breakpoint(desktop) {
+      width: auto;
+      display: block;
+    }
+
+    &.secondary {
+      display: block;
+      margin-top: 32px;
+
+      @include breakpoint(desktop) {
+        display: none;
+      }
+    }
+  }
+
+  .link {
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  .items {
+    flex-wrap: wrap;
+    gap: 28px;
+
+    @include breakpoint(desktop) {
+      flex-wrap: nowrap;
+      gap: 16px;
+    }
+  }
+
+  .text_secondary {
+    @include breakpoint(mobile-tablet) {
+      justify-content: center;
+    }
+  }
+
+  .item {
+    width: 100%;
+
+    @include breakpoint(desktop) {
+      width: auto;
+    }
+
+    &.primary {
+      flex-grow: 1;
+
+      @include breakpoint(mobile-tablet) {
+        text-align: center;
+      }
+    }
+
+    &.secondary {
+      flex-grow: 0;
+      flex-shrink: 0;
+      width: 100%;
+
+      @include breakpoint(desktop) {
+        width: 385px;
+      }
+
+      .item_inner {
+        padding: 12px 12px 20px;
+        background: var(--grey-light-11);
+
+        @include breakpoint(desktop) {
+          padding: 20px 28px;
+        }
+      }
+
+      .listItem {
+        padding: 16px 0;
+        border-bottom: 1px solid var(--grey-light);
+        gap: 16px;
+      }
+    }
+
+    .footer {
+      padding: 16px 0 0;
+    }
+  }
+
+  .container {
+    max-width: calc(855px + var(--container-padding) * 2);
+  }
+
+}

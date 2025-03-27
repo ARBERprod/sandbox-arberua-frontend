@@ -1,0 +1,1 @@
+export { ConsultantsPlaceholder } from './ConsultantsPlaceholder';

@@ -1,0 +1,56 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 40px 16px;
+
+  @include breakpoint(tablet) {
+    padding-bottom: 80px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  @include breakpoint(desktop) {
+    padding-left: 114px;
+    padding-right: 114px;
+  }
+
+  .logo {
+    width: 139px;
+    height: 27px;
+
+    &_wrap {
+      padding: 0 0 32px;
+
+      @include breakpoint(tablet) {
+        padding-bottom: 54px;
+      }
+    }
+  }
+
+  .title {
+    padding: 0 0 20px;
+    text-align: center;
+  }
+
+  .row {
+    padding: 0 0 16px;
+    gap: 14px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 24px;
+      gap: 16px;
+    }
+
+    &.secondary {
+      display: flex;
+    }
+
+    &:last-child {
+      padding-top: 4px;
+    }
+  }
+
+  .field {
+    flex-grow: 1;
+  }
+}

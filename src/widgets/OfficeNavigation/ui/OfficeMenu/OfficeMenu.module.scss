@@ -1,0 +1,17 @@
+.root {
+  width: 100%;
+}
+
+.list {
+  width: 100%;
+}
+
+.button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 32px;
+  background-color: var(--grey-light-2);
+  border-radius: 4px;
+}

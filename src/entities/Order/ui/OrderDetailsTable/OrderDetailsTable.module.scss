@@ -1,0 +1,74 @@
+@import '@/styles/mixins';
+.root {
+  width: 100%;
+  overflow-x: auto;
+}
+
+
+.statusCircle {
+  @include square-size(8px);
+  @include rounded-centered;
+}
+.bold {
+  font-weight: 500;
+}
+.left {
+  text-align: left;
+}
+.table {
+  width: 100%;
+  overflow: hidden;
+
+  .thead {
+    .tr {
+
+      .th {
+        padding-bottom: 32px;
+      }
+    }
+  }
+  .tbody {
+    .tr {
+
+      .td {
+        vertical-align: middle;
+        border-bottom: 1px solid var(--grey-light);
+        padding: 20px 0;
+        .tdWrap {
+        }
+      }
+    }
+  }
+  .tfoot {
+    tr {
+      &:first-child {
+        td {
+          padding-top: 20px;
+        }
+      }
+
+      &:last-child {
+        td {
+          padding-top: 8px;
+        }
+      }
+
+      td {
+        padding-bottom: 12px;
+      }
+    }
+  }
+}
+
+.paddedTd {
+  padding-left: 12px;
+  padding-right: 8px;
+}
+
+.productTd {
+  padding-bottom: 8px;
+}
+
+.btn {
+  max-width: 160px;
+}

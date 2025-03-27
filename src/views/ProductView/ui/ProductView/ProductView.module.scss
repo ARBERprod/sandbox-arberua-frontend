@@ -1,0 +1,26 @@
+@import '@/styles/mixins';
+.root {
+  @include adaptive-value(padding-top, 28, 20);
+  padding-bottom: 120px;
+  overflow-x: hidden;
+}
+
+.slider {
+  @include adaptive-value(margin-top, 125, 80);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.breadcrumps {
+  align-self: center;
+}
+
+.card {
+  margin-top: 20px;
+  @include breakpoint(tablet) {
+    margin-top: 30px;
+  }
+}

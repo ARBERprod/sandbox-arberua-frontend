@@ -1,0 +1,1 @@
+export { SettingsImage } from './SettingsImage';

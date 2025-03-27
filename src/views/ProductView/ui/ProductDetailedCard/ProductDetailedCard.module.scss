@@ -1,0 +1,46 @@
+@import '@/styles/mixins';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  @include adaptive-value(gap, 40, 16);
+
+  @include breakpoint(tablet) {
+    flex-direction: row;
+  }
+}
+
+.left {
+  flex: 1;
+  @include breakpoint(tablet) {
+    flex: 7;
+  }
+}
+.right {
+  flex: 1;
+  @include breakpoint(tablet) {
+    flex: 4;
+  }
+  max-width: 35%;
+  @media (max-width: 768px) {
+    max-width: none;
+  }
+}
+
+.color {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  @include breakpoint(tablet) {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+}
+
+.description {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+}

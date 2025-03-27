@@ -1,0 +1,26 @@
+@import '../mixins';
+@import "../variables/breakpoints";
+
+.hide-desktop {
+  @include breakpoint(desktop) {
+    display: none !important;
+  }
+}
+
+.hide-tablet-desktop {
+  @include breakpoint(tablet) {
+    display: none !important;
+  }
+}
+
+.hide-mobile-tablet {
+  @include breakpoint(mobile-tablet) {
+    display: none !important;
+  }
+}
+
+.hide-mobile {
+  @include breakpoint(only-mobile) {
+    display: none !important;
+  }
+}

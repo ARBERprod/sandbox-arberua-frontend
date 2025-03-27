@@ -1,0 +1,41 @@
+@import '@/styles/mixins';
+.root {
+  position: relative;
+  background-color: var(--white);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 16px 50px;
+  width: 100%;
+  gap: 24px;
+
+
+  .closeBtn {
+    top: 20px;
+    right: 20px;
+    position: absolute;
+  }
+
+}
+
+.title {
+  max-width: 370px;
+  align-self: center;
+}
+
+.text {
+  max-width: 370px;
+  align-self: center;
+}
+
+.icon {
+  align-self: center;
+  @include rounded-centered;
+  @include square-size(52px);
+  background-color: var(--grey-light-2);
+}
+
+.btn {
+  align-self: center;
+  min-width: 165px;
+}

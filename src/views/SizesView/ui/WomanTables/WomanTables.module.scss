@@ -1,0 +1,11 @@
+@import '@/styles/mixins';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+
+  @include breakpoint(desktop) {
+    gap: 60px;
+  }
+}

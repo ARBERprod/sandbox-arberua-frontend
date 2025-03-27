@@ -1,0 +1,16 @@
+@import '@/styles/mixins';
+
+.root {
+  @include breakpoint(desktop) {
+    width: 400px;
+  }
+  [class*=Toastify__toast-icon] {
+    width: unset;
+    margin-right: 8px;
+  }
+}
+
+
+.toast {
+  padding: 16px;
+}

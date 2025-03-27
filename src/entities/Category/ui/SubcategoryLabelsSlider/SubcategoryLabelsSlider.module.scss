@@ -1,0 +1,38 @@
+@import "@/styles/mixins";
+
+.root {
+  position: relative;
+
+  .header {
+    position: absolute;
+    right: calc(var(--subcategories-right-indent) * -1);
+    top: -36px;
+
+    @include breakpoint(tablet) {
+      display: none;
+    }
+  }
+
+  .navigation {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  .nav_btn {
+    background-color: var(--grey-light-2);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin: 0 8px 0 0;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .slide {
+    max-width: fit-content;
+  }
+}

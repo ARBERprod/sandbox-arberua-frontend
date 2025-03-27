@@ -1,0 +1,2 @@
+export const HISTORY_ITEMS_LINE_HEIGHT = 20;
+export const HISTORY_CONTAINER_GAP = 16;

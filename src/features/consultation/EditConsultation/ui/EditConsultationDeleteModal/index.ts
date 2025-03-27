@@ -1,0 +1,1 @@
+export { EditConsultationDeleteModal } from './EditConsultationDeleteModal';

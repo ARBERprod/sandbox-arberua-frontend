@@ -1,0 +1,33 @@
+@import '@/styles/mixins';
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+
+  @include breakpoint(only-mobile) {
+
+    width: 100%;
+
+    li[class*=rc-pagination-prev],
+    li[class*=rc-pagination-next] {
+      flex-grow: 1;
+
+      button, a {
+        display: flex;
+      }
+    }
+
+    li[class*=rc-pagination-prev] {
+      button, a {
+        justify-content: flex-start;
+      }
+    }
+    li[class*=rc-pagination-next] {
+      button, a {
+        justify-content: flex-end;
+      }
+    }
+  }
+}

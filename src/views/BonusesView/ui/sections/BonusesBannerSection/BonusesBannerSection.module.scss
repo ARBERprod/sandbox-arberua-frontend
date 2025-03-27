@@ -1,0 +1,30 @@
+@import '@/styles/mixins';
+.root {
+  .banner {
+    display: block;
+    width: 100%;
+    height: auto;
+
+    &.desktop {
+      display: none;
+      @include breakpoint(desktop) {
+        display: block;
+      };
+    }
+    &.tablet{
+      display: none;
+      @include breakpoint(tablet){
+        display: block;
+      }
+
+      @include breakpoint(desktop) {
+        display: none;
+      };
+    }
+    &.mobile {
+      @include breakpoint(tablet) {
+        display: none;
+      };
+    }
+  }
+}

@@ -1,0 +1,15 @@
+@import "../variables/breakpoints";
+
+@mixin breakpoint($point, $breakpoints: $breakpoints) {
+  $value: map-get($breakpoints, $point);
+
+  @if ($value) {
+    @media #{$value} {
+      @content;
+    }
+  }
+
+  @else {
+    @warn "Невідоме значення для `#{$value}`. Допустимі значення: #{map-keys($breakpoints)}.";
+  }
+}

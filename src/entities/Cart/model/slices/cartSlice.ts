@@ -1,0 +1,114 @@
+import { buildSlice } from '@/shared/lib/utils/buildSlice';
+import { sessionApi } from '@/entities/Session';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { cartApi } from '@/entities/Cart';
+import { CartData } from '../types/types';
+import { CartSchema } from '../types/cartSchema';
+
+const initialState: CartSchema = {
+  isOpen: false,
+  cartData: null,
+  isFetching: false,
+  isLoading: true,
+  isError: false,
+};
+
+export const cartSlice = buildSlice({
+  name: 'cart',
+  initialState,
+  reducers: {
+    openCart: (state) => {
+      state.isOpen = true;
+    },
+    closeCart: (state) => {
+      state.isOpen = false;
+    },
+    setCartData: (state, action: PayloadAction<CartData>) => {
+      state.cartData = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(sessionApi.endpoints.sessionFetch.matchFulfilled, (state, action) => {
+      state.cartData = action.payload.data.cart;
+      state.isFetching = false;
+      state.isLoading = false;
+      state.isError = false;
+    });
+    builder.addMatcher(sessionApi.endpoints.sessionFetch.matchPending, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addMatcher(sessionApi.endpoints.sessionFetch.matchRejected, (state) => {
+      state.isError = true;
+    });
+
+    builder.addMatcher(cartApi.endpoints.addProductToCart.matchFulfilled, (state, action) => {
+      state.isFetching = false;
+      state.isError = false;
+      state.cartData = action.payload;
+    });
+    builder.addMatcher(cartApi.endpoints.addProductToCart.matchPending, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addMatcher(cartApi.endpoints.addProductToCart.matchRejected, (state) => {
+      state.isError = true;
+    });
+
+    builder.addMatcher(cartApi.endpoints.addManyProductsToCart.matchFulfilled, (state, action) => {
+      state.isFetching = false;
+      state.isError = false;
+      state.cartData = action.payload;
+    });
+    builder.addMatcher(cartApi.endpoints.addManyProductsToCart.matchPending, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addMatcher(cartApi.endpoints.addManyProductsToCart.matchRejected, (state) => {
+      state.isError = true;
+    });
+
+    builder.addMatcher(cartApi.endpoints.deleteCart.matchFulfilled, (state, action) => {
+      state.isFetching = false;
+      state.isError = false;
+      state.cartData = action.payload;
+    });
+    builder.addMatcher(cartApi.endpoints.deleteCart.matchPending, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addMatcher(cartApi.endpoints.deleteCart.matchRejected, (state) => {
+      state.isError = true;
+    });
+
+    builder.addMatcher(cartApi.endpoints.deleteProduct.matchFulfilled, (state, action) => {
+      state.isFetching = false;
+      state.isError = false;
+      state.cartData = action.payload;
+    });
+    builder.addMatcher(cartApi.endpoints.deleteProduct.matchFulfilled, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addMatcher(cartApi.endpoints.deleteProduct.matchRejected, (state) => {
+      state.isError = true;
+    });
+
+    builder.addMatcher(cartApi.endpoints.updateProduct.matchFulfilled, (state, action) => {
+      state.isFetching = false;
+      state.isError = false;
+      state.cartData = action.payload;
+    });
+    builder.addMatcher(cartApi.endpoints.updateProduct.matchFulfilled, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addMatcher(cartApi.endpoints.updateProduct.matchRejected, (state) => {
+      state.isError = true;
+    });
+  },
+
+});
+
+export const { reducer: cartReducer } = cartSlice;
+export const { useActions: useCartActions } = cartSlice;

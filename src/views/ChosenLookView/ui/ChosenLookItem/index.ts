@@ -1,0 +1,1 @@
+export { ChosenLookItem } from './ChosenLookItem';

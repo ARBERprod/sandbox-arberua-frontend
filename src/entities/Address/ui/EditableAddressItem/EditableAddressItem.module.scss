@@ -1,0 +1,14 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--grey-light);
+
+  .title {
+    @include breakpoint(only-mobile) {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+}

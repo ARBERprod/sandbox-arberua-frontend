@@ -1,0 +1,45 @@
+@import "@/styles/mixins";
+
+.root {
+  position: fixed;
+  width: min(650px, 100vw);
+  left: 1rem;
+  bottom: 1rem;
+  background-color: var(--white);
+  padding: 16px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: var(--z-cookie-modal);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
+
+  @include breakpoint(only-mobile) {
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  @include breakpoint(only-mobile) {
+    gap: 12px;
+    padding: 8px;
+  }
+}
+
+.actions {
+  align-self: center;
+  display: flex;
+  gap: 24px;
+  width: fit-content;
+  @include breakpoint(only-mobile) {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+}
+
+.btn {
+  min-width: 186px;
+  width: 100%;
+}

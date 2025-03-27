@@ -1,0 +1,1 @@
+export { ManWomanBanner } from './ManWomanBanner';

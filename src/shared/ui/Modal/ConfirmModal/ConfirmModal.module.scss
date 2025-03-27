@@ -1,0 +1,16 @@
+@import '@/styles/mixins';
+.root {}
+
+.wrapper {
+  padding: 60px 16px 48px;
+  @include breakpoint(desktop) {
+    padding: 76px 56px 52px;
+
+  }
+}
+.actions {
+  margin-top: 24px;
+  @include breakpoint(desktop) {
+    margin-top: 40px;
+  }
+}

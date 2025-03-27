@@ -1,0 +1,20 @@
+@import '@/styles/mixins';
+.root {}
+
+
+.wrapper {
+  padding: 52px 40px;
+}
+
+.measurements {
+  margin-top: 40px;
+  @include breakpoint(desktop) {
+    margin-top: 60px;
+  }
+}
+
+.infoBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

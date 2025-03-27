@@ -1,0 +1,25 @@
+@import "@/styles/mixins";
+
+.root {
+  width: 100%;
+  margin: 0 auto;
+  @include breakpoint(desktop) {
+    max-width: calc(1376px + var(--container-padding) * 2);
+
+  }
+  .slide {
+    max-width: 240px;
+
+    @include breakpoint(tablet) {
+      max-width: 330px;
+    }
+  }
+
+  .header {
+    padding: 0 0 16px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 20px;
+    }
+  }
+}

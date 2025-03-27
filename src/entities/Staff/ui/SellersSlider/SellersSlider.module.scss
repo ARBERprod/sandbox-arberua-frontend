@@ -1,0 +1,25 @@
+@import '@/styles/mixins';
+
+.seller {
+  min-width: 175px;
+
+
+  @include breakpoint(tablet) {
+    min-width: 450px;
+
+  }
+}
+
+.slide {
+  height: auto;
+  max-width: 175px;
+
+
+  @include breakpoint(tablet) {
+    max-width: 450px;
+  }
+}
+
+.title {
+  padding: 0 0 16px;
+}

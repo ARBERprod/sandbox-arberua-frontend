@@ -1,0 +1,1 @@
+export { WomanTopSizesTable } from './WomanTopSizesTable';

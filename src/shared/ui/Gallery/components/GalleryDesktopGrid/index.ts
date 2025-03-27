@@ -1,0 +1,1 @@
+export { GalleryDesktopGrid } from './GalleryDesktopGrid';

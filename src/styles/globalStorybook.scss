@@ -1,0 +1,9 @@
+@import '@/styles/globals';
+
+[class*="ProductCard_root"] {
+  max-width: 400px;
+}
+
+#storybook-root {
+  position: relative;
+}

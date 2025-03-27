@@ -1,0 +1,1 @@
+export { VoiceSearchModal } from './VoiceSearchModal';

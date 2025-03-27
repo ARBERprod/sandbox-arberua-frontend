@@ -1,0 +1,41 @@
+@import "@/styles/mixins";
+
+.root {
+
+  .menu {
+    @include breakpoint(desktop) {
+      padding: 0 0 4px;
+    }
+  }
+
+  .item,
+  .item_link {
+    text-decoration: none;
+    transition: var(--transition-default);
+  }
+  .item_text {
+    font-size: 13px;
+  }
+
+  .item {
+    padding: 0 0 12px;
+  }
+
+  .secondary {
+    border-bottom: var(--border-delimiter-footer);
+    padding-top: 16px;
+    padding-bottom: 16px;
+
+    @include breakpoint(desktop) {
+      padding-top: 0;
+      padding-bottom: 12px;
+      border: none;
+    }
+  }
+
+  .item_link {
+    &:hover {
+      color: var(--grey-dark);
+    }
+  }
+}

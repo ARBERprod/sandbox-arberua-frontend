@@ -1,0 +1,16 @@
+@import '@/styles/mixins';
+
+.main {
+  flex-grow: 1;
+}
+
+.with_top_offset {
+  padding-top: var(--header-height);
+}
+
+.notHomePage {
+  @include breakpoint(mobile-tablet) {
+    padding-top: var(--header-height);
+  }
+}
+

@@ -1,0 +1,14 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  width: min-content;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 50px;
+  font-size: 10px;
+  color: var(--white);
+  background-color: var(--black);
+}

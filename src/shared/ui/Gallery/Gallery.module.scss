@@ -1,0 +1,13 @@
+@import '@/styles/mixins';
+.root {}
+
+.grid {
+  @include breakpoint(only-mobile) {
+    display: none;
+  }
+}
+.slider {
+  @include breakpoint(tablet) {
+    display: none;
+  }
+}

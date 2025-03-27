@@ -1,0 +1,15 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+
+  max-width: 1520px;
+  width: 100%;
+  margin: 0 auto;
+
+  .item {
+    max-width: 332px;
+    width: 100%;
+  }
+}

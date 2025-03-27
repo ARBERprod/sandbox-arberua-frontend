@@ -1,0 +1,233 @@
+@import "@/styles/mixins";
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include font(14px);
+  padding: 0 10px;
+  cursor: pointer;
+  outline: none;
+  max-height: 48px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  transition: var(--transition-default);
+  gap: 8px;
+
+  &_app {
+    width: 144px;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    &-small {
+      width: 90px;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+
+  &_rounded {
+    &-label {
+      border-radius: 18px;
+      width: auto;
+      padding-left: 12px;
+      padding-right: 12px;
+
+      @include breakpoint(tablet) {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+  }
+
+  &_action {
+    padding-left: 8px;
+    padding-right: 8px;
+    min-width: 104px;
+  }
+
+  &_tab {
+    font-size: 16px;
+    gap: 25px;
+    width: 100%;
+
+    @include breakpoint(wide-desktop) {
+      gap: 52px;
+    }
+  }
+
+  &_size {
+    &_small {
+      height: 32px;
+      line-height: 32px;
+    }
+
+    &_xsmall {
+      height: 36px;
+      line-height: 36px;
+    }
+
+    &_xxsmall {
+      height: 30px;
+      line-height: 30px;
+    }
+
+    &_medium {
+      height: 40px;
+      line-height: 40px;
+    }
+
+    &_mediumlarge {
+      height: 42px;
+      line-height: 42px;
+    }
+
+    &_large {
+      height: 48px;
+      line-height: 48px;
+    }
+
+    &_largexxl {
+      height: 72px;
+      line-height: 72px;
+      max-height: 72px;
+
+      @include breakpoint(desktop) {
+        height: 120px;
+        line-height: 120px;
+        max-height: 120px;
+      }
+    }
+  }
+
+  &_color {
+    &_dark {
+      background-color: var(--black);
+      border-color: var(--black);
+      color: var(--white);
+
+      &:hover {
+        background-color: var(--black-light);
+        border-color: var(--black-light);
+      }
+    }
+
+    &_light-primary {
+      background-color: var(--grey-light-4);
+      color: var(--black);
+      border-color: var(--grey-light-4);
+
+      &:hover {
+        background-color: var(--white);
+        border-color: var(--white);
+      }
+    }
+
+    &_light-secondary {
+      background-color: var(--white);
+      color: var(--black);
+      border-color: var(--grey-light-3);
+
+      &:hover {
+        background-color: var(--white);
+        border-color: var(--grey);
+      }
+    }
+
+    &_light-tertiary {
+      background-color: var(--grey-light-5);
+      color: var(--black);
+      border-color: var(--grey-light-5);
+
+      &:hover {
+        background-color: var(--white);
+        border-color: var(--white);
+      }
+    }
+
+    &_light-quaternary {
+      background-color: var(--grey-light-2);
+      color: var(--black);
+      border-color: var(--grey-light-2);
+
+      &.active {
+        background-color: var(--black);
+        color: var(--white);
+        border-color: var(--black);
+
+        span {
+          color: var(--white);
+        }
+      }
+    }
+
+    &_light-quinary {
+      background-color: var(--grey-light-2);
+      color: var(--black);
+      border-color: var(--grey-light-3);
+
+      &:hover {
+        background-color: var(--grey-light-2);
+        color: var(--black);
+        border-color: var(--grey-light-6);
+      }
+    }
+
+    &_transparent {
+      background-color: transparent;
+      color: var(--black);
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--grey-light-2);
+        border-color: var(--grey-light-2);
+      }
+
+      &-bg {
+        background-color: transparent;
+        color: var(--grey-dark);
+        border-color: var(--grey-light);
+
+        &:hover {
+          background-color: var(--grey-light);
+          color: var(--black);
+        }
+      }
+    }
+
+    &_icon {
+      padding: 0;
+      background-color: transparent;
+      border-color: transparent;
+      height: auto;
+      line-height: 1;
+
+      &:hover {
+        background-color: transparent;
+        border-color: transparent;
+      }
+    }
+
+    &_viber {
+      background-color: var(--viber-color);
+    }
+
+    &_telegram {
+      background-color: var(--telegram-color);
+    }
+  }
+
+  svg {
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.multiline {
+  line-height: 1.4;
+}

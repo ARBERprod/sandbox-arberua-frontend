@@ -1,0 +1,1 @@
+export { ShoesMeasurementsInfo } from './ShoesMeasurementsInfo';

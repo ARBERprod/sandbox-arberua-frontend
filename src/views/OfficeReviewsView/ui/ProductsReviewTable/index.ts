@@ -1,0 +1,1 @@
+export { ProductsReviewTable } from './ProductsReviewTable';

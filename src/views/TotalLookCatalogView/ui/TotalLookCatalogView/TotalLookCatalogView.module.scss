@@ -1,0 +1,30 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 0 0 120px;
+
+  @include breakpoint(tablet) {
+    padding-bottom: 160px;
+  }
+
+  .actions {
+    padding: 40px 0 16px;
+    margin: 0 auto;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 32px;
+      padding-top: 32px;
+    }
+  }
+
+
+}
+
+
+.pagination {
+  margin-top: 24px;
+
+  @include breakpoint(desktop) {
+    margin-top: 32px;
+  }
+}

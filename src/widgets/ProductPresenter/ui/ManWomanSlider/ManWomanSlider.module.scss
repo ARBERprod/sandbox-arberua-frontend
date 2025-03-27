@@ -1,0 +1,21 @@
+@import '@/styles/mixins';
+
+.link {
+  &:hover span {
+    color: var(--grey);
+  }
+}
+
+
+.mobile {
+  @include breakpoint(desktop) {
+    display: none;
+  }
+}
+
+.desktop {
+  display: none;
+  @include breakpoint(desktop) {
+    display: flex;
+  }
+}

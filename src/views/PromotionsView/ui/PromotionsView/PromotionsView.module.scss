@@ -1,0 +1,16 @@
+@import '@/styles/mixins';
+
+.root {
+  padding-bottom: 120px;
+
+  @include breakpoint(desktop) {
+    padding-top: 28px;
+    padding-bottom: 160px;
+  }
+}
+
+.loader {
+  align-self: center;
+  margin: 15px auto;
+  overflow: hidden;
+}

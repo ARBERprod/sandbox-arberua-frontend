@@ -1,0 +1,25 @@
+@import "@/styles/mixins";
+
+.root {
+  $gap-mobile: 10px;
+  $gap-desktop: 16px;
+
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: $gap-mobile;
+  row-gap: 30px;
+
+  @include breakpoint(tablet) {
+    gap: $gap-desktop;
+  }
+
+  .item {
+    width: calc(50% - $gap-mobile/2);
+    flex-grow: 0;
+
+    @include breakpoint(tablet) {
+      width: calc(25% - $gap-desktop);
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.root {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  align-items: stretch;
+  height: 100%;
+
+  .slider {
+    height: 100%;
+    margin-left: 0;
+  }
+
+}
+
+.removeBtn {
+  background-color: var(--grey-light-2);
+  width: 36px;
+  min-width: 36px;
+  border-radius: 2px;
+}
+
+
+
+.slide {
+  height: auto;
+  max-width: fit-content;
+  padding: 2px;
+}

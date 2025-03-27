@@ -1,0 +1,78 @@
+@import "@/styles/mixins/index";
+
+.root {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--grey-light);
+  cursor: pointer;
+
+  &:last-child,
+  &:last-of-type {
+    border: none;
+  }
+
+  .wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 10px;
+    border-radius: 20px;
+    transition: var(--transition-default);
+
+    &.active,
+    &:hover {
+      background-color: var(--grey-light-2);
+    }
+
+    @include breakpoint(tablet) {
+      gap: 12px;
+    }
+  }
+
+  .inner {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+
+    @include breakpoint(tablet) {
+      gap: 16px;
+    }
+  }
+
+  .img_wrap {
+    display: none;
+    width: 62px;
+    height: 62px;
+    flex-shrink: 0;
+    border-radius: 3px;
+    overflow: hidden;
+
+    @include breakpoint(tablet) {
+      width: 72px;
+      height: 72px;
+    }
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .title {
+    padding: 0 0 2px;
+    font-weight: 500;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 4px;
+    }
+  }
+
+  .raiting {
+    padding: 0 0 4px;
+
+    @include breakpoint(tablet) {
+      padding-bottom: 16px;
+    }
+  }
+}

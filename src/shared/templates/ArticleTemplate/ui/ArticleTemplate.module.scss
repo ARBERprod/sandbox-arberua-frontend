@@ -1,0 +1,205 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1160px;
+  padding: 0 8px;
+  margin: 0 auto;
+  gap: 40px;
+}
+
+.imageBlock {
+  position: relative;
+  width: 100%;
+  height: 498px;
+  display: flex;
+  align-items: center;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.textBlock {
+  position: absolute;
+  z-index: 1;
+  top: auto;
+  bottom: auto;
+  left: 48px;
+  max-width: 545px;
+  width: 100%;
+
+  p {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    margin-bottom: 16px;
+  }
+}
+
+.sliderBlock {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+.textBlock2 {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 448px;
+  width: 100%;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+  }
+}
+
+.imageBlock2 {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+
+  img {
+    max-width: 332px;
+    width: 100%;
+    height: 498px;
+  }
+}
+
+.sliderBlock2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .textBlock2 {
+    max-width: 680px;
+    width: 100%;
+    margin-left: auto;
+  }
+
+  .imageBlock2 {
+    margin-right: auto;
+  }
+}
+
+.textBlock2 {
+  h2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-style: 22px;
+    gap: 6px;
+
+    span {
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 400;
+    }
+  }
+}
+
+.slider {
+  display: none;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.imageDesktop {
+  display: block;
+}
+
+.imageMobile {
+  display: none;
+}
+
+@media (max-width: 1144px) {
+  .sliderBlock {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 8px;
+  }
+
+  .imageBlock {
+    flex-direction: column;
+    height: auto;
+    gap: 20px;
+
+    img {
+      position: relative;
+      max-height: 537px;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .textBlock {
+    position: static;
+  }
+
+  .sliderBlock {
+    flex-direction: column;
+  }
+
+  .imageBlock2 {
+    display: none;  
+  }
+
+  .slider {
+    max-width: 768px;
+    width: 100%;
+    display: block;
+  }
+
+  .sliderBlock2 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  
+    .textBlock2 {
+      max-width: none;
+      width: 100%;
+      margin-left: none;
+      text-wrap: wrap;
+    }
+  
+    .imageBlock2 {
+      margin-right: none;
+    }
+  }
+
+  .textBlockColumn {
+    h2 {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  .imageDesktop {
+    display: none;
+  }
+
+  .imageMobile {
+    display: block;
+  }
+}

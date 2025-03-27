@@ -1,0 +1,63 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 0 0 120px;
+
+  @include breakpoint(tablet) {
+    padding-bottom: 164px;
+  }
+
+  .bc {
+    padding: 20px 0;
+
+    @include breakpoint(tablet) {
+      padding-top: 28px;
+      padding-bottom: 28px;
+    }
+  }
+
+  .inner {
+    max-width: 912px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .title {
+    margin-top: 28px;
+
+    @include breakpoint(tablet) {
+      margin-top: 40px;
+    }
+  }
+
+  .paragraph {
+    margin-top: 12px;
+
+    @include breakpoint(tablet) {
+      margin-top: 16px;
+    }
+  }
+
+  .red {
+    color: var(--red);
+  }
+
+  .bold {
+    font-weight: 600;
+  }
+
+  .certificates {
+    padding: 32px 0 0;
+
+    @include breakpoint(tablet) {
+      padding-top: 40px;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+@import '@/styles/mixins';
+.root {}
+
+.circle {
+  @include square-size(8px);
+  @include rounded-centered;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  font-weight: 500;
+}

@@ -1,0 +1,1 @@
+export { ReviewConsultationsList } from './ReviewConsultationsList';

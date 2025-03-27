@@ -1,0 +1,202 @@
+@import "@/styles/mixins";
+
+.root {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  top: 0;
+  width: 100vw;
+  z-index: var(--z-header-menu);
+  transition: top var(--transition-menu-duration) ease 0s;
+  padding-top: var(--header-height);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include breakpoint(only-mobile) {
+    height: max(100vh, 550px);
+    transform: translateY(-100%);
+    transition: transform var(--transition-menu-duration) ease 0s;
+  }
+
+  @include breakpoint(tablet) {
+    right: auto;
+    top: 0;
+    left: -100%;
+    bottom: auto;
+    height: auto;
+    width: var(--menu-width);
+    padding-top: 0;
+    transition: left var(--transition-menu-duration-desktop) ease 0s;
+  }
+
+  &.expanded {
+    bottom: 0;
+    transition: bottom var(--transition-menu-duration) ease 0s;
+    height: 100vh;
+
+    @include breakpoint(only-mobile) {
+      transform: translateY(0);
+      transition: transform var(--transition-menu-duration) ease 0s;
+    }
+
+    .inner {
+      border-color: var(--grey-light);
+      overflow-y: auto;
+    }
+
+    @include breakpoint(tablet) {
+      bottom: 0;
+      top: 0;
+      left: 0;
+      transition: left var(--transition-menu-duration-desktop) ease 0s;
+    }
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    z-index: 0;
+    background-color: var(--white);
+    transition: top var(--transition-menu-duration) ease 0s;
+
+    @include breakpoint(tablet) {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: calc(-1 * var(--menu-width));
+      height: 100vh;
+      width: var(--menu-width);
+      transition: left var(--transition-menu-duration-desktop) ease 0s;
+    }
+  }
+
+  &:hover {
+    @include breakpoint(tablet) {
+      z-index: 4;
+      left: 0;
+      height: calc(100vh - var(--socials-height) - var(--locale-height));
+      overflow-y: auto;
+    }
+  }
+
+  &:hover:before {
+    @include breakpoint(tablet) {
+      left: 0;
+      transition: left .3s ease 0s;
+    }
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    flex-grow: 1;
+    position: relative;
+    background-color: transparent;
+    z-index: var(--z-header-menu);
+
+    @include breakpoint(tablet) {
+      display: none;
+    }
+  }
+
+  &.expanded:after {
+    background-color: rgba(0, 0, 0, .4);
+    transition: background-color .1s ease var(--transition-menu-duration);
+  }
+
+  &.expanded_overlay:before {
+    left: 0;
+    transition: top var(--transition-menu-duration) ease var(--transition-menu-layout-delay);
+  }
+
+  .inner {
+    position: relative;
+    z-index: var(--z-header-menu);
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 25px;
+    border-top: 1px solid transparent;
+    background-color: var(--white);
+
+    &.expanded_overlay {
+      border-color: var(--grey-light);
+      transition: var(--transition-border-appearing-menu);
+    }
+
+    @include breakpoint(tablet) {
+      border-color: transparent;
+      padding-top: calc(var(--header-height) + 20px);
+      padding-left: var(--menu-padding-left);
+      padding-right: var(--menu-padding-right);
+      background-color: transparent;
+    }
+  }
+
+  .container {
+    @include breakpoint(tablet) {
+      padding-left: 0;
+      padding-right: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+      margin: 0;
+    }
+  }
+
+  .locale {
+    @include breakpoint(tablet) {
+      margin-top: auto;
+      opacity: 0;
+      position: fixed;
+      z-index: -1;
+      visibility: hidden;
+      left: calc(-1 * var(--menu-width));
+      bottom: var(--socials-height);
+      width: var(--menu-width);
+      height: var(--locale-height);
+    }
+  }
+
+  &:hover .locale {
+    @include breakpoint(tablet) {
+      opacity: 1;
+      z-index: 1;
+      visibility: visible;
+      left: 0;
+      transition: opacity var(--transition-menu-duration-desktop) ease var(--transition-menu-icons-delay-desktop);
+    }
+  }
+
+  .socials {
+    @include breakpoint(tablet) {
+      opacity: 0;
+      position: fixed;
+      z-index: -1;
+      visibility: hidden;
+      left: calc(-1 * var(--menu-width));
+      bottom: 0;
+      height: var(--socials-height);
+      width: var(--menu-width);
+    }
+  }
+
+  &:hover .socials {
+    @include breakpoint(tablet) {
+      opacity: 1;
+      z-index: 1;
+      visibility: visible;
+      left: 0;
+      transition: opacity var(--transition-menu-duration-desktop) ease var(--transition-menu-icons-delay-desktop);
+    }
+  }
+}

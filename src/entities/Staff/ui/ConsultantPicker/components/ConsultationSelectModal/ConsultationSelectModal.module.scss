@@ -1,0 +1,14 @@
+@import "@/styles/mixins/index";
+
+.root {
+  .search {
+    @include breakpoint(tablet) {
+      margin-left: 64px;
+      margin-right: 64px;
+    }
+  }
+}
+
+.modal_hidden {
+  display: none;
+}

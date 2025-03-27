@@ -1,0 +1,15 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--grey-dark-6);
+  flex-wrap: wrap;
+
+  * {
+    color: inherit;
+  }
+}
+
+.color {
+  color: inherit;
+}

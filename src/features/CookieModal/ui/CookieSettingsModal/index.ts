@@ -1,0 +1,1 @@
+export { CookieSettingsModal } from './CookieSettingsModal';

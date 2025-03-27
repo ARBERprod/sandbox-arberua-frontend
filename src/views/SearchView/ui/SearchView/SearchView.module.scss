@@ -1,0 +1,24 @@
+@import '@/styles/mixins';
+
+.root {
+  padding-top: 20px;
+  padding-bottom: 120px;
+  @include breakpoint(desktop) {
+    padding-top: 28px;
+    padding-bottom: 100px;
+  }
+}
+
+
+.grid {
+  margin-top: 16px;
+}
+
+.pagination {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  @include breakpoint(desktop) {
+    margin-top: 60px;
+  }
+}

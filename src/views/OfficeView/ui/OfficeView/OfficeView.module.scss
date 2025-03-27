@@ -1,0 +1,48 @@
+@import "@/styles/mixins";
+
+.root {
+  padding-bottom: 0;
+
+  @include breakpoint(tablet) {
+    padding: 0;
+  }
+
+  .item {
+    padding-top: 28px;
+    padding-bottom: 12px;
+    border-top: 1px solid var(--grey-light-2);
+
+    @include breakpoint(tablet) {
+      padding: 24px 0;
+    }
+
+    &:first-child {
+      border-top: none;
+      padding-top: 12px;
+
+      @include breakpoint(tablet) {
+        padding-top: 28px;
+        border-top: 1px solid var(--grey-light-2);
+      }
+    }
+
+    &:last-child {
+      border-bottom: none;
+
+      @include breakpoint(tablet) {
+        border-bottom: 1px solid var(--grey-light-2);
+        padding-bottom: 36px;
+      }
+    }
+  }
+
+  .svg {
+    width: 36px;
+    height: 36px;
+
+    @include breakpoint(tablet) {
+      width: 48px;
+      height: 48px;
+    }
+  }
+}

@@ -1,0 +1,1 @@
+export { SendCommentButton } from './SendCommentButton';

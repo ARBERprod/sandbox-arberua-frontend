@@ -1,0 +1,1 @@
+export { PromotionsGrid } from './PromotionsGrid';

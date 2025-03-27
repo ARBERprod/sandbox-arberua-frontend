@@ -1,0 +1,1 @@
+export { OfficeWishListView } from './OfficeWishListView';

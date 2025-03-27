@@ -1,0 +1,1 @@
+export { FooterStoreButtons } from './FooterStoreButtons';

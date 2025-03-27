@@ -1,0 +1,1 @@
+export { ClothesSliderList } from './ClothesSliderList';

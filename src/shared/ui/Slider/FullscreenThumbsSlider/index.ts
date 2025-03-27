@@ -1,0 +1,1 @@
+export { FullscreenThumbsSlider } from './FullscreenThumbsSlider';

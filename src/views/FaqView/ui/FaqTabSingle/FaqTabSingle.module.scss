@@ -1,0 +1,17 @@
+.root {
+  padding-left: 36px;
+  display: flex;
+  justify-content: flex-start;
+
+  .btn_inner {
+    text-align: left;
+  }
+}
+
+
+.icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  object-fit: contain;
+}

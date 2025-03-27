@@ -1,0 +1,9 @@
+@import "@/styles/mixins";
+
+.root {
+  padding-bottom: 120px;
+
+  @include breakpoint(tablet) {
+    padding-bottom: 0;
+  }
+}

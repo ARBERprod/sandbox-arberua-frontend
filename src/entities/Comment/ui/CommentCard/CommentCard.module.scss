@@ -1,0 +1,56 @@
+@import '@/styles/mixins';
+
+.root {
+  padding: 16px 12px 12px;
+  border: 1px solid var(--grey-light);
+  border-radius: 2px;
+
+  @include breakpoint(desktop) {
+    padding: 16px 12px 20px;
+  }
+
+  &.seller {
+    padding-bottom: 16px;
+
+    @include breakpoint(desktop) {
+      padding: 24px 28px 14px;
+      border: none;
+    }
+
+    .title {
+      @include breakpoint(desktop) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  &.product {
+    .title {
+      @include breakpoint(desktop) {
+        font-size: 12px;
+      }
+    }
+    .content {
+      font-size: 13px;
+    }
+  }
+
+  .title {
+    font-weight: 500;
+  }
+}
+
+.content {
+  word-break: break-word;
+}
+
+.stars {
+  padding: 12px 0 17px;
+
+  &_seller {
+    @include breakpoint(desktop) {
+      padding-top: 15px;
+      padding-bottom: 20px;
+    }
+  }
+}

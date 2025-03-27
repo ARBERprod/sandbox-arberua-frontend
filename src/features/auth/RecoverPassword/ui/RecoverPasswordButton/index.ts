@@ -1,0 +1,1 @@
+export { RecoverPasswordButton } from './RecoverPasswordButton';

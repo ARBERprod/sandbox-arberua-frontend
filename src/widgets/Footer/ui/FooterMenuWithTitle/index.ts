@@ -1,0 +1,1 @@
+export { FooterMenuWithTitle } from './FooterMenuWithTitle';

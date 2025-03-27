@@ -1,0 +1,1 @@
+export { SingleCertificateCard } from './SingleCertificateCard';

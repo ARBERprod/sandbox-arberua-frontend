@@ -1,0 +1,91 @@
+@import "@/styles/mixins";
+
+.root {
+  padding: 12px 0 32px;
+  margin-bottom: 28px;
+
+  @include breakpoint(tablet) {
+    padding-top: 58px;
+    padding-bottom: 58px;
+  }
+
+  .slider_wrap {
+    @include breakpoint(tablet) {
+      width: calc(60% - 50px);
+    }
+
+    @include breakpoint(desktop) {
+      padding-left: 60px;
+      padding-right: 60px;
+    }
+  }
+
+  .image_wrap {
+    @include breakpoint(tablet) {
+      width: 40%;
+    }
+  }
+
+  .image_inner {
+    height: 0;
+    padding-top: 158%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    object-fit: cover;
+  }
+
+  .content {
+    @include breakpoint(tablet) {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+
+  .link {
+    display: none;
+
+    @include breakpoint(tablet) {
+      display: block;
+      white-space: nowrap;
+    }
+  }
+
+  .header {
+    padding: 0 0 12px;
+
+    @include breakpoint(tablet) {
+      display: none;
+    }
+
+    &_secondary {
+      padding-bottom: 16px;
+      padding-top: 16px;
+      display: none;
+
+      @include breakpoint(tablet) {
+        display: flex;
+      }
+    }
+  }
+
+  .footer {
+    padding: 20px 0 16px;
+
+    @include breakpoint(tablet) {
+      display: none;
+    }
+  }
+}
+
+.title {
+  @include crop-text();
+}

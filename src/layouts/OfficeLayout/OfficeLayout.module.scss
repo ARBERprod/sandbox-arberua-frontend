@@ -1,0 +1,15 @@
+@import '@/styles/mixins';
+.root {}
+
+.container {
+  padding-bottom: 120px;
+  padding-top: 20px;
+  @include breakpoint(desktop) {
+    padding-bottom: 160px;
+    padding-top: 40px;
+  }
+}
+
+.menuBtn {
+  margin-bottom: 32px;
+}

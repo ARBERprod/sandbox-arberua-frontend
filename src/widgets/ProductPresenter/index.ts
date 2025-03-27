@@ -1,0 +1,9 @@
+export { ProductsGrid } from './ui/ProductsGrid';
+export { ProductSlider } from './ui/ProductSlider';
+export { ManWomanSlider } from './ui/ManWomanSlider';
+export { RecommendedProducts } from './ui/RecommendedProducts';
+export { OfficeProductsGrid } from './ui/OfficeProductsGrid';
+export { WishListProductCard } from './ui/WishListProductCard';
+export { ViewedProductCard } from './ui/ViewedProductCard';
+export { SingleProductCard } from './ui/SingleProductCard';
+export { HistoryProducts } from './ui/HistoryProducts';

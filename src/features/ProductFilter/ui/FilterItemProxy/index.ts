@@ -1,0 +1,1 @@
+export { FilterItemProxy } from './FilterItemProxy';

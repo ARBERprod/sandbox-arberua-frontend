@@ -1,0 +1,1 @@
+export { WomanMeasurementsInfo } from './WomanMeasurementsInfo';

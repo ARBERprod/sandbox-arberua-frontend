@@ -1,0 +1,1 @@
+export { FaqTabSingle } from './FaqTabSingle';

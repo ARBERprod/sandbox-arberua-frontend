@@ -1,0 +1,15 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.centered {
+  align-self: center;
+  margin-top: 8px;
+}
+
+.btn {
+  margin-bottom: 12px;
+  align-self: flex-start;
+}

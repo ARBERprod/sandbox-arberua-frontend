@@ -1,0 +1,9 @@
+{
+  "description": "Description",
+  "material_and_care": "Material and care",
+  "delivery": "Delivery",
+  "return_policy": "Return",
+  "reviews": "Reviews",
+  "delivery.text": "After the order has been approved by the buyer, an invoice is created and sent (Email or SMS). Shipping within Ukraine is carried out within 2-3 working days from the moment the order is processed.",
+  "return_policy.text": "If the purchased product does not fit you in size or is found to be defective, you can use the service of returning or exchanging the product within 14 calendar days (from the moment of receiving the order). Exceptions are non-returnable goods: socks."
+}

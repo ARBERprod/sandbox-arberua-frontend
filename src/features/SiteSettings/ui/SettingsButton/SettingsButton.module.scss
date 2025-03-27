@@ -1,0 +1,26 @@
+@import "@/styles/mixins";
+
+.link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  width: 100%;
+  @include font(14px, var(--grey-dark), 400);
+  text-decoration: none;
+  transition: var(--transition-default);
+
+  &:hover {
+    .icon [stroke] {
+      stroke: var(--grey-dark);
+    }
+  }
+
+  @include breakpoint(tablet) {
+    margin-left: var(--menu-padding-left);
+    margin-right: var(--menu-padding-right);
+    border-top: 1px solid var(--grey-light);
+    border-bottom: 1px solid var(--grey-light);
+    width: calc(100% - var(--menu-padding-left) - var(--menu-padding-right));
+  }
+}

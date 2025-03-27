@@ -1,0 +1,1 @@
+export { LabelDiscount } from './LabelDiscount';

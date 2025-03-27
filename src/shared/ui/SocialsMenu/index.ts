@@ -1,0 +1,1 @@
+export { SocialsMenu } from './SocialsMenu';

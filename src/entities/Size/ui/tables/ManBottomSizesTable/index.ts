@@ -1,0 +1,1 @@
+export { ManBottomSizesTable } from './ManBottomSizesTable';

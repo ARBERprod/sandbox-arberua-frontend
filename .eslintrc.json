@@ -1,0 +1,123 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "globals": {
+    "JSX": true,
+    "IntersectionObserverCallback": true,
+    "google": true,
+    "NodeJS": true
+  },
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:storybook/recommended",
+    "airbnb",
+    "plugin:react/recommended",
+    "plugin:i18next/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "2021",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-hooks",
+    "i18next"
+  ],
+  "rules": {
+    "import/order": "off",
+    "react/display-name": "off",
+    "jsx-a11y/media-has-caption":"off",
+    "i18next/no-literal-string": "warn",
+    "react/jsx-indent": [
+      2,
+      2
+    ],
+    "react/jsx-indent-props": [
+      2,
+      2
+    ],
+    "indent": [
+      2,
+      2
+    ],
+    "react/jsx-filename-extension": [
+      2,
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".tsx"
+        ]
+      }
+    ],
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "react/require-default-props": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": "off",
+    "no-shadow": "off",
+    "import/extensions": "off",
+    "import/no-extraneous-dependencies": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "no-underscore-dangle": "off",
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+        "ignoreComments": true,
+        "ignoreStrings": true,
+        "ignoreRegExpLiterals": true
+      }
+    ],
+    "react/button-has-type": "off",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "state",
+          "config",
+          "swiper",
+          "acc"
+        ]
+      }
+    ],
+    "class-methods-use-this": "off",
+    "no-unused-vars": "warn",
+    "jsx-a11y/label-has-associated-control": "off",
+    "no-debugger": "warn",
+    "linebreak-style": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "import/no-cycle": "off",
+    "consistent-return": "off",
+    "lines-between-class-members": "off",
+    "camelcase": "off",
+    "react/no-unstable-nested-components": [
+      "error",
+      {
+        "allowAsProps": true
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/src/**/*.{test,stories}.{ts,tsx}"],
+      "rules": {
+        "i18next/no-literal-string": "off",
+        "max-len": "off"
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+@import '@/styles/mixins';
+
+.root {
+  padding-top: 20px;
+  padding-bottom: 120px;
+
+  @include breakpoint(desktop) {
+    padding-top: 28px;
+    padding-bottom: 160px;
+  }
+}
+
+.container {
+  max-width: 1440px;
+  display: flex;
+  flex-direction: column;
+}
+
+.breadcrumps {
+  align-self: center;
+}
+
+.title {
+  margin-top: 20px;
+  margin-bottom: 16px;
+  @include breakpoint(desktop) {
+    margin-top: 40px;
+    margin-bottom: 24px;
+  }
+}
+
+.content {
+  margin-top: 20px;
+  margin-bottom: 36px;
+  @include breakpoint(desktop) {
+    margin-top: 24px;
+    margin-bottom: 40px;
+  }
+}
+
+.slider {
+  margin-top: 20px;
+  margin-bottom: 36px;
+  @include breakpoint(desktop) {
+    margin-top: 24px;
+    margin-bottom: 40px;
+  }
+}

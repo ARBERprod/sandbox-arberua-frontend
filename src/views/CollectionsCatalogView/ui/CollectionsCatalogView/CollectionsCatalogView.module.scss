@@ -1,0 +1,35 @@
+@import '@/styles/mixins';
+
+.pagination {
+  margin-top: 32px;
+
+  @include breakpoint(tablet) {
+    margin-top: 60px;
+  }
+}
+
+.actions {
+  margin-bottom: 16px;
+
+  @include breakpoint(desktop) {
+    margin-bottom: 32px;
+  }
+}
+
+.body {
+  padding-top: 40px;
+  padding-bottom: 120px;
+
+  @include breakpoint(desktop) {
+    padding-top: 32px;
+    padding-bottom: 100px;
+  }
+}
+
+.bc {
+  margin-bottom: 16px;
+}
+
+.title {
+  margin-bottom: 20px;
+}

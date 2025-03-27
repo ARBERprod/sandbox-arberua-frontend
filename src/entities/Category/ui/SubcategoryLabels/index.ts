@@ -1,0 +1,1 @@
+export { SubcategoryLabels } from './SubcategoryLabels';

@@ -1,0 +1,1 @@
+export { ManMeasurementsInfo } from './ManMeasurementsInfo';

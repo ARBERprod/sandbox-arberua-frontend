@@ -1,0 +1,9 @@
+@import '@/styles/mixins';
+.root {
+  width: 100%;
+  padding-right: 7px;
+  @include breakpoint(tablet) {
+    max-width: 160px;
+    padding-right: 0;
+  }
+}

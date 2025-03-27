@@ -1,0 +1,16 @@
+@import "@/styles/mixins";
+.root {
+
+}
+
+.primaryImage {
+  @include aspect-ratio-image;
+  opacity: 1;
+  transition: opacity .4s ease-in-out;
+}
+
+.hoverImage {
+  transition: opacity .4s ease-in-out;
+  @include aspect-ratio-image;
+  opacity: 0;
+}

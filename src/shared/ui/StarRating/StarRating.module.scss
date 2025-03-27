@@ -1,0 +1,28 @@
+.root {
+  --height: auto;
+  display: flex;
+  align-items: center;
+
+  svg[class*=star-svg] {
+    display: inline-block;
+
+    &:not(:first-child) {
+      margin-left: var(--gap);
+    }
+  }
+
+  span[class*=style-module_simpleStarRating] {
+    vertical-align: initial;
+  }
+
+  span[class*=style-module_starRatingWrap] {
+    height: var(--height);
+  }
+
+
+  .rating {
+    height: var(--height);
+  }
+}
+
+

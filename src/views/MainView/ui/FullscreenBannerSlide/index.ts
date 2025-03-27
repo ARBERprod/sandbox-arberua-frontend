@@ -1,0 +1,1 @@
+export { FullscreenBannerSlide } from './FullscreenBannerSlide';

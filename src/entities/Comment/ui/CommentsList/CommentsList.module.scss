@@ -1,0 +1,26 @@
+@import "@/styles/mixins";
+
+.root {
+  .divider {
+    display: none;
+
+    &_seller {
+      @include breakpoint(desktop) {
+        display: block;
+        margin-right: 28px;
+        margin-left: 28px;
+        width: calc(100% - 56px);
+      }
+    }
+  }
+
+  .item {
+    margin-top: -1px;
+
+    &_seller {
+      @include breakpoint(desktop) {
+        margin-top: 0;
+      }
+    }
+  }
+}

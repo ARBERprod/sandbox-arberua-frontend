@@ -1,0 +1,49 @@
+@import "@/styles/mixins";
+
+.root {
+  min-width: 375px;
+  width: auto;
+  height: 100%;
+  position: relative;
+
+  @include breakpoint(desktop) {
+    width: 510px;
+  }
+
+  .backBtn {
+    position: absolute;
+    top: 16px;
+    left: 8px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include breakpoint(tablet) {
+      display: none;
+    }
+  }
+
+  .header {
+    padding: 0 65px;
+    height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include breakpoint(tablet) {
+      display: none;
+    }
+  }
+
+  .map {
+    min-height: 560px;
+    height: calc(100% - 65px);
+    background-color: var(--grey-light-6);
+
+    @include breakpoint(tablet) {
+      height: 100%;
+    }
+  }
+}

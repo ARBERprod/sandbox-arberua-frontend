@@ -1,0 +1,39 @@
+@import '@/styles/mixins';
+
+.root {
+  padding-top: 0;
+  padding-bottom: 120px;
+  overflow-x: hidden;
+  @include breakpoint(desktop) {
+    padding-bottom: 160px;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.sellersSlider {
+  margin-top: 60px;
+
+  @include breakpoint(desktop) {
+    margin-top: 105px;
+  }
+}
+
+.productSlider {
+  margin-top: 80px;
+
+  @include breakpoint(desktop) {
+    margin-top: 105px;
+  }
+}
+
+.populars {
+  margin-top: 60px;
+
+  @include breakpoint(desktop) {
+    margin-top: 105px;
+  }
+}

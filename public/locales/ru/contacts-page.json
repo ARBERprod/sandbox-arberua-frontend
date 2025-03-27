@@ -1,0 +1,24 @@
+{
+  "contact.title": "Контакты",
+
+  "contact.tel.text": "Телефон:",
+  "contact.tel": "+38 0800 333 083",
+
+  "contact.mail.text": "Электронная почта:",
+  "contact.mail": "ecommerce@arber.ua",
+
+  "contact.schedule.text": "График работы:",
+  "contact.schedule": "ПН-ВС 09:00-19:00",
+
+  "contact.social.text": "Социальные сети:",
+
+  "contact.question": "Остались вопросы?",
+
+  "contact.form.text": "Имя",
+  "contact.form.text1": "Введите имя",
+  "contact.form.text2": "Email",
+  "contact.form.text3": "Введите email",
+  "contact.form.text4": "Комментарий",
+  "contact.form.text5": "Введите комментарий",
+  "contact.form.btn": "Отправить"
+}

@@ -1,0 +1,60 @@
+@import "@/styles/mixins";
+
+.root {
+  background-color: #fff;
+  position: relative;
+
+  @include breakpoint(tablet) {
+    width: 100%;
+    max-width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .close_btn {
+    position: absolute;
+    right: 22px;
+    top: 18px;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 50px 22px 40px;
+
+    @include breakpoint(tablet) {
+      padding: 60px 60px 48px;
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  .instagram {
+    width: 100%;
+    margin: 28px 0 0;
+
+    @include breakpoint(only-mobile) {
+      order: 2;
+    }
+
+    @include breakpoint(tablet) {
+      margin-top: 0;
+      width: 425px;
+    }
+  }
+
+  .product {
+    width: 100%;
+
+    @include breakpoint(only-mobile) {
+      order: 1;
+    }
+
+    @include breakpoint(tablet) {
+      margin-top: 0;
+      width: 332px;
+      margin-right: 24px;
+    }
+  }
+}

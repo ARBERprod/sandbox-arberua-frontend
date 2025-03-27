@@ -1,0 +1,17 @@
+.root {}
+
+.slider {
+  padding: 0 7px;
+  margin-bottom: 8px;
+}
+
+.divider {
+  height: 1px;
+  width: 6px;
+  background-color: var(--black);
+  flex-shrink: 0;
+}
+
+.field {
+  width: 100%;
+}

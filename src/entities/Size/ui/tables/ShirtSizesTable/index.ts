@@ -1,0 +1,1 @@
+export { ShirtSizesTable } from './ShirtSizesTable';
