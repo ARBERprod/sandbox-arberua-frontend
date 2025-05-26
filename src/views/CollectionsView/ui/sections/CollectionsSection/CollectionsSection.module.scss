@@ -11,7 +11,7 @@
 
   .slider_wrap {
     @include breakpoint(tablet) {
-      width: calc(60% - 50px);
+      width: calc(80% - 50px);
     }
 
     @include breakpoint(desktop) {
@@ -22,7 +22,7 @@
 
   .image_wrap {
     @include breakpoint(tablet) {
-      width: 40%;
+      width: 25%;
     }
   }
 

@@ -20,13 +20,13 @@
 
   .manWrap {
     @include breakpoint(desktop) {
-      left: 80px;
+      // left: 80px;
     }
   }
 
   .womanWrap {
     @include breakpoint(desktop) {
-      left: -25px;
+      // left: -25px;
     }
   }
 
