@@ -99,7 +99,7 @@ export const CheckoutSuccessView = memo(
           content_category: order.products.map((item) => item.category),
           content_type: 'product',
         };
-        window?.fbq('track', 'Purchase', paramsFbq, { eventID: order.id });
+        // window?.fbq('track', 'Purchase', paramsFbq, { eventID: order.id });
       }
     }, [order, clientId]);
 

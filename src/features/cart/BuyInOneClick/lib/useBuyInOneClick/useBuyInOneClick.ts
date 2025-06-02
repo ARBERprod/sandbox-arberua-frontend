@@ -28,14 +28,14 @@ export const useBuyInOneClick = () => {
       closeCart();
       showSuccessModal();
       if (typeof window !== 'undefined' && window?.fbq) {
-        window?.fbq('track', 'Purchase', {
-          value: cartItems.map((item) => item.price.value).reduce((acc, item) => +acc + +item, 0),
-          currency: 'UAH',
-          content_ids: cartItems.map((item) => item.owner_id),
-          content_name: cartItems.map((item) => item.title),
-          content_category: cartItems.map((item) => item.category),
-          content_type: 'product',
-        });
+        // window?.fbq('track', 'Purchase', {
+        //   value: cartItems.map((item) => item.price.value).reduce((acc, item) => +acc + +item, 0),
+        //   currency: 'UAH',
+        //   content_ids: cartItems.map((item) => item.owner_id),
+        //   content_name: cartItems.map((item) => item.title),
+        //   content_category: cartItems.map((item) => item.category),
+        //   content_type: 'product',
+        // });
       }
     } catch (e) {
       if (isValidationError(e)) {

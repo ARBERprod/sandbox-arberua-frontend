@@ -76,7 +76,7 @@ export const getServerSideProps = wrapper.getServerSideProps<ProductPageProps>((
     title: title ? `${title}` : '',
     description: description || '',
     descriptionUsesTitle: title ? `${title}` : '',
-    textBeforeDescription: 'Купіть',
+    textBeforeDescription: 'Замовляйте',
     textAfterDescription: 'ARBER. Швидка доставка по Україні. Замовити',
     textEndDescription: 'ARBER за вигідною ціною зараз!',
   };

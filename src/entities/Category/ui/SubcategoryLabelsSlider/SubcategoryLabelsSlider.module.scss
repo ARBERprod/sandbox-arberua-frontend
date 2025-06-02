@@ -4,11 +4,13 @@
   position: relative;
 
   .header {
+    display: none;
     position: absolute;
-    right: calc(var(--subcategories-right-indent) * -1);
+    right: 0;
     top: -36px;
 
     @include breakpoint(tablet) {
+      right: calc(var(--subcategories-right-indent) * -1);
       display: none;
     }
   }

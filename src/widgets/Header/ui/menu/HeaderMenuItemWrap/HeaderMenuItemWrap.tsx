@@ -24,6 +24,7 @@ interface HeaderMenuItemWrapProps {
   openNewPage?: boolean;
   color?: string;
   bold?: boolean;
+  onClose?: () => void;
 }
 
 export const HeaderMenuItemWrap = memo(({
@@ -37,6 +38,7 @@ export const HeaderMenuItemWrap = memo(({
   openNewPage,
   color,
   bold,
+  onClose,
 }:HeaderMenuItemWrapProps) => {
   const clickHandler = () => {
     if (targetMenu) {
@@ -45,7 +47,7 @@ export const HeaderMenuItemWrap = memo(({
   };
 
   const linkClickHandler = () => {
-    document.body.style.removeProperty('overflow');
+    onClose?.();
   };
 
   const { isHovered } = useHeaderMenu();

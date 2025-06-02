@@ -50,8 +50,8 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
     };
   } else if (query.category?.includes('briuki-1')) {
     meta = {
-      title: 'Чоловічі штани ARBER | Офіційний сайт ARBER.UA',
-      description: 'Купити чоловічі брюки на офіційному сайті ARBER: льняні, класичні, спортивні моделі від українського бренду. Широкий вибір чоловічого одягу ARBER за найкращою ціною.',
+      title: 'Купити чоловічі штани ARBER — Доставка по Україні',
+      description: 'Чоловічі брюки в інтернет-магазині ARBER. Великий вибір, доступні ціни, швидка доставка по Україні.',
       page,
     };
   } else if (query.category === 'sorocki') {
@@ -164,14 +164,14 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
     };
   } else if (query.category?.includes('Outlet-1')) {
     meta = {
-      title: 'Outlet для чоловіків | Спеціальні пропозиції та знижки | ARBER.UA',
-      description: 'Отримуйте тільки найкращі пропозиції в Outlet для чоловіків від ARBER! Стильний чоловічий одяг, аксесуари та знижки на найкращі товари.',
+      title: 'Outlet одяг для чоловіків — Знижки на одяг від ARBER',
+      description: 'Знижки та спеціальні пропозиції на одяг, взуття та аксесуари для чоловіків від бренду ARBER.',
       page,
     };
   } else if (query.category?.includes('Outlet')) {
     meta = {
-      title: 'Outlet для жінок | Спеціальні пропозиції та знижки | ARBER.UA',
-      description: 'Отримуйте тільки найкращі пропозиції в Outlet для жінок від ARBER! Стильний чоловічий одяг, аксесуари та знижки на найкращі товари.',
+      title: 'Outlet одяг для жінок — Знижки на одяг від ARBER',
+      description: 'Знижки та спеціальні пропозиції на одяг, взуття та аксесуари для жінок від бренду ARBER.',
       page,
     };
   } else if (query.category?.includes('popular-man')) {
@@ -242,8 +242,8 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
     };
   } else if (query.category?.includes('sal')) {
     meta = {
-      title: 'Шапки для жінок Arber | Стильні аксесуари для зимового та осіннього сезону',
-      description: 'Придбати жіночі шапки від бренду Arber на офіційному сайті. Теплі моделі для холодної погоди та елегантні варіанти на будь-який смак. Купуйте за вигідною ціною.',
+      title: 'Весняний розпродаж від Arber — Знижки на одяг',
+      description: 'Купуйте чоловічий та жіночий одяг, та взуття від ARBER вигідно з акцією Весняний розпродаж',
       page,
     };
   }

@@ -33,7 +33,7 @@ export const RegisterForm = memo(({
     onSubmit,
     onSuccess: (eventId?: string) => {
       if (typeof window !== 'undefined' && window?.fbq) {
-        window?.fbq('track', 'Registration', {}, { eventID: eventId || '' });
+        // window?.fbq('track', 'Registration', {}, { eventID: eventId || '' });
       }
     },
   });

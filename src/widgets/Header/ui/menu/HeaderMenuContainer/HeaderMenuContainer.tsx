@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useMediaQuery } from '@/shared/lib/hooks/useMediaQuery';
 import { breakpoints } from '@/shared/config/breakpoints';
 import { useHiddenMenu } from '@/shared/lib/hooks/useHiddenMenu';
@@ -20,20 +20,55 @@ export const HeaderMenuContainer = ({ className }:HeaderMenuContainerProps) => {
 
   const [expanded, setExpanded] = useState(false);
   const [expandedOverlay, setExpandedOverlay] = useState(false);
+  const [userClosed, setUserClosed] = useState(false);
   const isHiddenMenu = useHiddenMenu();
 
-  useEffect(() => {
-    const isMenuExpanded = !isMobile && isHomePage;
-    const isOverlayExpanded = isMobile && isHomePage;
-    setExpanded(isMenuExpanded);
-    setExpandedOverlay(isOverlayExpanded);
-  }, [isMobile, isHomePage]);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const closeMenu = () => {
+    setUserClosed(true);
+    setExpanded(false);
+    setExpandedOverlay(false);
+    document.body.style.setProperty('overflow', 'visible');
+  };
 
   useEffect(() => {
-    if (!isMobile && isHomePage) {
+    setUserClosed(false);
+    if (!userClosed) {
+      const isMenuExpanded = !isMobile && isHomePage;
+      const isOverlayExpanded = isMobile && isHomePage;
+      setExpanded(isMenuExpanded);
+      setExpandedOverlay(isOverlayExpanded);
+    }
+  }, [isMobile, isHomePage, pathname, userClosed]);
+
+  useEffect(() => {
+    if (!isMobile && isHomePage && !userClosed) {
       setExpanded(!isHiddenMenu);
     }
-  }, [isMobile, isHiddenMenu, isHomePage]);
+  }, [isMobile, isHiddenMenu, isHomePage, userClosed]);
+
+  useEffect(() => {
+    if (!isHomePage) {
+      setUserClosed(false);
+    }
+  }, [isHomePage]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        closeMenu();
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.style.setProperty('overflow', 'visible');
+  }, [pathname]);
 
   const onMenuButtonClick = () => {
     if (isMobile) {
@@ -55,7 +90,7 @@ export const HeaderMenuContainer = ({ className }:HeaderMenuContainerProps) => {
           expanded={expanded}
           isMobile={isMobile}
         />
-        <HeaderMenu expanded={expanded} expandedOverlay={expandedOverlay} className={styles.menu} />
+        <HeaderMenu expanded={expanded} expandedOverlay={expandedOverlay} className={styles.menu} onClose={closeMenu} />
       </div>
     </HeaderMenuProvider>
 

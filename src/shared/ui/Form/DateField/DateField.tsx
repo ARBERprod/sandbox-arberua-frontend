@@ -62,6 +62,8 @@ export const DateField = memo(({
     const { name } = e.target;
     onBlur?.(name);
   };
+  const { children, ...filteredRest } = rest;
+
   const inputProps = {
     id,
     name,
@@ -69,7 +71,7 @@ export const DateField = memo(({
     disabled,
     onChange: changeHandler,
     onBlur: blurHandler,
-    ...rest,
+    ...filteredRest,
   };
 
   return (

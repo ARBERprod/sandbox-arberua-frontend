@@ -38,7 +38,7 @@ export const CertificatesView = memo(({ className }:CertificatesViewProps) => {
             <AppImage src={BANNERS[locale as Language]} alt="banner" className={styles.image} />
           </div>
           <div className={styles.content}>
-            <Typography variant="title-3" className={styles.title}>{t('certificates:certificates.title')}</Typography>
+            <Typography variant="title-1" className={styles.title}>{t('certificates:certificates.title')}</Typography>
             <Typography variant="body-1" className={styles.paragraph}>
               {t('certificates:certificates.title.paragraph')}
             </Typography>

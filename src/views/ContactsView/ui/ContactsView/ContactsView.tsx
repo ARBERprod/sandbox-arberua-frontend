@@ -18,7 +18,7 @@ export const ContactsView = memo(({ className }:ContactsViewProps) => {
   return (
     <div className={cn(styles.root, className)}>
       <Container>
-        <Typography variant="title-2" centered className={styles.title}>{t('contact.title')}</Typography>
+        <Typography variant="title-1" centered className={styles.title}>{t('contact.title')}</Typography>
         <Flex justify="center">
           <ContactUsFormWrapper
             className={styles.inner}

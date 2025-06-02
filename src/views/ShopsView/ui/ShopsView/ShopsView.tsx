@@ -70,7 +70,7 @@ export const ShopsView = memo(({ className }: ShopsViewProps) => {
     <div className={cn(styles.root, className)}>
       <Container className={styles.container}>
         <PageBreadcrumbs breadcrumbs={breadcrumbs} className={styles.breadcrumbs} />
-        <Typography className={cn(styles.title, 'mb-6')} centered variant="title-2">
+        <Typography className={cn(styles.title, 'mb-6')} centered variant="title-1">
           {t('menu.stores')}
         </Typography>
         <div className={styles.content}>

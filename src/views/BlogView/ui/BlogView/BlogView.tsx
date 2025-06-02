@@ -35,7 +35,7 @@ export const BlogView = memo(({ className }: BlogViewProps) => {
     <div className={cn(styles.root, className)}>
       <Container className={styles.container}>
         <PageBreadcrumbs breadcrumbs={data.data.breadcrumbs} className={styles.bc} />
-        <Typography variant="title-2" centered className="mt-5">
+        <Typography variant="title-1" centered className="mt-5">
           {t('menu.blog')}
         </Typography>
         <BlogCategories className={styles.categories} categories={data.data.categories} />

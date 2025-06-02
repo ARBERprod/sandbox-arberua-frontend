@@ -1,5 +1,5 @@
 import {
-  ReactNode, useCallback, useEffect, useMemo,
+  ReactNode, useCallback, useEffect, useMemo, useState,
 } from 'react';
 import { useSet } from '@/shared/lib/hooks/useSet';
 import { HEADER_ELEMENT_ID } from '@/shared/constants/common';
@@ -10,27 +10,33 @@ interface FloatingProviderProps {
   children?: ReactNode;
 }
 
-const SCROLLBAR_WIDTH = 17;
+// const SCROLLBAR_WIDTH = 17;
 
 export const FloatingProvider = ({ children }: FloatingProviderProps) => {
   const elementsSet = useSet<string>([]);
   const { isDesktop } = useMobileDetect();
+  const [isOverflowHidden, setIsOverflowHidden] = useState(false);
 
   useEffect(() => {
-    if (elementsSet.size > 0) {
-      document.body.style.setProperty('overflow', 'hidden');
+    setIsOverflowHidden(elementsSet.size > 0);
+  }, [elementsSet.size]);
+
+  useEffect(() => {
+    if (isOverflowHidden) {
+      document.body.classList.add('overflow-hidden');
       if (isDesktop()) {
-        document.body.style.setProperty('padding-right', `${SCROLLBAR_WIDTH}px`);
-        document.getElementById(HEADER_ELEMENT_ID)?.style.setProperty('padding-right', `${SCROLLBAR_WIDTH}px`);
+        document.body.classList.add('scrollbar-padding');
       }
     } else {
-      document.body.style.removeProperty('overflow');
-      if (isDesktop()) {
-        document.body.style.removeProperty('padding-right');
-        document.getElementById(HEADER_ELEMENT_ID)?.style.removeProperty('padding-right');
-      }
+      document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove('scrollbar-padding');
     }
-  }, [elementsSet.size, isDesktop]);
+
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove('scrollbar-padding');
+    };
+  }, [isOverflowHidden, isDesktop]);
 
   const appendElement = useCallback((elementId: string) => {
     elementsSet.add(elementId);

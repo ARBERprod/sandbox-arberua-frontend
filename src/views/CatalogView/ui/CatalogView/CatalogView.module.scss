@@ -33,5 +33,30 @@
 
 .body {
   height: 800px;
-  background-color: #fff;
+  background-color: var(--white);
+}
+
+.actionsWrapper {
+  min-height: 56px;
+
+  &.fixed {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    z-index: 2;
+    padding: 0 8px 8px 8px;
+    background-color: var(--white);
+    border-top: 1px solid var(--grey-light);
+
+    @include breakpoint(tablet) {
+      padding: 8px;
+    }
+
+    div {
+      button + div + div {
+        display: none;
+      }
+    }
+  }
 }

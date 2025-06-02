@@ -58,11 +58,12 @@ export const HeaderMenuListItems = memo(({
         } else if (item.children) {
           type = 'accordion';
         }
+        const finalHref = item.url || item.href;
 
         return (
           <HeaderMenuItem
             key={item.title}
-            href={item.url}
+            href={finalHref}
             onClick={onClick}
             type={type as MenuLinkView}
             nested={item.children}

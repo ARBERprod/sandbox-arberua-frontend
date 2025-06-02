@@ -7,7 +7,7 @@
   .slider {
     &_wrap {
       width: 100%;
-      padding-right: var(--subcategories-right-indent);
+      padding-right: 0;
 
       @include breakpoint(tablet) {
         padding-right: var(--subcategories-right-indent-desktop);
@@ -29,8 +29,10 @@
     width: 125px;
     font-size: 12px;
     gap: 0;
+    display: none;
 
     @include breakpoint(tablet) {
+      display: flex;
       width: 130px;
       font-size: 14px;
     }

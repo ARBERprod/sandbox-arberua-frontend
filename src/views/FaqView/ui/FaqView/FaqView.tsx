@@ -209,7 +209,7 @@ export const FaqView = memo(({ className }:FaqViewProps) => {
               <Typography variant="body-2" color="black">{t('menu.faq')}</Typography>
             </Breadcrumps>
           </Flex>
-          <Typography variant="title-2" centered className={styles.title}>{t('menu.faq')}</Typography>
+          <Typography variant="title-1" centered className={styles.title}>{t('menu.faq')}</Typography>
           <div className={styles.inner}>
             <FaqSectionDesktop
               className={cn(styles.faq, 'hide-mobile-tablet')}

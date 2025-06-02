@@ -27,7 +27,7 @@ export const FilterDrawer = ({
       <div className={styles.filters}>
         {filtersSlot}
       </div>
-      <Flex className="mt-16" gap="12">
+      <Flex className={styles.filtersAction} gap="12">
         <Button onClick={onCancel} fullWidth size="large" color="light-secondary">{t('reset')}</Button>
         <Button onClick={onAccept} fullWidth size="large">{t('show')}</Button>
       </Flex>

@@ -9,6 +9,8 @@ import styles from './ProductDetails.module.scss';
 import { Price } from '@/shared/types/common';
 import { StarRating } from '@/shared/ui/StarRating';
 import { useTranslation } from 'next-i18next';
+import DeliveryIcon from '@/shared/assets/icons/delivery.svg';
+import { Svg } from '@/shared/ui/Svg';
 
 interface ProductDetailsProps {
   className?: string;
@@ -53,7 +55,7 @@ export const ProductDetails = ({
           {article}
         </Typography>
       )}
-      <Typography variant="title-4" className={styles.title}>{title}</Typography>
+      <Typography variant="title-1" className={styles.title}>{title}</Typography>
       {Number(commentsCount) > 0 && (
         <Flex gap="8" align="center" className={styles.rating}>
           <StarRating className="pb-2" readonly value={rating || 0} />
@@ -94,6 +96,12 @@ export const ProductDetails = ({
             {slots.actions}
           </div>
         )}
+      <div className={styles.delivery}>
+        <Svg Icon={DeliveryIcon} stroke="black" width={20} height={20} />
+        <p className={styles.delivery__text}>
+          {t('product-delivery-text')}
+        </p>
+      </div>
       <div className={styles.details}>
         <AccordionList>
           {details}

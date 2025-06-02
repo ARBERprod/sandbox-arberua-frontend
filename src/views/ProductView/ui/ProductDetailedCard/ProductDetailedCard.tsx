@@ -45,7 +45,7 @@ export const ProductDetailedCard = memo(({
       content_type: 'product',
     };
     if (typeof window !== 'undefined' && window?.fbq) {
-      window?.fbq('track', 'ViewContent', params, { eventID: eventId });
+      // window?.fbq('track', 'ViewContent', params, { eventID: eventId });
     }
     viewContentEvent({
       slug: query?.slug as string,

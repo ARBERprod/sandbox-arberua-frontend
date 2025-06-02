@@ -20,6 +20,7 @@ export const FullscreenBannerSlide = memo(({
   className, src, type, link, srcMob, srcTab,
 }:FullscreenVideoSlideProps) => {
   if (!src) return null;
+
   return (
     <div className={cn(styles.root, className)}>
       <div className={styles.loader_wrap}>

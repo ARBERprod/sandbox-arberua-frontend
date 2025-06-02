@@ -52,7 +52,6 @@ export const ProductCard = memo(({
 
   const sale = oldPrice && oldPrice?.value !== 0
     ? Math.floor(((oldPrice.value - price.value) / oldPrice.value) * 100) : null;
-
   return (
     <div className={cn(styles.root, className)}>
       <Card
@@ -61,7 +60,7 @@ export const ProductCard = memo(({
         href={product.url}
         sale={sale}
         className={cn(styles.card, { [styles.hasHover]: false })}
-        imageSlot={<CardImagesCarousel pictures={product.pictures} />}
+        imageSlot={<CardImagesCarousel pictures={product.pictures.slice(0, 1)} />}
         hoverContent={slots?.cartActions ? (
           <div className={styles.hoverFooter}>
             <div className={styles.top}>
@@ -86,13 +85,18 @@ export const ProductCard = memo(({
             <LabelDiscount discount={product.discount} />
           )}
         footer={(
-          <Flex fullWidth justify="center">
+          <Flex fullWidth>
             <FlexCol gap="4" align="center">
               <ItemPrice
                 price={price}
                 oldPrice={oldPrice}
               />
             </FlexCol>
+            <div className={styles.addToCartMob}>
+              {slots?.cartActions?.({
+                productId: chosenSku?.id || product.id,
+              })}
+            </div>
           </Flex>
         )}
         classes={classes}

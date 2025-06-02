@@ -15,6 +15,6 @@ export const HeaderMenuButton = ({
   const Icon = (expanded && isMobile) ? CloseIcon : MenuIcon;
 
   return (
-    <MenuButton className={cn(styles.root, className)} Icon={Icon} {...rest} />
+    <MenuButton className={cn(styles.root, className)} Icon={Icon} expanded={expanded} {...rest} />
   );
 };

@@ -179,3 +179,28 @@ $header-transition: background-color .2s ease;
   background-color: var(--grey-light-9);
 }
 
+.contact {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &_icon {
+    @include breakpoint(tablet) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &_text {
+    display: none;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%;
+    letter-spacing: 0;
+    color: var(--black);
+
+    @include breakpoint(tablet) {
+      display: block;
+    }
+  }
+}

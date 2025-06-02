@@ -12,7 +12,7 @@ interface PageTitleProps {
 export const PageTitle = memo(({ className, children }:PageTitleProps) => (
   <div className={cn(styles.root, className)}>
     <Container>
-      <Typography variant="title-2" className={styles.container}>
+      <Typography variant="title-1" className={styles.container}>
         {children}
       </Typography>
     </Container>

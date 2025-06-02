@@ -47,7 +47,7 @@ export const SearchModal = memo(({
   useEffect(() => {
     const eventId = getRandomEventId();
     if (typeof window !== 'undefined' && window?.fbq) {
-      window?.fbq('track', 'Search', { search_string: searchQuery }, { eventID: eventId });
+      // window?.fbq('track', 'Search', { search_string: searchQuery }, { eventID: eventId });
     }
     searchEvent({
       q: searchQuery,

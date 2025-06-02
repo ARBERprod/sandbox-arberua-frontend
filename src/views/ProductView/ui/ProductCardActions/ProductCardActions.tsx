@@ -99,7 +99,7 @@ export const ProductCardActions = memo(({
         content_category: [product?.category || ''],
         content_type: 'product',
       };
-      window?.fbq('track', 'AddToCart', paramsFbq, { eventID: eventId });
+      // window?.fbq('track', 'AddToCart', paramsFbq, { eventID: eventId });
     }
   };
   const itemId = chosenSku?.id || productId;

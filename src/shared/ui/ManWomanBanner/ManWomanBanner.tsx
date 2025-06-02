@@ -81,7 +81,7 @@ export const ManWomanBanner = memo(({
         <FlexCol className={cn(styles.title, styles.title_primary, classes?.text)} align="center" gap="8">
           <Typography
             variant="title-1"
-            as="h2"
+            as="h1"
             className={cn({ [styles.white]: colorWhite })}
           >
             {title}

@@ -53,7 +53,7 @@ export const CategorySlider = memo(({
     <div data-testid="CategorySlider" className={cn(styles.root, className)}>
       <div className={styles.header}>
         <div className={styles.header_top}>
-          <Typography variant="title-2" color="black" className={styles.title_wrap}>
+          <Typography variant="title-1" color="black" className={styles.title_wrap}>
             {category?.title}
           </Typography>
         </div>

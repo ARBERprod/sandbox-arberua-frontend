@@ -90,7 +90,7 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
         content_category: cartData?.items.map((item) => item.category),
         content_type: 'product',
       };
-      window?.fbq('track', 'InitiateCheckout', paramsFbq, { eventID: eventId });
+      // window?.fbq('track', 'InitiateCheckout', paramsFbq, { eventID: eventId });
       checkoutEvent({
         eventId,
       });
