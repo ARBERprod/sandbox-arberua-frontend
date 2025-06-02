@@ -7,7 +7,6 @@
   bottom: 100%;
   top: 0;
   width: 100vw;
-  height: fit-content !important;
   z-index: var(--z-header-menu);
   transition: top var(--transition-menu-duration) ease 0s;
   padding-top: var(--header-height);
