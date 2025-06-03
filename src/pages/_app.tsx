@@ -28,7 +28,7 @@ import { BinotelWidget } from '@/widgets/Binotel';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Language } from '@/shared/config/lang';
-// import Script from 'next/script';
+import Script from 'next/script';
 import { useEffect } from 'react';
 import { $api } from '@/shared/api/api';
 
@@ -112,24 +112,24 @@ function App({
       {/*     fbq('track', 'PageView'); */}
       {/*   `} */}
       {/* </Script> */}
-      {/* <Script */}
-      {/*   id="gtm" */}
-      {/*   strategy="lazyOnload" */}
-      {/* > */}
-      {/*   {` */}
-      {/*     (function(w,d,s,l,i){ */}
-      {/*       w[l]=w[l]||[]; */}
-      {/*       w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'}); */}
-      {/*       var f=d.getElementsByTagName(s)[0], */}
-      {/*           j=d.createElement(s), */}
-      {/*           dl=l!='dataLayer'?'&l='+l:''; */}
-      {/*       j.async=true; */}
-      {/*       j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; */}
-      {/*       console.log({f, j, dl, i, w,d,s,l}); */}
-      {/*       f.parentNode.insertBefore(j,f); */}
-      {/*     })(window,document,'script','dataLayer','GTM-PHHD7CTQ'); */}
-      {/*   `} */}
-      {/* </Script> */}
+      <Script
+        id="gtm"
+        strategy="lazyOnload"
+      >
+        {`
+          (function(w,d,s,l,i){
+            w[l]=w[l]||[];
+            w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),
+                dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            console.log({f, j, dl, i, w,d,s,l});
+            f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-PHHD7CTQ');
+        `}
+      </Script>
       <FloatingProvider>
         <ConfirmModalProvider>
           <Provider store={store}>
