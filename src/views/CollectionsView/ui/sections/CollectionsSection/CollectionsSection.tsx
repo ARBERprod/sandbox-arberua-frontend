@@ -59,7 +59,7 @@ export const CollectionsSection = memo(({
             </Flex>
             <ProductSlider
               products={products}
-              slidesPerView={2}
+              slidesPerView={3}
               notFullWidthOnMobile
               navigationMode="wide"
             />
