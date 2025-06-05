@@ -12,7 +12,9 @@ import { ProductComments } from '../ProductComments';
 import { Typography } from '@/shared/ui/Typography';
 import { ProductSizeSlot } from '../ProductSizeSlot';
 import { useProductSkus } from '../../lib/ProductSkusContext';
+import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
+import { useUser } from '@/entities/User';
 import { useUserId } from '@/entities/Session';
 import { useRouter } from 'next/router';
 import { useViewContentMutation } from '@/entities/Events';
@@ -33,6 +35,9 @@ export const ProductDetailedCard = memo(({
   const clientId = useUserId();
   const [viewContentEvent] = useViewContentMutation();
   const { query } = useRouter();
+  const user = useUser();
+
+  const [eventId] = useState(() => getRandomEventId());
 
   useEffect(() => {
     const eventId = getRandomEventId();
@@ -51,7 +56,7 @@ export const ProductDetailedCard = memo(({
       slug: query?.slug as string,
       eventId,
     });
-  }, [product, chosenSku, viewContentEvent, query?.slug]);
+  }, [product, chosenSku, viewContentEvent, query?.slug, user, eventId]);
 
   useEffect(() => {
     const items = [{
@@ -90,11 +95,16 @@ export const ProductDetailedCard = memo(({
       items: itemsMeasurements,
     };
 
+    const user_data = getUserDataForAnalytics(user);
+
     pushDataLayerEvent({
       event: 'view_item',
+      event_id: eventId,
       ecommerce: {
+        value: product.price.value,
         items,
       },
+      ...(user_data && { user_data }),
     });
 
     measurementsPost({
@@ -102,7 +112,7 @@ export const ProductDetailedCard = memo(({
       params,
       client_id: clientId,
     });
-  }, [product, chosenSku, clientId]);
+  }, [product, chosenSku, clientId, user, eventId]);
 
   const { price, oldPrice } = getItemPrices(product, chosenSku);
   return (
@@ -136,31 +146,31 @@ export const ProductDetailedCard = memo(({
           details={(
             <>
               {product.description
-              && (
-                <AccordionItem
-                  title={t('product-card:description')}
-                  content={(
-                    <div
-                      className={styles.description}
-                      dangerouslySetInnerHTML={{ __html: product.description }}
-                    />
-                  )}
-                />
-              )}
+                && (
+                  <AccordionItem
+                    title={t('product-card:description')}
+                    content={(
+                      <div
+                        className={styles.description}
+                        dangerouslySetInnerHTML={{ __html: product.description }}
+                      />
+                    )}
+                  />
+                )}
               {product.materials.length > 0
-              && (
-                <AccordionItem title={t('product-card:material_and_care')}>
-                  <Typography>
-                    {product.materials.map((material, index) => (
-                      <Typography as="span" variant="body-2" key={material.title}>
-                        {material.title}
-                        {index !== product.materials.length - 1 && ','}
-                        {' '}
-                      </Typography>
-                    ))}
-                  </Typography>
-                </AccordionItem>
-              )}
+                && (
+                  <AccordionItem title={t('product-card:material_and_care')}>
+                    <Typography>
+                      {product.materials.map((material, index) => (
+                        <Typography as="span" variant="body-2" key={material.title}>
+                          {material.title}
+                          {index !== product.materials.length - 1 && ','}
+                          {' '}
+                        </Typography>
+                      ))}
+                    </Typography>
+                  </AccordionItem>
+                )}
               <AccordionItem title={t('product-card:delivery')} content={t('product-card:delivery.text')} />
               <AccordionItem title={t('product-card:return_policy')} content={t('product-card:return_policy.text')} />
               <AccordionItem title={`${t('product-card:reviews')}${commentsCount > 0 ? ` (${commentsCount})` : ''}`}>

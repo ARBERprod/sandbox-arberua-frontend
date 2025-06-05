@@ -12,3 +12,7 @@ export interface User {
   birthday: string | null;
   user_id: string;
 }
+
+export interface UserSchema {
+  data: User | null;
+}
