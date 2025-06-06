@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -13,8 +13,11 @@ import { Svg } from '@/shared/ui/Svg';
 import styles from './CheckoutSuccesView.module.scss';
 import { OrderDto } from '@/entities/Order';
 import { ClothesItem, SmallProductCard } from '@/entities/Product';
+import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
+import { useUser } from '@/entities/User';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
+import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 
 interface CheckoutSuccessViewProps {
   className?: string;
@@ -29,6 +32,9 @@ export const CheckoutSuccessView = memo(
     const { push } = useRouter();
     const { t } = useTranslation();
     const clientId = useUserId();
+
+    const user = useUser();
+    const [eventId] = useState(() => getRandomEventId());
 
     useEffect(() => {
       const orderInfo = {
@@ -79,6 +85,8 @@ export const CheckoutSuccessView = memo(
         shipping: 0,
       };
 
+      const user_data = getUserDataForAnalytics(user);
+
       measurementsPost({
         name: 'purchase',
         params,
@@ -87,7 +95,9 @@ export const CheckoutSuccessView = memo(
 
       pushDataLayerEvent({
         event: 'purchase',
+        event_id: eventId,
         ecommerce: orderInfo,
+        ...(user_data && { user_data }),
       });
 
       if (typeof window !== 'undefined' && window?.fbq) {
@@ -101,7 +111,7 @@ export const CheckoutSuccessView = memo(
         };
         // window?.fbq('track', 'Purchase', paramsFbq, { eventID: order.id });
       }
-    }, [order, clientId]);
+    }, [order, clientId, user, eventId]);
 
     const goToHome = () => {
       push(routerPaths.main);
