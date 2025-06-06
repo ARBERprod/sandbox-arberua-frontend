@@ -8,6 +8,8 @@ import {
 } from '@/entities/Category';
 import { Typography } from '@/shared/ui/Typography';
 import styles from './CategorySlider.module.scss';
+import { CardView } from '@/shared/types/common';
+import { GridViewSwitcher } from '@/shared/ui/GridViewSwitcher';
 
 export interface CategorySliderProps {
   className?: string;
@@ -15,6 +17,8 @@ export interface CategorySliderProps {
   category: Category | null;
   isSubcategory: boolean;
   onCategoryChange: (category: Category) => void;
+  onViewChange: (view: CardView) => void;
+  view: CardView;
 }
 
 export const CategorySlider = memo(({
@@ -22,6 +26,8 @@ export const CategorySlider = memo(({
   categories = [],
   onCategoryChange,
   category,
+  onViewChange,
+  view,
   isSubcategory = false,
 }: CategorySliderProps) => {
   const clickCategoryHandler = useCallback((category: Category) => {
@@ -56,6 +62,7 @@ export const CategorySlider = memo(({
           <Typography variant="title-1" color="black" className={styles.title_wrap}>
             {category?.title}
           </Typography>
+          <GridViewSwitcher className={styles.viewSwitcher} value={view} onChange={onViewChange} />
         </div>
       </div>
       {isSubcategory ? (

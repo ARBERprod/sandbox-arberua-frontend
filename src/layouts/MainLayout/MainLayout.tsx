@@ -62,7 +62,7 @@ export const MainLayout = ({
     const baseTitle = metaData?.title ? t(metaData.title as any) : title;
     const pageNumber = metaData?.page ? ` - ${t('page')} ${metaData.page}` : '';
 
-    return baseTitle ? `${baseTitle}${pageNumber}` : t('home.title');
+    return baseTitle ? `${baseTitle}${pageNumber}` : 'Інтернет-магазин українського бренду ARBER - Купити Чоловічий та Жіночий одяг, взуття, аксесуари';
   };
   const metaTitle = getMetaTitle();
 
