@@ -76,7 +76,7 @@ export const MainLayout = ({
           name="description"
           content={(dynamicMeta?.description && `${dynamicMeta.textBeforeDescription ? `${dynamicMeta.textBeforeDescription}` : ''} ${dynamicMeta.description} ${dynamicMeta.textAfterDescription ? `${dynamicMeta.textAfterDescription}` : ''} ${dynamicMeta.descriptionUsesTitle ? dynamicMeta.descriptionUsesTitle : ''} ${dynamicMeta.textEndDescription ? `${dynamicMeta.textEndDescription}` : ''}`)
                         || (metaData?.description && t(metaData.description as any))
-                        || t('home.description')}
+                        || 'Офіційний сайт українського бренду ARBER – стильний чоловічий і жіночий одяг, взуття та аксесуари. Сезонні знижки, вигідні акції та великий асортимент для створення вашого ідеального образу.'}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
