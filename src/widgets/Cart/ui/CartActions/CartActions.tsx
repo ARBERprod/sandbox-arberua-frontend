@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import cn from 'classnames';
 import { Divider } from '@/shared/ui/Divider';
 import { Flex } from '@/shared/ui/Flex';
@@ -12,8 +12,6 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'next-i18next';
 import styles from './CartActions.module.scss';
 import { displayPrice } from '@/shared/lib/utils/displayPrice';
-// import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
-// import { useUser } from '@/entities/User';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
 import { useInitiateCheckoutMutation } from '@/entities/Events';
@@ -31,9 +29,6 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
   const { t } = useTranslation();
   const clientId = useUserId();
   const [checkoutEvent] = useInitiateCheckoutMutation();
-
-  // const user = useUser();
-  const [eventId] = useState(() => getRandomEventId());
 
   const goToCheckout = async () => {
     const items = cartData?.items.map((item) => ({
@@ -72,8 +67,6 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
       items: itemsMeasurements,
     };
 
-    // const user_data = getUserDataForAnalytics(user);
-
     measurementsPost({
       name: 'begin_checkout',
       params,
@@ -82,14 +75,13 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
 
     pushDataLayerEvent({
       event: 'begin_checkout',
-      // event_id: eventId,
       ecommerce: {
         items,
       },
-      // ...(user_data && { user_data }),
     });
 
     if (typeof window !== 'undefined' && window?.fbq) {
+      const eventId = getRandomEventId();
       const paramsFbq = {
         value: cartData?.items.map((item) => item.cost.value).reduce((acc, item) => +acc + +item, 0),
         currency: 'UAH',

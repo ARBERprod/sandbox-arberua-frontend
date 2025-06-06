@@ -154,8 +154,10 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
         <CategorySlider
           categories={data.data.children}
           category={data.data.category}
+          view={view}
           isSubcategory={getIsSubCategory(data.data.category)}
           onCategoryChange={onCategoryChange}
+          onViewChange={viewChangeHandler}
         />
         <div
           ref={actionsRef}
