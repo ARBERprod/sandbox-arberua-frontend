@@ -9,6 +9,11 @@
 
 .toggleWrapper {
   position: relative;
+  flex-direction: row-reverse;
+
+  @include breakpoint(tablet) {
+    flex-direction: row;
+  }
 
   &::after {
     content: "";

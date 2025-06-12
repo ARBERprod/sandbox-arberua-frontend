@@ -18,7 +18,8 @@
     }
 
     .product {
-      max-width: 100%;
+      max-width: calc(100% / 2);
+      padding: 0 4px;
 
       @include breakpoint(tablet) {
         max-width: calc(100% / 3);
@@ -39,8 +40,7 @@
     }
 
     .product {
-      max-width: calc(100% / 2);
-      padding: 0 4px;
+      max-width: 100%;
 
       @include breakpoint(tablet) {
         max-width: calc(100% / 4);
