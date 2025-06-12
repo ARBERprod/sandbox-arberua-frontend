@@ -30,8 +30,8 @@ export const GridViewSwitcher = memo(({ onChange, value, className }:GridViewSwi
   // };
   const isMobile = useMediaQuery(breakpoints['only-mobile']);
 
-  const firstLabel = isMobile ? <Svg width={16} Icon={GridView2Plate} stroke="black" /> : <Svg width={24} Icon={GridView4Plate} stroke="black" />;
-  const secondLabel = isMobile ? <Svg width={16} Icon={GridView1Plate} stroke="black" /> : <Svg width={24} Icon={GridView3Plate} stroke="black" />;
+  const firstLabel = isMobile ? <Svg width={16} Icon={GridView1Plate} stroke="black" /> : <Svg width={24} Icon={GridView4Plate} stroke="black" />;
+  const secondLabel = isMobile ? <Svg width={16} Icon={GridView2Plate} stroke="black" /> : <Svg width={24} Icon={GridView3Plate} stroke="black" />;
 
   const handleFirstClick = () => {
     onChange(CardView.NORMAL);
