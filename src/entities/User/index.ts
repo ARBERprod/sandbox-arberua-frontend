@@ -1,1 +1,2 @@
-export type { User } from './model/types';
+export { useUser } from './model/hooks/useUser';
+export type { User, UserSchema } from './model/types';

@@ -13,8 +13,11 @@ import styles from './ProductCardActions.module.scss';
 // import { AvailabilityStoresButton } from '@/widgets/ProductAvailability';
 import { useProductSkus } from '@/views/ProductView/lib/ProductSkusContext';
 import { DetailedProduct } from '@/entities/Product';
+import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
+import { useUser } from '@/entities/User';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
+import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 
 interface ProductCardActionsProps {
     className?: string;
@@ -34,11 +37,14 @@ export const ProductCardActions = memo(({
   const { chosenSku, productSkus } = useProductSkus();
   const clientId = useUserId();
 
+  const user = useUser();
+  const [eventId] = useState(() => getRandomEventId());
+
   const onTryOnClose = () => {
     setIsOpenTryOn(false);
   };
 
-  const onAddToCart = (eventId: string) => {
+  const onAddToCart = () => {
     console.log('product', product);
 
     const items = [{
@@ -77,11 +83,15 @@ export const ProductCardActions = memo(({
       items: itemsMeasurements,
     };
 
+    const user_data = getUserDataForAnalytics(user);
+
     pushDataLayerEvent({
       event: 'add_to_cart',
+      event_id: eventId,
       ecommerce: {
         items,
       },
+      ...(user_data && { user_data }),
     });
 
     measurementsPost({
