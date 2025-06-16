@@ -8,6 +8,10 @@ import styles from './AboutView.module.scss';
 import { AboutBrandSection } from '../sections/AboutBrandSection';
 import { AboutBannerWithContentSection } from '../sections/AboutBannerWithContentSection';
 import { getAboutBrandSections } from '../../constants';
+import { NewsSection } from '@/views/MainView/ui/sections/NewsSection';
+import { useMainPageData } from '@/views/MainView/lib/useMainPageData';
+import { PageLoader } from '@/shared/ui/Loader';
+import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 
 interface AboutViewProps {
   className?: string;
@@ -15,6 +19,11 @@ interface AboutViewProps {
 
 export const AboutView = memo(({ className }:AboutViewProps) => {
   const { t } = useTranslation('about-page');
+  const { latest, isLoading, errors } = useMainPageData();
+
+  if (isLoading) return <PageLoader />;
+  if (errors.banners || errors.base) return <ErrorMessage error="Error loading data" />;
+
   return (
     <div className={cn(styles.root, className)}>
       <PageTitle>{t('heading')}</PageTitle>
@@ -66,6 +75,7 @@ export const AboutView = memo(({ className }:AboutViewProps) => {
         image={getAboutBrandSections(t)[5].image}
         variant="right"
       />
+      <NewsSection latestData={latest} className={styles.news} />
     </div>
   );
 });
