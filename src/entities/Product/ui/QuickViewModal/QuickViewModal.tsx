@@ -43,8 +43,8 @@ export const QuickViewModal = ({
       centered
       rootClassName={styles.quickViewRoot}
     >
-      <div className={styles.modal}>
-        <div className={styles.container}>
+      <div className={styles.modal} onClick={onClose}>
+        <div className={styles.container} onClick={(e) => e.stopPropagation()}>
           <button className={styles.closeBtn} onClick={onClose}>
             <Svg Icon={CloseIcon} stroke="grey" width={16} height={16} />
           </button>
@@ -90,7 +90,7 @@ export const QuickViewModal = ({
                 onClose();
               }}
             >
-              Подробнее
+              {t('quick_view_more')}
             </Button>
           </div>
         </div>
