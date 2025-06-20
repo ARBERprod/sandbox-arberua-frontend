@@ -29,6 +29,7 @@ export const NewsSection = memo(({
         <ManWomanSlider
           href={href}
           title={t('new_slider.title')}
+          linkText={t('news_view_all')}
           chosenTab={chosenTab}
           onTabChange={onTabChange}
           tabs={tabs}
