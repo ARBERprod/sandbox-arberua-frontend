@@ -25,6 +25,9 @@ import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
 import { useFixedHeader } from '@/shared/lib/hooks/useFixedHeader';
+import { useGetPostsQuery, PostsGrid } from '@/entities/Blog';
+import { Typography } from '@/shared/ui/Typography';
+import { useTranslation } from 'next-i18next';
 
 interface CatalogViewProps {
   className?: string;
@@ -43,6 +46,7 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
     moreBtnClickHandler,
     page,
   } = usePaginate();
+  const { t } = useTranslation('common');
   const view = useSelector(UISelectors.getGlobalView);
   const { setView } = useUIActions();
   const { category, filters } = query;
@@ -74,6 +78,11 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
   const isHeaderFixed = useFixedHeader();
   const actionsRef = useRef<HTMLDivElement>(null);
   const [isActionsFixed, setIsActionsFixed] = useState(false);
+
+  const { data: blogData } = useGetPostsQuery({
+    page: 1,
+    merge: false,
+  });
 
   useEffect(() => {
     if (data?.data?.products) {
@@ -147,6 +156,7 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
   if (isLoading) return <PageLoader />;
   if (isError || !data) return <ErrorMessage error="Error" />;
 
+  // @ts-ignore
   return (
     <div className={cn(styles.root, className)}>
       <Container>
@@ -182,6 +192,14 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
           onButtonClick={moreBtnClickHandler}
           onPageChange={pageChangeHandler}
         />
+        <Typography variant="title-1" centered className="mt-10">
+          {t('category_read_more_blog_title')}
+        </Typography>
+        {blogData?.data?.posts && blogData.data.posts.length > 0 && (
+          <div className={styles.latestNews}>
+            <PostsGrid className={styles.latestNewsWrapper} articles={blogData.data.posts.slice(0, 3)} />
+          </div>
+        )}
       </Container>
     </div>
   );
