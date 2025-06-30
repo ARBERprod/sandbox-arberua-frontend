@@ -205,10 +205,13 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
         {(() => {
           if (!promotionsData || !promotionsData.data.length) return null;
 
+          console.log('promotionsData', promotionsData);
+
           const currentCatalogLink = `/catalog/${category}`;
 
           const activePromotions = promotionsData.data
-            .filter((promo) => promo.link && promo.link !== currentCatalogLink)
+            .filter((promo) => promo.is_started
+              && promo.link !== currentCatalogLink)
             .sort((a, b) => {
               const aEnd = new Date(a.end_date).getTime();
               const bEnd = new Date(b.end_date).getTime();
