@@ -19,6 +19,8 @@ import { useSelector } from 'react-redux';
 import { UISelectors, useUIActions } from '@/entities/UI';
 import styles from './CollectionsCatalogView.module.scss';
 import { FilterUtils } from '@/entities/Filter';
+import { CategorySlider } from '@/widgets/CategorySlider';
+import { Category } from '@/entities/Category';
 
 interface CollectionsCatalogViewProps {
   className?: string;
@@ -34,7 +36,7 @@ export const CollectionsCatalogView = memo(({ className }: CollectionsCatalogVie
   const view = useSelector(UISelectors.getGlobalView);
   const { setView } = useUIActions();
 
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const filtersString = FilterUtils.getFilterStringFromQueryArray(query.filters as string[] | undefined);
   const collectionId = query.id as string;
   const {
@@ -48,6 +50,26 @@ export const CollectionsCatalogView = memo(({ className }: CollectionsCatalogVie
     sort: query.sort as string,
     page,
   });
+
+  const currentCollection: Category | null = data?.data.collection
+    ? {
+      id: data.data.collection.id,
+      title: data.data.collection.title,
+      description: data.data.collection.description,
+      url: String(data.data.collection.url),
+    }
+    : null;
+  const convertedCollections = ((data?.data as any)?.children || []).map((c: any) => ({
+    ...c,
+  }));
+
+  const onCollectionChange = useCallback((category: Category) => {
+    const filterSlug = category.id;
+    const url = filterSlug
+      ? `/collection/${collectionId}/kategoriia=${filterSlug}`
+      : `/collection/${collectionId}`;
+    push(url);
+  }, [push, collectionId]);
 
   const viewChangeHandler = useCallback((view: CardView) => {
     setView(view);
@@ -66,6 +88,16 @@ export const CollectionsCatalogView = memo(({ className }: CollectionsCatalogVie
           <Typography variant="title-2" centered className={styles.title}>
             {data.data.collection.title}
           </Typography>
+          <CategorySlider
+            basePath={routerPaths.collections_catalog(collectionId)}
+            categories={convertedCollections}
+            category={currentCollection}
+            filters={data.data.filter || []}
+            view={view}
+            isSubcategory={false}
+            onCategoryChange={onCollectionChange}
+            onViewChange={viewChangeHandler}
+          />
           <CatalogActions
             className={styles.actions}
             basePath={routerPaths.collections_catalog(collectionId)}
