@@ -15,6 +15,7 @@ interface ManWomanSliderProps {
   onTabChange: (tab: string) => void;
   tabs: ManWomanTab[];
   title: string;
+  linkText?: string;
   href: string;
 }
 
@@ -26,6 +27,7 @@ export const ManWomanSlider = memo(({
   href,
   title,
   tabs,
+  linkText,
 }: ManWomanSliderProps) => {
   const { t } = useTranslation();
   return (
@@ -35,7 +37,7 @@ export const ManWomanSlider = memo(({
         <ManWomanSwitcherButtons tabs={tabs} className="hide-mobile-tablet" setChosenTab={onTabChange} chosenTab={chosenTab} />
         {href && (
           <Link className={styles.link} href={href}>
-            <Typography as="span" variant="body-2">{t('view_all')}</Typography>
+            <Typography as="span" variant="body-2">{ linkText || t('view_all')}</Typography>
           </Link>
         )}
       </Flex>
