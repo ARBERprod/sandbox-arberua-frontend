@@ -10,6 +10,7 @@ import { CardView } from '@/shared/types/common';
 import { LabelDiscount } from '@/shared/ui/LabelDiscount';
 import styles from './ProductCard.module.scss';
 import { getItemPrices, ProductSkus } from '@/entities/Product';
+import { QuickViewModal } from '@/entities/Product/ui/QuickViewModal';
 
 interface ActionProps {
   productId: string;
@@ -40,6 +41,10 @@ export const ProductCard = memo(({
   const initedRef = useRef(false);
 
   const { price, oldPrice } = getItemPrices(product, chosenSku);
+  const [isQuickViewOpen, setQuickViewOpen] = useState(false);
+
+  const openQuickView = () => setQuickViewOpen(true);
+  const closeQuickView = () => setQuickViewOpen(false);
 
   useEffect(() => {
     if (!modificationsExist || initedRef.current) return;
@@ -93,13 +98,19 @@ export const ProductCard = memo(({
               />
             </FlexCol>
             <div className={styles.addToCartMob}>
-              {slots?.cartActions?.({
-                productId: chosenSku?.id || product.id,
-              })}
+              <button onClick={openQuickView}>
+                Быстрый просмотр
+              </button>
             </div>
           </Flex>
         )}
         classes={classes}
+      />
+      <QuickViewModal
+        isOpen={isQuickViewOpen}
+        onClose={closeQuickView}
+        product={product}
+        cartActions={slots?.cartActions}
       />
     </div>
   );

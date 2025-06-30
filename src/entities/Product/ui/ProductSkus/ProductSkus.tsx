@@ -31,6 +31,9 @@ export const ProductSkus = ({
       {filteredSkus.map((sku) => (
         <button
           type="button"
+          className={cn(styles.sku, {
+            [styles.active]: activeSkuId === sku.id,
+          })}
           disabled={disableIfIsNotSale && !sku.is_sale}
           onClick={() => onClick?.(sku)}
           key={sku.id}
