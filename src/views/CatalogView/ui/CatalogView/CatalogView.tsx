@@ -25,6 +25,7 @@ import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
 import { useFixedHeader } from '@/shared/lib/hooks/useFixedHeader';
+import { useGetPromotionsQuery, PromotionsGrid } from '@/entities/Promotion';
 import { useGetPostsQuery, PostsGrid } from '@/entities/Blog';
 import { Typography } from '@/shared/ui/Typography';
 import { useTranslation } from 'next-i18next';
@@ -83,6 +84,7 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
     page: 1,
     merge: false,
   });
+  const { data: promotionsData } = useGetPromotionsQuery();
 
   useEffect(() => {
     if (data?.data?.products) {
@@ -200,6 +202,31 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
             <PostsGrid className={styles.latestNewsWrapper} articles={blogData.data.posts.slice(0, 3)} />
           </div>
         )}
+        {(() => {
+          if (!promotionsData || !promotionsData.data.length) return null;
+
+          const currentCatalogLink = `/catalog/${category}`;
+
+          const activePromotions = promotionsData.data
+            .filter((promo) => promo.link && promo.link !== currentCatalogLink)
+            .sort((a, b) => {
+              const aEnd = new Date(a.end_date).getTime();
+              const bEnd = new Date(b.end_date).getTime();
+              return aEnd - bEnd;
+            })
+            .slice(0, 2);
+
+          if (activePromotions.length === 0) return null;
+
+          return (
+            <div className={styles.latestPromotions}>
+              <Typography variant="title-1" centered className="mt-10">
+                {t('category_read_more_promo_title')}
+              </Typography>
+              <PromotionsGrid className="mt-6" promotions={activePromotions} />
+            </div>
+          );
+        })()}
       </Container>
     </div>
   );
