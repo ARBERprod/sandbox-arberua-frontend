@@ -204,9 +204,6 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
         )}
         {(() => {
           if (!promotionsData || !promotionsData.data.length) return null;
-
-          console.log('promotionsData', promotionsData);
-
           const currentCatalogLink = `/catalog/${category}`;
 
           const activePromotions = promotionsData.data
