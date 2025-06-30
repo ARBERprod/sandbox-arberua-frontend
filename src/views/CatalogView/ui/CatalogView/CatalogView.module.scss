@@ -60,3 +60,24 @@
     }
   }
 }
+
+.latestNews {
+  margin-top: 20px;
+
+  &Wrapper {
+    display: grid !important;
+    grid-template-columns: 1fr;
+
+    @include breakpoint(tablet) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    & > div {
+      max-width: inherit;
+    }
+  }
+}
+
+.latestPromotions {
+  margin-top: 60px;
+}
