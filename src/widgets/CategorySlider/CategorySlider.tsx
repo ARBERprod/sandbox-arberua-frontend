@@ -84,7 +84,7 @@ export const CategorySlider = memo(({
           <Typography variant="title-1" color="black" className={styles.title_wrap}>
             {category?.title}
           </Typography>
-          <GridViewSwitcher className={styles.viewSwitcher} value={view} onChange={onViewChange}/>
+          <GridViewSwitcher className={styles.viewSwitcher} value={view} onChange={onViewChange} />
         </div>
       </div>
       {isSubcategory ? (
