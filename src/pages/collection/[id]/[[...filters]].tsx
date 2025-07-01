@@ -27,7 +27,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   return {
     props: {
       ...(await serverSideTranslations(locale as string, [
-        'common',
+        'common', 'sizes',
       ])),
     },
   };
