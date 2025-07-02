@@ -225,7 +225,7 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
               <Typography variant="title-1" centered className="mt-10">
                 {t('category_read_more_promo_title')}
               </Typography>
-              <PromotionsGrid className="mt-6" promotions={activePromotions} />
+              <PromotionsGrid className={cn(styles.promotions, 'mt-6')} promotions={activePromotions} />
             </div>
           );
         })()}
