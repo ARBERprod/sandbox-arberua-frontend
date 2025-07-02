@@ -10,50 +10,72 @@ import { Typography } from '@/shared/ui/Typography';
 import styles from './CategorySlider.module.scss';
 import { CardView } from '@/shared/types/common';
 import { GridViewSwitcher } from '@/shared/ui/GridViewSwitcher';
+import { FilterItem } from '@/entities/Filter';
 
 export interface CategorySliderProps {
-  className?: string;
-  categories: Category[];
-  category: Category | null;
-  isSubcategory: boolean;
-  onCategoryChange: (category: Category) => void;
-  onViewChange: (view: CardView) => void;
-  view: CardView;
+  basePath: string;
+  className?: string,
+  categories: Category[],
+  category: Category | null,
+  filters: FilterItem[];
+  isSubcategory: boolean,
+  onCategoryChange: (category: Category) => void,
+  onViewChange: (view: CardView) => void,
+  view: CardView,
 }
 
 export const CategorySlider = memo(({
   className,
   categories = [],
+  filters,
   onCategoryChange,
   category,
   onViewChange,
   view,
+  basePath,
   isSubcategory = false,
 }: CategorySliderProps) => {
   const clickCategoryHandler = useCallback((category: Category) => {
     onCategoryChange(category);
   }, [onCategoryChange]);
 
-  const slidesCategory: Slide[] = useMemo(() => categories.map((category) => {
-    if (!isSubcategory) {
-      return {
-        id: category.url,
-        slide: (
-          <SubcategoryLabelSlide
-            category={category}
-            onClick={clickCategoryHandler}
-          />),
-      };
+  const slidesCategory: Slide[] = useMemo(() => {
+    if (categories.length === 0 && filters.length > 0) {
+      const categoryFilter = filters[0];
+
+      return categoryFilter.values.map((value) => {
+        const url = `${basePath}/${categoryFilter.slug}=${value.slug}`;
+
+        return {
+          id: value.slug,
+          slide: (
+            <SubcategoryLabelSlide
+              category={{
+                id: value.slug,
+                title: value.title,
+                url,
+              }}
+              onClick={() => onCategoryChange({
+                id: value.slug,
+                title: value.title,
+                url,
+              })}
+            />
+          ),
+        };
+      });
     }
-    return {
+
+    return categories.map((category) => ({
       id: category.url,
       slide: (
         <SubcategoryLabelSlide
           category={category}
           onClick={clickCategoryHandler}
-        />),
-    };
-  }), [categories, clickCategoryHandler, isSubcategory]);
+        />
+      ),
+    }));
+  }, [categories, filters, basePath, onCategoryChange, clickCategoryHandler]);
 
   return (
     <div data-testid="CategorySlider" className={cn(styles.root, className)}>

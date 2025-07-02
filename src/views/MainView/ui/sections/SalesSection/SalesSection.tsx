@@ -5,6 +5,7 @@ import { ManWomanSlider } from '@/widgets/ProductPresenter';
 import { useSectionData } from '../../../lib/useSectionData';
 import styles from './SalesSection.module.scss';
 import { SliderData } from '../../../api/types';
+import { useTranslation } from 'next-i18next';
 
 interface SalesSectionProps {
   className?: string;
@@ -15,6 +16,7 @@ export const SalesSection = memo(({ className, sliderData = [] }: SalesSectionPr
   const {
     products, tabs, onTabChange, href, chosenTab,
   } = useSectionData(sliderData);
+  const { t } = useTranslation('main-page');
 
   if (sliderData.length === 0) return null;
 
@@ -24,6 +26,7 @@ export const SalesSection = memo(({ className, sliderData = [] }: SalesSectionPr
         <ManWomanSlider
           tabs={tabs}
           title="Outlet"
+          linkText={t('sales_view_all')}
           href={href}
           products={products}
           onTabChange={onTabChange}

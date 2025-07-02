@@ -164,8 +164,10 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
       <Container>
         <PageBreadcrumbs breadcrumbs={data.data.breadcrumbs} className={styles.breadcrumps} />
         <CategorySlider
+          basePath={`${routerPaths.catalog}/${category}`}
           categories={data.data.children}
           category={data.data.category}
+          filters={data.data.filters}
           view={view}
           isSubcategory={getIsSubCategory(data.data.category)}
           onCategoryChange={onCategoryChange}

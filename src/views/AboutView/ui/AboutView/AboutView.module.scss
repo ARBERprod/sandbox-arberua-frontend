@@ -7,3 +7,8 @@
     padding-bottom: 0;
   }
 }
+
+.news {
+  @include adaptive-value(margin-top, 85, 40);
+  @include adaptive-value(margin-bottom, 85, 40);
+}
