@@ -63,7 +63,10 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
       quantity: item.quantity,
     }));
 
-    const value = itemsMeasurements?.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const value = cartData?.items.reduce((acc, item) => {
+      const cost = typeof item.cost?.value === 'number' ? item.cost.value : parseFloat(item.cost?.value || '0');
+      return acc + cost;
+    }, 0);
 
     const params = {
       currency: 'UAH',

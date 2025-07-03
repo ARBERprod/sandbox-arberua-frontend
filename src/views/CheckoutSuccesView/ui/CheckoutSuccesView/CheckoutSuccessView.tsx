@@ -17,6 +17,7 @@ import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDat
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useAuth, useUserId } from '@/entities/Session';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
+import { User } from '@/entities/User';
 
 interface CheckoutSuccessViewProps {
   className?: string;
@@ -34,6 +35,29 @@ export const CheckoutSuccessView = memo(
 
     const { userData } = useAuth();
     const [eventId] = useState(() => getRandomEventId());
+
+    const fallbackUserData: User = {
+      email: order.customer.email || '',
+      phone: order.customer.phone || '',
+      first_name: order.customer.first_name || '',
+      last_name: order.customer.last_name || '',
+      middle_name: order.customer.middle_name || '',
+      bonus_balance: 0,
+      sex: null,
+      birthday: null,
+      addresses: [
+        {
+          id: order.address?.id || '',
+          index: '',
+          house: order.address?.house || '',
+          flat: order.address?.flat || '',
+          street: order.address?.street || '',
+          city: order.city || {},
+          country: (order.address as any)?.country || undefined,
+        },
+      ],
+      user_id: order.customer.id || '',
+    };
 
     useEffect(() => {
       const orderInfo = {
@@ -84,7 +108,7 @@ export const CheckoutSuccessView = memo(
         shipping: 0,
       };
 
-      const user_data = getUserDataForAnalytics(userData);
+      const user_data = getUserDataForAnalytics(userData || fallbackUserData);
 
       measurementsPost({
         name: 'purchase',
