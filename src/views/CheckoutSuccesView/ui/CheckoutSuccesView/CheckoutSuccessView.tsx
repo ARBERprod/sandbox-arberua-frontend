@@ -14,9 +14,8 @@ import styles from './CheckoutSuccesView.module.scss';
 import { OrderDto } from '@/entities/Order';
 import { ClothesItem, SmallProductCard } from '@/entities/Product';
 import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
-import { useUser } from '@/entities/User';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
-import { useUserId } from '@/entities/Session';
+import { useAuth, useUserId } from '@/entities/Session';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 
 interface CheckoutSuccessViewProps {
@@ -33,7 +32,7 @@ export const CheckoutSuccessView = memo(
     const { t } = useTranslation();
     const clientId = useUserId();
 
-    const user = useUser();
+    const { userData } = useAuth();
     const [eventId] = useState(() => getRandomEventId());
 
     useEffect(() => {
@@ -85,7 +84,7 @@ export const CheckoutSuccessView = memo(
         shipping: 0,
       };
 
-      const user_data = getUserDataForAnalytics(user);
+      const user_data = getUserDataForAnalytics(userData);
 
       measurementsPost({
         name: 'purchase',
@@ -111,7 +110,7 @@ export const CheckoutSuccessView = memo(
         };
         // window?.fbq('track', 'Purchase', paramsFbq, { eventID: order.id });
       }
-    }, [order, clientId, user, eventId]);
+    }, [order, clientId, userData, eventId]);
 
     const goToHome = () => {
       push(routerPaths.main);

@@ -13,9 +13,8 @@ import { useTranslation } from 'next-i18next';
 import styles from './CartActions.module.scss';
 import { displayPrice } from '@/shared/lib/utils/displayPrice';
 import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
-import { useUser } from '@/entities/User';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
-import { useUserId } from '@/entities/Session';
+import { useAuth, useUserId } from '@/entities/Session';
 import { useInitiateCheckoutMutation } from '@/entities/Events';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 
@@ -32,7 +31,7 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
   const clientId = useUserId();
   const [checkoutEvent] = useInitiateCheckoutMutation();
 
-  const user = useUser();
+  const { userData } = useAuth();
   const [eventId] = useState(() => getRandomEventId());
 
   const goToCheckout = async () => {
@@ -72,7 +71,7 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
       items: itemsMeasurements,
     };
 
-    const user_data = getUserDataForAnalytics(user);
+    const user_data = getUserDataForAnalytics(userData);
 
     measurementsPost({
       name: 'begin_checkout',
@@ -84,6 +83,8 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
       event: 'begin_checkout',
       event_id: eventId,
       ecommerce: {
+        currency: 'UAH',
+        value: value || 0,
         items,
       },
       ...(user_data && { user_data }),
