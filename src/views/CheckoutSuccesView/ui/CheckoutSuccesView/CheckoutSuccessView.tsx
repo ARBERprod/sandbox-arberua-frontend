@@ -36,30 +36,30 @@ export const CheckoutSuccessView = memo(
     const { userData } = useAuth();
     const [eventId] = useState(() => getRandomEventId());
 
-    const fallbackUserData: User = {
-      email: order.customer.email || '',
-      phone: order.customer.phone || '',
-      first_name: order.customer.first_name || '',
-      last_name: order.customer.last_name || '',
-      middle_name: order.customer.middle_name || '',
-      bonus_balance: 0,
-      sex: null,
-      birthday: null,
-      addresses: [
-        {
-          id: order.address?.id || '',
-          index: '',
-          house: order.address?.house || '',
-          flat: order.address?.flat || '',
-          street: order.address?.street || '',
-          city: order.city || {},
-          country: (order.address as any)?.country || undefined,
-        },
-      ],
-      user_id: order.customer.id || '',
-    };
-
     useEffect(() => {
+      const fallbackUserData: User = {
+        email: order.customer.email || '',
+        phone: order.customer.phone || '',
+        first_name: order.customer.first_name || '',
+        last_name: order.customer.last_name || '',
+        middle_name: order.customer.middle_name || '',
+        bonus_balance: 0,
+        sex: null,
+        birthday: null,
+        addresses: [
+          {
+            id: order.address?.id || '',
+            index: '',
+            house: order.address?.house || '',
+            flat: order.address?.flat || '',
+            street: order.address?.street || '',
+            city: order.city || {},
+            country: (order.address as any)?.country || undefined,
+          },
+        ],
+        user_id: order.customer.id || '',
+      };
+
       const orderInfo = {
         transaction_id: order.order_number,
         affiliation: 'Онлайн-магазин',
