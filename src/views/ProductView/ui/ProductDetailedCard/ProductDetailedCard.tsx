@@ -1,5 +1,5 @@
 import {
-  Fragment, memo, useEffect, useState,
+  memo, useEffect, useState,
 } from 'react';
 import cn from 'classnames';
 import { DetailedProduct, getItemPrices, ProductDetails } from '@/entities/Product';
@@ -14,8 +14,7 @@ import { ProductSizeSlot } from '../ProductSizeSlot';
 import { useProductSkus } from '../../lib/ProductSkusContext';
 import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
-import { useUser } from '@/entities/User';
-import { useUserId } from '@/entities/Session';
+import { useAuth, useUserId } from '@/entities/Session';
 import { useRouter } from 'next/router';
 import { useViewContentMutation } from '@/entities/Events';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
@@ -35,7 +34,7 @@ export const ProductDetailedCard = memo(({
   const clientId = useUserId();
   const [viewContentEvent] = useViewContentMutation();
   const { query } = useRouter();
-  const user = useUser();
+  const { userData } = useAuth();
 
   const [eventId] = useState(() => getRandomEventId());
 
@@ -56,7 +55,7 @@ export const ProductDetailedCard = memo(({
       slug: query?.slug as string,
       eventId,
     });
-  }, [product, chosenSku, viewContentEvent, query?.slug, user, eventId]);
+  }, [product, chosenSku, viewContentEvent, query?.slug, userData, eventId]);
 
   useEffect(() => {
     const items = [{
@@ -95,12 +94,13 @@ export const ProductDetailedCard = memo(({
       items: itemsMeasurements,
     };
 
-    const user_data = getUserDataForAnalytics(user);
+    const user_data = getUserDataForAnalytics(userData);
 
     pushDataLayerEvent({
       event: 'view_item',
       event_id: eventId,
       ecommerce: {
+        currency: 'UAH',
         value: product.price.value,
         items,
       },
@@ -112,7 +112,7 @@ export const ProductDetailedCard = memo(({
       params,
       client_id: clientId,
     });
-  }, [product, chosenSku, clientId, user, eventId]);
+  }, [product, chosenSku, clientId, userData, eventId]);
 
   const { price, oldPrice } = getItemPrices(product, chosenSku);
   return (
