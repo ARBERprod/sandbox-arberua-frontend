@@ -4,16 +4,21 @@ import { wrapper } from '@/shared/config/store/makeStore';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { getRunningQueriesThunk } from '@/shared/api/rtkApi';
 import { getPromotions } from '@/entities/Promotion';
+import { useTranslation } from 'react-i18next';
 
-const PromotionsPage = () => (
-  <MainLayout metaData={{
-    title: 'Акції та знижки на одяг — Інтернет-магазин ARBER',
-    description: 'Акції та знижки на чоловічий і жіночий одяг, взуття та аксесуари від українського бренду ARBER.',
-  }}
-  >
-    <PromotionsView />
-  </MainLayout>
-);
+const PromotionsPage = () => {
+  const { t } = useTranslation();
+
+  return (
+    <MainLayout metaData={{
+      title: t('promotions.title'),
+      description: t('promotions.description'),
+    }}
+    >
+      <PromotionsView />
+    </MainLayout>
+  );
+};
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ locale }) => {
   store.dispatch(getPromotions.initiate());

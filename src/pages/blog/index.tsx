@@ -4,16 +4,22 @@ import { wrapper } from '@/shared/config/store/makeStore';
 import { getPosts } from '@/entities/Blog';
 import { getRunningQueriesThunk } from '@/shared/api/rtkApi';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'react-i18next';
+import { AboutView } from '@/views/AboutView';
 
-const BlogPage = () => (
-  <MainLayout metaData={{
-    title: 'Блог та статті про одяг, стиль та тренди — Інтернет-магазин ARBER',
-    description: 'Читайте блог про одяг від ARBER: новини моди, стильні рішення для чоловіків та жінок, та тренди в одязі.',
-  }}
-  >
-    <BlogView />
-  </MainLayout>
-);
+const BlogPage = () => {
+  const { t } = useTranslation();
+
+  return (
+    <MainLayout metaData={{
+      title: t('blog.title'),
+      description: t('blog.description'),
+    }}
+    >
+      <BlogView />
+    </MainLayout>
+  );
+};
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ locale }) => {
   store.dispatch(getPosts.initiate({

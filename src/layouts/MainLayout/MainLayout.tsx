@@ -62,7 +62,7 @@ export const MainLayout = ({
     const baseTitle = metaData?.title ? t(metaData.title as any) : title;
     const pageNumber = metaData?.page ? ` - ${t('page')} ${metaData.page}` : '';
 
-    return baseTitle ? `${baseTitle}${pageNumber}` : 'Інтернет-магазин українського бренду ARBER - Купити Чоловічий та Жіночий одяг, взуття, аксесуари';
+    return baseTitle ? `${baseTitle}${pageNumber}` : t('home.title');
   };
   const metaTitle = getMetaTitle();
 
@@ -76,7 +76,7 @@ export const MainLayout = ({
           name="description"
           content={(dynamicMeta?.description && `${dynamicMeta.textBeforeDescription ? `${dynamicMeta.textBeforeDescription}` : ''} ${dynamicMeta.description} ${dynamicMeta.textAfterDescription ? `${dynamicMeta.textAfterDescription}` : ''} ${dynamicMeta.descriptionUsesTitle ? dynamicMeta.descriptionUsesTitle : ''} ${dynamicMeta.textEndDescription ? `${dynamicMeta.textEndDescription}` : ''}`)
                         || (metaData?.description && t(metaData.description as any))
-                        || 'Офіційний сайт українського бренду ARBER – стильний чоловічий і жіночий одяг, взуття та аксесуари. Сезонні знижки, вигідні акції та великий асортимент для створення вашого ідеального образу.'}
+                        || t('home.description')}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
