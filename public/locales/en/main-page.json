@@ -1,4 +1,5 @@
 {
+  "home_page_seo_text.title": "ARBER - Quality elegant clothing for men and women",
   "new_slider.title": "New items",
   "new_arrivals": "New arrivals",
   "black_friday": "Black Friday Sale",
@@ -10,5 +11,7 @@
   "about_brand.text2": "We don't just sell clothes, we create entire collections that follow the latest fashion trends and embody our ideas of style and beauty. We make sure that our customers can always find something new and interesting with us.",
   "about_brand.button": "Read more",
   "total_look.text": "“Total Look” is ready-made looks that we have made for you from various elements of clothing. It's a simple and stylish way to look your best.",
-  "instagram_slider.title": "Reviews on Instagram"
+  "instagram_slider.title": "Reviews on Instagram",
+  "news_view_all": "See all new products",
+  "sales_view_all": "See all outlets"
 }

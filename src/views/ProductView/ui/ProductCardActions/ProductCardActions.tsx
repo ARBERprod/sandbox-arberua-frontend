@@ -13,8 +13,10 @@ import styles from './ProductCardActions.module.scss';
 // import { AvailabilityStoresButton } from '@/widgets/ProductAvailability';
 import { useProductSkus } from '@/views/ProductView/lib/ProductSkusContext';
 import { DetailedProduct } from '@/entities/Product';
+import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
-import { useUserId } from '@/entities/Session';
+import { useAuth, useUserId } from '@/entities/Session';
+import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 
 interface ProductCardActionsProps {
     className?: string;
@@ -34,13 +36,14 @@ export const ProductCardActions = memo(({
   const { chosenSku, productSkus } = useProductSkus();
   const clientId = useUserId();
 
+  const { userData } = useAuth();
+  const [eventId] = useState(() => getRandomEventId());
+
   const onTryOnClose = () => {
     setIsOpenTryOn(false);
   };
 
-  const onAddToCart = (eventId: string) => {
-    console.log('product', product);
-
+  const onAddToCart = () => {
     const items = [{
       id: product?.parent_id || productId,
       name: product?.title || '',
@@ -77,11 +80,17 @@ export const ProductCardActions = memo(({
       items: itemsMeasurements,
     };
 
+    const user_data = getUserDataForAnalytics(userData);
+
     pushDataLayerEvent({
       event: 'add_to_cart',
+      event_id: eventId,
       ecommerce: {
+        currency: 'UAH',
+        value: product?.price.value || 0,
         items,
       },
+      ...(user_data && { user_data }),
     });
 
     measurementsPost({
@@ -99,7 +108,7 @@ export const ProductCardActions = memo(({
         content_category: [product?.category || ''],
         content_type: 'product',
       };
-      window?.fbq('track', 'AddToCart', paramsFbq, { eventID: eventId });
+      // window?.fbq('track', 'AddToCart', paramsFbq, { eventID: eventId });
     }
   };
   const itemId = chosenSku?.id || productId;

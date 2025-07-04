@@ -1,5 +1,5 @@
 import {
-  Fragment, memo, useEffect, useState,
+  memo, useEffect, useState,
 } from 'react';
 import cn from 'classnames';
 import { DetailedProduct, getItemPrices, ProductDetails } from '@/entities/Product';
@@ -12,8 +12,9 @@ import { ProductComments } from '../ProductComments';
 import { Typography } from '@/shared/ui/Typography';
 import { ProductSizeSlot } from '../ProductSizeSlot';
 import { useProductSkus } from '../../lib/ProductSkusContext';
+import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
-import { useUserId } from '@/entities/Session';
+import { useAuth, useUserId } from '@/entities/Session';
 import { useRouter } from 'next/router';
 import { useViewContentMutation } from '@/entities/Events';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
@@ -33,6 +34,9 @@ export const ProductDetailedCard = memo(({
   const clientId = useUserId();
   const [viewContentEvent] = useViewContentMutation();
   const { query } = useRouter();
+  const { userData } = useAuth();
+
+  const [eventId] = useState(() => getRandomEventId());
 
   useEffect(() => {
     const eventId = getRandomEventId();
@@ -45,13 +49,13 @@ export const ProductDetailedCard = memo(({
       content_type: 'product',
     };
     if (typeof window !== 'undefined' && window?.fbq) {
-      window?.fbq('track', 'ViewContent', params, { eventID: eventId });
+      // window?.fbq('track', 'ViewContent', params, { eventID: eventId });
     }
     viewContentEvent({
       slug: query?.slug as string,
       eventId,
     });
-  }, [product, chosenSku, viewContentEvent, query?.slug]);
+  }, [product, chosenSku, viewContentEvent, query?.slug, userData, eventId]);
 
   useEffect(() => {
     const items = [{
@@ -90,11 +94,17 @@ export const ProductDetailedCard = memo(({
       items: itemsMeasurements,
     };
 
+    const user_data = getUserDataForAnalytics(userData);
+
     pushDataLayerEvent({
       event: 'view_item',
+      event_id: eventId,
       ecommerce: {
+        currency: 'UAH',
+        value: product.price.value,
         items,
       },
+      ...(user_data && { user_data }),
     });
 
     measurementsPost({
@@ -102,7 +112,7 @@ export const ProductDetailedCard = memo(({
       params,
       client_id: clientId,
     });
-  }, [product, chosenSku, clientId]);
+  }, [product, chosenSku, clientId, userData, eventId]);
 
   const { price, oldPrice } = getItemPrices(product, chosenSku);
   return (
@@ -136,31 +146,31 @@ export const ProductDetailedCard = memo(({
           details={(
             <>
               {product.description
-              && (
-                <AccordionItem
-                  title={t('product-card:description')}
-                  content={(
-                    <div
-                      className={styles.description}
-                      dangerouslySetInnerHTML={{ __html: product.description }}
-                    />
-                  )}
-                />
-              )}
+                && (
+                  <AccordionItem
+                    title={t('product-card:description')}
+                    content={(
+                      <div
+                        className={styles.description}
+                        dangerouslySetInnerHTML={{ __html: product.description }}
+                      />
+                    )}
+                  />
+                )}
               {product.materials.length > 0
-              && (
-                <AccordionItem title={t('product-card:material_and_care')}>
-                  <Typography>
-                    {product.materials.map((material, index) => (
-                      <Typography as="span" variant="body-2" key={material.title}>
-                        {material.title}
-                        {index !== product.materials.length - 1 && ','}
-                        {' '}
-                      </Typography>
-                    ))}
-                  </Typography>
-                </AccordionItem>
-              )}
+                && (
+                  <AccordionItem title={t('product-card:material_and_care')}>
+                    <Typography>
+                      {product.materials.map((material, index) => (
+                        <Typography as="span" variant="body-2" key={material.title}>
+                          {material.title}
+                          {index !== product.materials.length - 1 && ','}
+                          {' '}
+                        </Typography>
+                      ))}
+                    </Typography>
+                  </AccordionItem>
+                )}
               <AccordionItem title={t('product-card:delivery')} content={t('product-card:delivery.text')} />
               <AccordionItem title={t('product-card:return_policy')} content={t('product-card:return_policy.text')} />
               <AccordionItem title={`${t('product-card:reviews')}${commentsCount > 0 ? ` (${commentsCount})` : ''}`}>

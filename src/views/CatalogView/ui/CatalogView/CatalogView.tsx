@@ -1,4 +1,6 @@
-import { memo, useCallback, useEffect } from 'react';
+import {
+  memo, useCallback, useEffect, useRef, useState,
+} from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 import { CardView } from '@/shared/types/common';
@@ -22,6 +24,11 @@ import { FilterUtils } from '@/entities/Filter';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
+import { useFixedHeader } from '@/shared/lib/hooks/useFixedHeader';
+import { useGetPromotionsQuery, PromotionsGrid } from '@/entities/Promotion';
+import { useGetPostsQuery, PostsGrid } from '@/entities/Blog';
+import { Typography } from '@/shared/ui/Typography';
+import { useTranslation } from 'next-i18next';
 
 interface CatalogViewProps {
   className?: string;
@@ -40,6 +47,7 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
     moreBtnClickHandler,
     page,
   } = usePaginate();
+  const { t } = useTranslation('common');
   const view = useSelector(UISelectors.getGlobalView);
   const { setView } = useUIActions();
   const { category, filters } = query;
@@ -67,6 +75,16 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
       push(category.url);
     }
   }, [push]);
+
+  const isHeaderFixed = useFixedHeader();
+  const actionsRef = useRef<HTMLDivElement>(null);
+  const [isActionsFixed, setIsActionsFixed] = useState(false);
+
+  const { data: blogData } = useGetPostsQuery({
+    page: 1,
+    merge: false,
+  });
+  const { data: promotionsData } = useGetPromotionsQuery();
 
   useEffect(() => {
     if (data?.data?.products) {
@@ -121,26 +139,54 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
     }
   }, [data, clientId]);
 
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const handleScroll = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        if (!actionsRef.current) return;
+        const { top } = actionsRef.current.getBoundingClientRect();
+        setIsActionsFixed(top <= 60);
+      }, 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   if (isLoading) return <PageLoader />;
   if (isError || !data) return <ErrorMessage error="Error" />;
 
+  // @ts-ignore
   return (
     <div className={cn(styles.root, className)}>
       <Container>
         <PageBreadcrumbs breadcrumbs={data.data.breadcrumbs} className={styles.breadcrumps} />
         <CategorySlider
+          basePath={`${routerPaths.catalog}/${category}`}
           categories={data.data.children}
           category={data.data.category}
-          isSubcategory={getIsSubCategory(data.data.category)}
-          onCategoryChange={onCategoryChange}
-        />
-        <CatalogActions
-          basePath={`${routerPaths.catalog}/${category}`}
           filters={data.data.filters}
           view={view}
-          sortOptions={data.data.sorter}
+          isSubcategory={getIsSubCategory(data.data.category)}
+          onCategoryChange={onCategoryChange}
           onViewChange={viewChangeHandler}
         />
+        <div
+          ref={actionsRef}
+          className={cn(styles.actionsWrapper, {
+            [styles.fixed]: isActionsFixed && isHeaderFixed,
+          })}
+        >
+          <CatalogActions
+            basePath={`${routerPaths.catalog}/${category}`}
+            filters={data.data.filters}
+            view={view}
+            sortOptions={data.data.sorter}
+            onViewChange={viewChangeHandler}
+          />
+        </div>
         <ProductsGrid className={styles.grid} products={data.data.products} view={view} />
         <CatalogPagination
           className={styles.pagination}
@@ -150,6 +196,39 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
           onButtonClick={moreBtnClickHandler}
           onPageChange={pageChangeHandler}
         />
+        <Typography variant="title-1" centered className="mt-10">
+          {t('category_read_more_blog_title')}
+        </Typography>
+        {blogData?.data?.posts && blogData.data.posts.length > 0 && (
+          <div className={styles.latestNews}>
+            <PostsGrid className={styles.latestNewsWrapper} articles={blogData.data.posts.slice(0, 3)} />
+          </div>
+        )}
+        {(() => {
+          if (!promotionsData || !promotionsData.data.length) return null;
+          const currentCatalogLink = `/catalog/${category}`;
+
+          const activePromotions = promotionsData.data
+            .filter((promo) => promo.is_started
+              && promo.link !== currentCatalogLink)
+            .sort((a, b) => {
+              const aEnd = new Date(a.end_date).getTime();
+              const bEnd = new Date(b.end_date).getTime();
+              return aEnd - bEnd;
+            })
+            .slice(0, 2);
+
+          if (activePromotions.length === 0) return null;
+
+          return (
+            <div className={styles.latestPromotions}>
+              <Typography variant="title-1" centered className="mt-10">
+                {t('category_read_more_promo_title')}
+              </Typography>
+              <PromotionsGrid className={cn(styles.promotions, 'mt-6')} promotions={activePromotions} />
+            </div>
+          );
+        })()}
       </Container>
     </div>
   );

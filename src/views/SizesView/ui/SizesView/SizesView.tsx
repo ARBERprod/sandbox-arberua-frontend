@@ -59,7 +59,7 @@ export const SizesView = memo(({ className, hideBreadcrumps = false, hideSizeInf
             </Typography>
           </Breadcrumps>
         )}
-        <Typography variant="title-2" centered className={styles.title}>{t('sizes:sizes_grid')}</Typography>
+        <Typography variant="title-1" centered className={styles.title}>{t('sizes:sizes_grid')}</Typography>
         <Flex gap="24" direction="column" className={styles.row}>
           <ManWomanSwitcherButtons
             tabs={tabs}

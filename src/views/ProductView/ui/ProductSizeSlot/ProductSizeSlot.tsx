@@ -42,9 +42,9 @@ export const ProductSizeSlot = ({
             {t('size')}
             :
           </Typography>
+          <SizeGridButton variant="icon" />
           <div className={styles.content}>
             <ProductSkus onClick={clickHandler} activeSkuId={chosenSku?.id} skus={productSkus} />
-            <SizeGridButton variant="icon" />
           </div>
         </Flex>
       )}

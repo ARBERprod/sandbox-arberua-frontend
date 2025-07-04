@@ -21,7 +21,7 @@ export const AboutBannerWithContentSection = memo(({
   let titleVariant = 'primary';
   let variantClassName = '';
   if (variant === 'primary') {
-    titleVariant = 'title-1';
+    titleVariant = 'title-2';
     variantClassName = 'primary';
   } else if (variant === 'secondary') {
     titleVariant = 'title-2';

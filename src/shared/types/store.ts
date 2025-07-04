@@ -30,6 +30,7 @@ import { AuthBySocialsSchema } from '@/features/auth/AuthBySocials';
 import { BuyInOneClickCartSchema } from '@/features/cart/BuyInOneClick';
 import { PreorderProductSchema } from '@/features/PreOrderProduct';
 import { ProductAvailabilitySchema } from '@/widgets/ProductAvailability';
+import { UserSchema } from '@/entities/User/model/types';
 
 export interface StoreSchema {
   auth: AuthSchema;
@@ -40,6 +41,7 @@ export interface StoreSchema {
   wishList: WishListSchema;
   search: SearchSchema;
   ui: UISchema;
+  user?: UserSchema;
 
   lookConstructor?: LookConstructorSchema;
   preorderProduct?: PreorderProductSchema;

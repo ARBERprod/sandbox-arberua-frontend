@@ -144,6 +144,7 @@
   "menu.catalog": "Catalogue",
   "menu.collections": "Collections",
   "menu.promotions-offers": "Sales",
+  "heading.promotions-title": "Promotions and discounts from ARBER",
   "menu.outfit-builder": "Image designer",
   "menu.total-look": "Total look",
   "menu.promotions": "Sales",
@@ -327,6 +328,7 @@
   "required": "required",
   "order": "Order",
   "product-article": "Vendor code",
+  "product-delivery-text": "Free delivery for purchases over UAH 3000.",
   "bonuses.cashback-to.text": "Cashback",
   "cookie-modal.paragraph": "We use cookies to ensure the smooth operation of the website (essential cookies) and to create services and  offers tailored to your needs (Optional cookies - you must additionally agree to them).",
   "cookie-modal.setting": "Settings",
@@ -460,5 +462,10 @@
   "buy-online": "Buy online",
   "fast-delivery": "Fast delivery in Ukraine. Order",
   "good-price": "at a bargain price right now!",
-  "timer-text": "Black Friday has already started! Time left:"
+  "timer-text": "Black Friday has already started! Time left:",
+  "menu.allProducts": "All products",
+  "category_read_more_blog_title": "Read also",
+  "category_read_more_promo_title": "PROMOTIONS",
+  "quick_view_title": "Quick View",
+  "quick_view_more": "More"
 }

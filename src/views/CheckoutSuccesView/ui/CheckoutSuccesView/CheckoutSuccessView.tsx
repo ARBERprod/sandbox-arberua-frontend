@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -13,8 +13,11 @@ import { Svg } from '@/shared/ui/Svg';
 import styles from './CheckoutSuccesView.module.scss';
 import { OrderDto } from '@/entities/Order';
 import { ClothesItem, SmallProductCard } from '@/entities/Product';
+import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
-import { useUserId } from '@/entities/Session';
+import { useAuth, useUserId } from '@/entities/Session';
+import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
+import { User } from '@/entities/User';
 
 interface CheckoutSuccessViewProps {
   className?: string;
@@ -30,7 +33,33 @@ export const CheckoutSuccessView = memo(
     const { t } = useTranslation();
     const clientId = useUserId();
 
+    const { userData } = useAuth();
+    const [eventId] = useState(() => getRandomEventId());
+
     useEffect(() => {
+      const fallbackUserData: User = {
+        email: order.customer.email || '',
+        phone: order.customer.phone || '',
+        first_name: order.customer.first_name || '',
+        last_name: order.customer.last_name || '',
+        middle_name: order.customer.middle_name || '',
+        bonus_balance: 0,
+        sex: null,
+        birthday: null,
+        addresses: [
+          {
+            id: order.address?.id || '',
+            index: '',
+            house: order.address?.house || '',
+            flat: order.address?.flat || '',
+            street: order.address?.street || '',
+            city: order.city || {},
+            country: (order.address as any)?.country || undefined,
+          },
+        ],
+        user_id: order.customer.id || '',
+      };
+
       const orderInfo = {
         transaction_id: order.order_number,
         affiliation: 'Онлайн-магазин',
@@ -79,6 +108,8 @@ export const CheckoutSuccessView = memo(
         shipping: 0,
       };
 
+      const user_data = getUserDataForAnalytics(userData || fallbackUserData);
+
       measurementsPost({
         name: 'purchase',
         params,
@@ -87,7 +118,9 @@ export const CheckoutSuccessView = memo(
 
       pushDataLayerEvent({
         event: 'purchase',
+        event_id: eventId,
         ecommerce: orderInfo,
+        ...(user_data && { user_data }),
       });
 
       if (typeof window !== 'undefined' && window?.fbq) {
@@ -99,9 +132,9 @@ export const CheckoutSuccessView = memo(
           content_category: order.products.map((item) => item.category),
           content_type: 'product',
         };
-        window?.fbq('track', 'Purchase', paramsFbq, { eventID: order.id });
+        // window?.fbq('track', 'Purchase', paramsFbq, { eventID: order.id });
       }
-    }, [order, clientId]);
+    }, [order, clientId, userData, eventId]);
 
     const goToHome = () => {
       push(routerPaths.main);

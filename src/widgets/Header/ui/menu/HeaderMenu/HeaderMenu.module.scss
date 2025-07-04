@@ -17,7 +17,7 @@
 
   @include breakpoint(only-mobile) {
     height: max(100vh, 550px);
-    transform: translateY(-100%);
+    transform: translateY(-300%);
     transition: transform var(--transition-menu-duration) ease 0s;
   }
 
@@ -95,18 +95,18 @@
     }
   }
 
-  &:after {
-    content: '';
-    display: block;
-    flex-grow: 1;
-    position: relative;
-    background-color: transparent;
-    z-index: var(--z-header-menu);
-
-    @include breakpoint(tablet) {
-      display: none;
-    }
-  }
+  //&:after {
+  //  content: '';
+  //  display: block;
+  //  flex-grow: 1;
+  //  position: relative;
+  //  background-color: transparent;
+  //  z-index: var(--z-header-menu);
+  //
+  //  @include breakpoint(tablet) {
+  //    display: none;
+  //  }
+  //}
 
   &.expanded:after {
     background-color: rgba(0, 0, 0, .4);

@@ -26,7 +26,7 @@ export const NotFoundView = memo(({ className }: NotFoundViewProps) => {
         <div className={styles.imageWrap}>
           <AppImage alt="not-found" src={NotFoundImage} className={styles.image} />
         </div>
-        <Typography variant="title-4" className={styles.title}>{t('404.title')}</Typography>
+        <Typography variant="title-1" className={styles.title}>{t('404.title')}</Typography>
         <Typography variant="body-3" className={styles.subtitle}>
           {t('404.text1')}
         </Typography>

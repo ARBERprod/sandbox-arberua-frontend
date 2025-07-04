@@ -3,6 +3,10 @@
 .root {
   list-style: none;
 
+  &:not(:last-child) {
+    margin-bottom: 4px;
+  }
+
   .link {
     font-weight: 500;
     font-size: 16px;
@@ -12,7 +16,7 @@
     display: flex;
     justify-content: space-between;
     transition: var(--transition-default);
-    padding: 5px 0;
+    padding: 10px 0;
     width: 100%;
     cursor: pointer;
 
@@ -33,6 +37,12 @@
     font-size: 14px;
     font-weight: 400;
     color: var(--grey-dark);
+  }
+
+  .promotions {
+    .link_text {
+      color: var(--red);
+    }
   }
 
   .link_text {

@@ -15,9 +15,11 @@ interface HeaderMenuProps {
   className?: string;
   expanded?: boolean;
   expandedOverlay?: boolean;
+  onClose?: () => void;
 }
 
-const menuViewMap: Record<MenuView, FC<{onClick?: (type: CurrentMenuType) => void; isHovered?: boolean;}>> = {
+// eslint-disable-next-line max-len
+const menuViewMap: Record<MenuView, FC<{onClick?: (type: CurrentMenuType) => void; isHovered?: boolean; onClose?: () => void;}>> = {
   [MenuView.INFO]: HeaderMenuInfo,
   [MenuView.MAIN]: HeaderMenuMain,
   [MenuView.CATALOG]: HeaderMenuCatalog,
@@ -27,6 +29,7 @@ export const HeaderMenu = ({
   className,
   expanded,
   expandedOverlay,
+  onClose,
 }:HeaderMenuProps) => {
   const [currentMenu, setCurrentMenu] = useState<CurrentMenuType>(MenuView.MAIN);
   const { setIsHoveredHandler, setIsNotHoveredHandler, isHovered } = useHeaderMenu();
@@ -47,7 +50,7 @@ export const HeaderMenu = ({
     >
       <div className={cn(styles.inner, styles[expandedOverlayClassName])}>
         <Container className={styles.container}>
-          <CurrentMenu onClick={setCurrentMenuHandler} isHovered={isHovered} />
+          <CurrentMenu onClick={setCurrentMenuHandler} isHovered={isHovered} onClose={onClose} />
           <HeaderMenuLocale className={styles.locale} expanded={expanded} />
           <HeaderMenuSocials className={styles.socials} />
         </Container>

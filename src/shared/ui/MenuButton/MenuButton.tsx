@@ -9,21 +9,33 @@ export interface MenuButtonProps {
   className?: string;
   onClick?: () => void;
   Icon?: SvgType;
+  expanded?: boolean;
 }
 
 export const MenuButton = ({
-  className, onClick, Icon = HamburgerIcon, ...rest
+  className, onClick, expanded, Icon = HamburgerIcon, ...rest
 }: MenuButtonProps) => {
   const { setIsHoveredHandler, setIsNotHoveredHandler } = useHeaderMenu();
 
   return (
-    <button
-      onMouseEnter={setIsHoveredHandler}
-      onMouseLeave={setIsNotHoveredHandler}
-      className={cn(styles.root, className)}
-      onClick={onClick}
-    >
-      <Svg Icon={Icon} width="24" height="24" stroke="black-light-2" {...rest} />
-    </button>
+    <>
+      <button
+        onMouseEnter={setIsHoveredHandler}
+        onMouseLeave={setIsNotHoveredHandler}
+        className={cn(styles.root, className)}
+        onClick={onClick}
+      >
+        <Svg Icon={Icon} width="24" height="24" stroke="black-light-2" {...rest} />
+      </button>
+      <button
+        onMouseEnter={setIsHoveredHandler}
+        onMouseLeave={setIsNotHoveredHandler}
+        className={cn(
+          styles.menuOverlay,
+          { [styles.overlay]: expanded },
+        )}
+        onClick={onClick}
+      />
+    </>
   );
 };

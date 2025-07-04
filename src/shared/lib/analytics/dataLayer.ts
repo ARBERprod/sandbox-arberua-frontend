@@ -1,7 +1,9 @@
 type DataLayerEvent = {
-    event: string;
-    ecommerce: Record<string, any>;
-  };
+  event: string;
+  ecommerce: Record<string, any>;
+  event_id?: string;
+  user_data?: Record<string, any>;
+};
 
 export const pushDataLayerEvent = (eventData: DataLayerEvent): void => {
   if (typeof window !== 'undefined' && 'dataLayer' in window) {

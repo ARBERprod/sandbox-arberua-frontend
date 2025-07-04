@@ -55,7 +55,7 @@ export const CollectionsView = memo(({ className }:CollectionsViewProps) => {
         <PageBreadcrumbs breadcrumbs={data.data.breadcrumbs} className={styles.bc} />
       </Flex>
 
-      <Typography variant="title-2" centered className={styles.title}>
+      <Typography variant="title-1" centered className={styles.title}>
         {t('collections:heading')}
       </Typography>
       <ManWomanSwitcherButtons

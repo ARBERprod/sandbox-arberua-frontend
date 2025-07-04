@@ -16,7 +16,7 @@ export const BonusesHowitworksSection = memo(({ className }:BonusesHowitworksSec
   return (
     <section className={cn(styles.root, className)}>
       <Container>
-        <Typography variant="title-2" className={styles.title}>{t('bonuses.title3')}</Typography>
+        <Typography variant="title-1" className={styles.title}>{t('bonuses.title3')}</Typography>
         <ul className={styles.list}>
           <li className={styles.item}>
             <div className={styles.icon}>

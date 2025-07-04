@@ -11,6 +11,7 @@ import { Button } from '@/shared/ui/Button';
 import styles from './ArticlePostView.module.scss';
 import { Product } from '@/entities/Product';
 import { RecommendedProducts } from '@/widgets/ProductPresenter';
+import Head from 'next/head';
 
 interface ArticlePostViewProps {
   className?: string;
@@ -33,9 +34,16 @@ export const ArticlePostView = memo(({
   const { push } = useRouter();
   return (
     <div className={cn(styles.root, className)}>
+      <Head>
+        <title>
+          {article.title}
+          {' '}
+          — Блог об одежде ARBER
+        </title>
+      </Head>
       <Container className={styles.container}>
         <PageBreadcrumbs breadcrumbs={breadcrumbs} className={styles.breadcrumps} />
-        <Typography variant="title-2" className={styles.title} centered>{article.title}</Typography>
+        <Typography variant="title-1" className={styles.title} centered>{article.title}</Typography>
         <Typography variant="body-2" centered>{article.created_at}</Typography>
         <div className={styles.content} dangerouslySetInnerHTML={{ __html: article.description }} />
         <RecommendedProducts title={t('same_products')} products={recommended} className={styles.slider} />

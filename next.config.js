@@ -6,6 +6,17 @@ const {
 } = require('./next-i18next.config');
 const axios = require('axios');
 
+const getHostFromUrl = (url) => {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return null;
+  }
+};
+
+const imgHost = getHostFromUrl(process.env.NEXT_PUBLIC_IMG_URL);
+const apiHost = getHostFromUrl(process.env.NEXT_PUBLIC_API_URL_BASE);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   i18n,
@@ -39,6 +50,8 @@ const nextConfig = {
     return config;
   },
   images: {
+    formats: ['image/webp'],
+    domains: [imgHost, apiHost],
     remotePatterns: [{
       protocol: 'https',
       hostname: '*',

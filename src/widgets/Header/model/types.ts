@@ -17,6 +17,7 @@ export type MenuLinkView =
 export interface MenuLink {
   title: string;
   url?: string;
+  href?: string;
   children: MenuLink[] | false;
   button?: CurrentMenuType | false;
   openNewPage?: boolean;

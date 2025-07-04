@@ -28,7 +28,7 @@ export const PageView = memo(({ className }:PageViewProps) => {
       <Container className={styles.container}>
         <FlexCol align="center">
           <PageBreadcrumbs breadcrumbs={breadcrumbs} className={styles.breadcrumbs} />
-          <Typography variant="title-2">{page.title}</Typography>
+          <Typography variant="title-1">{page.title}</Typography>
         </FlexCol>
         <div className={styles.content} dangerouslySetInnerHTML={{ __html: page.description }} />
       </Container>

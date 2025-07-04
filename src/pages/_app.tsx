@@ -35,30 +35,19 @@ import { $api } from '@/shared/api/api';
 const inter = localFont({
   src: [
     {
-      path: '../../public/fonts/inter/Inter-light.woff',
-      weight: '300',
-    },
-    {
       path: '../../public/fonts/inter/Inter-light.woff2',
       weight: '300',
-    },
-    {
-      path: '../../public/fonts/inter/inter-regular.woff',
-      weight: '400',
     },
     {
       path: '../../public/fonts/inter/inter-regular.woff2',
       weight: '400',
     },
     {
-      path: '../../public/fonts/inter/Inter-medium.woff',
-      weight: '500',
-    },
-    {
       path: '../../public/fonts/inter/Inter-medium.woff2',
       weight: '500',
     },
   ],
+  display: 'swap',
 });
 
 function App({
@@ -74,9 +63,9 @@ function App({
 
   useEffect(() => {
     const handleRouteChange = () => {
-      if (typeof window !== 'undefined' && window?.fbq) {
-        window?.fbq('track', 'PageView');
-      }
+      // if (typeof window !== 'undefined' && window?.fbq) {
+      //   window?.fbq('track', 'PageView');
+      // }
       $api.post(`${process.env.NEXT_PUBLIC_API_URL_V2}/events/pageView`);
     };
 
@@ -106,26 +95,26 @@ function App({
         ))}
         <link rel="canonical" href={`https://arber.ua${locale === 'ru' ? '/ru' : ''}${asPath}`} />
       </Head>
-      <Script
-        id="facebook-pixel"
-        strategy="beforeInteractive"
-      >
-        {`
-          !function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '1440826369354364');
-          fbq('track', 'PageView');
-        `}
-      </Script>
+      {/* <Script */}
+      {/*   id="facebook-pixel" */}
+      {/*   strategy="lazyOnload" */}
+      {/* > */}
+      {/*   {` */}
+      {/*     !function(f,b,e,v,n,t,s) */}
+      {/*     {if(f.fbq)return;n=f.fbq=function(){n.callMethod? */}
+      {/*     n.callMethod.apply(n,arguments):n.queue.push(arguments)}; */}
+      {/*     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0'; */}
+      {/*     n.queue=[];t=b.createElement(e);t.async=!0; */}
+      {/*     t.src=v;s=b.getElementsByTagName(e)[0]; */}
+      {/*     s.parentNode.insertBefore(t,s)}(window, document,'script', */}
+      {/*     'https://connect.facebook.net/en_US/fbevents.js'); */}
+      {/*     fbq('init', '1440826369354364'); */}
+      {/*     fbq('track', 'PageView'); */}
+      {/*   `} */}
+      {/* </Script> */}
       <Script
         id="gtm"
-        strategy="beforeInteractive"
+        strategy="lazyOnload"
       >
         {`
           (function(w,d,s,l,i){

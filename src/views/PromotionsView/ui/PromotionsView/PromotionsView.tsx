@@ -21,7 +21,7 @@ export const PromotionsView = memo(({ className }:PromotionsViewProps) => {
   return (
     <div className={cn(styles.root, className)}>
       <Container>
-        <Typography variant="title-2" centered>{t('menu.promotions-offers')}</Typography>
+        <Typography variant="title-1" centered>{t('heading.promotions-title')}</Typography>
         <PromotionsGrid className="mt-6" promotions={data?.data} />
       </Container>
     </div>

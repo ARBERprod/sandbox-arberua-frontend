@@ -121,6 +121,18 @@ b {
   overflow: clip;
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.scrollbar-padding {
+  padding-right: 17px;
+}
+
+.d-none {
+  display: none !important;
+}
+
 @media (width <= 967.98px) {
   .trend-section {
     flex-direction: column;
@@ -199,6 +211,22 @@ b {
 
   .label-heading {
     flex-wrap: wrap;
+  }
+
+  #bingc-phone-button.bingc-show {
+    left: inherit !important;
+    right: 0 !important;
+    bottom: 11% !important;
+
+    #bingc-phone-button-tooltip {
+      right: 6px;
+      left: inherit;
+
+      .bingc-phone-button-arrow {
+        left: inherit;
+        right: 29px;
+      }
+    }
   }
 }
 

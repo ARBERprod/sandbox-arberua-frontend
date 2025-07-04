@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import cn from 'classnames';
 import { Divider } from '@/shared/ui/Divider';
 import { Flex } from '@/shared/ui/Flex';
@@ -12,13 +12,14 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'next-i18next';
 import styles from './CartActions.module.scss';
 import { displayPrice } from '@/shared/lib/utils/displayPrice';
+import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
-import { useUserId } from '@/entities/Session';
+import { useAuth, useUserId } from '@/entities/Session';
 import { useInitiateCheckoutMutation } from '@/entities/Events';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 
 interface CartActionsProps {
-    className?: string;
+  className?: string;
 }
 
 export const CartActions = memo(({ className }: CartActionsProps) => {
@@ -29,6 +30,9 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
   const { t } = useTranslation();
   const clientId = useUserId();
   const [checkoutEvent] = useInitiateCheckoutMutation();
+
+  const { userData } = useAuth();
+  const [eventId] = useState(() => getRandomEventId());
 
   const goToCheckout = async () => {
     const items = cartData?.items.map((item) => ({
@@ -59,13 +63,18 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
       quantity: item.quantity,
     }));
 
-    const value = itemsMeasurements?.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const value = cartData?.items.reduce((acc, item) => {
+      const cost = typeof item.cost?.value === 'number' ? item.cost.value : parseFloat(item.cost?.value || '0');
+      return acc + cost;
+    }, 0);
 
     const params = {
       currency: 'UAH',
       value: value || 0,
       items: itemsMeasurements,
     };
+
+    const user_data = getUserDataForAnalytics(userData);
 
     measurementsPost({
       name: 'begin_checkout',
@@ -75,13 +84,16 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
 
     pushDataLayerEvent({
       event: 'begin_checkout',
+      event_id: eventId,
       ecommerce: {
+        currency: 'UAH',
+        value: value || 0,
         items,
       },
+      ...(user_data && { user_data }),
     });
 
     if (typeof window !== 'undefined' && window?.fbq) {
-      const eventId = getRandomEventId();
       const paramsFbq = {
         value: cartData?.items.map((item) => item.cost.value).reduce((acc, item) => +acc + +item, 0),
         currency: 'UAH',
@@ -90,7 +102,7 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
         content_category: cartData?.items.map((item) => item.category),
         content_type: 'product',
       };
-      window?.fbq('track', 'InitiateCheckout', paramsFbq, { eventID: eventId });
+      // window?.fbq('track', 'InitiateCheckout', paramsFbq, { eventID: eventId });
       checkoutEvent({
         eventId,
       });
@@ -99,12 +111,12 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
     await push(routerPaths.checkout);
     closeCart();
   };
-    // const oneClickHandler = () => {
-    //   if (!cartData) return;
-    //   closeCart();
-    //   setCartItems(cartData.items);
-    //   openCart();
-    // };
+  // const oneClickHandler = () => {
+  //   if (!cartData) return;
+  //   closeCart();
+  //   setCartItems(cartData.items);
+  //   openCart();
+  // };
 
   if (!cartData) return null;
 
