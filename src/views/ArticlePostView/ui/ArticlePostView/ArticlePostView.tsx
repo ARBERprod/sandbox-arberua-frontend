@@ -38,7 +38,9 @@ export const ArticlePostView = memo(({
         <title>
           {article.title}
           {' '}
-          — Блог об одежде ARBER
+          —
+          {' '}
+          {t('blog-article-end.title')}
         </title>
       </Head>
       <Container className={styles.container}>

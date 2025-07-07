@@ -2,18 +2,24 @@ import { MainLayout } from '@/layouts/MainLayout';
 import { AboutView } from '@/views/AboutView';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'react-i18next';
+import { PromotionsView } from '@/views/PromotionsView';
 
-const AboutPage = () => (
-  <MainLayout
-    metaData={{
-      title: 'Історія ARBER — Про український бренд одягу для чоловіків та жінок',
-      description: 'Дізнайтеся більше про бренд ARBER – український виробник чоловічого та жіночого одягу. Історія, місія та цінності бренду, що поєднує якість та актуальний дизайн.',
-    }}
-    withFooter
-  >
-    <AboutView />
-  </MainLayout>
-);
+const AboutPage = () => {
+  const { t } = useTranslation();
+
+  return (
+    <MainLayout
+      metaData={{
+        title: t('about.title'),
+        description: t('about.description'),
+      }}
+      withFooter
+    >
+      <AboutView />
+    </MainLayout>
+  );
+};
 
 export const getStaticProps:GetStaticProps = async ({ locale }) => ({
   props: {

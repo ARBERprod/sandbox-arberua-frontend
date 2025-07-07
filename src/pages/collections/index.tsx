@@ -5,12 +5,15 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { getCollections } from '@/entities/Collection';
 import { getRunningQueriesThunk } from '@/shared/api/rtkApi';
 import { ParamsService } from '@/shared/lib/services/params.service';
+import { useTranslation } from 'react-i18next';
 
 export default function CollectionsPage() {
+  const { t } = useTranslation();
+
   return (
     <MainLayout metaData={{
-      title: 'Колекції одягу ARBER - Інтернет-магазин чоловічого та жіночого одягу',
-      description: 'Офіційний сайт українського бренду ARBER – сучасні колекції чоловічого та жіночого одягу, взуття і аксесуарів. Скористайтеся знижками, акціями та вигідними пропозиціями прямо зараз!',
+      title: t('collection.title'),
+      description: t('collection.description'),
     }}
     >
       <CollectionsView />
