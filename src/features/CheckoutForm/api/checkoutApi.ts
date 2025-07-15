@@ -11,6 +11,7 @@ import {
   WarehousesDto,
   WayForPayFormDto,
   XPayFormDto,
+  PayPlaceFormDto,
 } from './types';
 import { SuccessApiResponse } from '@/shared/types/api';
 
@@ -70,6 +71,12 @@ const checkoutApi = rtkApi.injectEndpoints({
       }),
       transformResponse: (response: XPayFormDto) => response.data,
     }),
+    getPayPlaceForm: build.query<string, { orderId: string }>({
+      query: ({ orderId }) => ({
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/payment-process/${orderId}/payplace`,
+      }),
+      transformResponse: (response: PayPlaceFormDto) => response.data,
+    }),
   }),
 });
 
@@ -79,6 +86,7 @@ export const {
     getLiqPayForm,
     getWayForPayForm,
     getXPayForm,
+    getPayPlaceForm,
   },
   useCheckoutMutation,
   useGetDeliveryMethodsQuery,

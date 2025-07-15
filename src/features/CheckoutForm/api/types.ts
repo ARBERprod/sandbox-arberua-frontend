@@ -64,6 +64,7 @@ export type CheckoutResponseDto = CheckoutResponseUrlDto | CheckoutResponseIdDto
 export type WayForPayFormDto = SuccessApiResponse<string>;
 export type LiqPayFormDto = SuccessApiResponse<string>;
 export type XPayFormDto = SuccessApiResponse<string>;
+export type PayPlaceFormDto = SuccessApiResponse<string>;
 
 export type PaymentMethodsDto = SuccessApiResponse<PaymentMethod[]>;
 export type DeliveryMethodsDto = SuccessApiResponse<DeliveryMethod[]>;
