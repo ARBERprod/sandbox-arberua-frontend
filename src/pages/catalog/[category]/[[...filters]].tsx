@@ -42,16 +42,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
 
   let meta = null;
 
-  const t = (key: string) => key;
-
-  const buildMeta = (title: string, description: string): Meta => {
-    const meta: Meta = { title, description };
-    if (typeof page === 'string') {
-      meta.page = page;
-    }
-    return meta;
-  };
-
   if (query.category?.includes('new')) {
     meta = {
       title: 'Новинки ARBER - Купити останні надходження чоловічого та жіночого одягу',
@@ -59,10 +49,11 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
       page,
     };
   } else if (query.category?.includes('briuki-1')) {
-    meta = buildMeta(
-      t('briuki-1.title'),
-      t('briuki-1.description'),
-    );
+    meta = {
+      title: 'Купити чоловічі штани ARBER — Доставка по Україні',
+      description: 'Чоловічі брюки в інтернет-магазині ARBER. Великий вибір, доступні ціни, швидка доставка по Україні.',
+      page,
+    };
   } else if (query.category === 'sorocki') {
     meta = {
       title: 'Чоловічі сорочки ARBER | Офіційний сайт ARBER.UA',
@@ -171,21 +162,18 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
       description: 'Купити чоловічі шкарпетки ARBER на офіційному сайті: класичні шкарпетки від українського бренду ARBER. Шкарпетки ARBER та інші чоловічі аксесуари за найкращими цінами.',
       page,
     };
-  } else if (query.category?.includes('outlet-all')) {
-    meta = buildMeta(
-      t('outlet-all.title'),
-      t('outlet-all.description'),
-    );
   } else if (query.category?.includes('Outlet-1')) {
-    meta = buildMeta(
-      t('outlet-1.title'),
-      t('outlet-1.description'),
-    );
+    meta = {
+      title: 'Outlet одяг для чоловіків — Знижки на одяг від ARBER',
+      description: 'Знижки та спеціальні пропозиції на одяг, взуття та аксесуари для чоловіків від бренду ARBER.',
+      page,
+    };
   } else if (query.category?.includes('Outlet')) {
-    meta = buildMeta(
-      t('outlet.title'),
-      t('outlet.description'),
-    );
+    meta = {
+      title: 'Outlet одяг для жінок — Знижки на одяг від ARBER',
+      description: 'Знижки та спеціальні пропозиції на одяг, взуття та аксесуари для жінок від бренду ARBER.',
+      page,
+    };
   } else if (query.category?.includes('popular-man')) {
     meta = {
       title: 'Популярні речі для чоловіків | Стильний одяг та аксесуари | ARBER.UA',
@@ -253,10 +241,11 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
       page,
     };
   } else if (query.category?.includes('sal')) {
-    meta = buildMeta(
-      t('spring-sale.title'),
-      t('spring-sale.description'),
-    );
+    meta = {
+      title: 'Весняний розпродаж від Arber — Знижки на одяг',
+      description: 'Купуйте чоловічий та жіночий одяг, та взуття від ARBER вигідно з акцією Весняний розпродаж',
+      page,
+    };
   }
 
   await Promise.all(store.dispatch(getRunningQueriesThunk()));
