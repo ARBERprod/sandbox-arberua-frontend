@@ -72,12 +72,12 @@ export const getServerSideProps = wrapper.getServerSideProps<ProductPageProps>((
   } = data.product;
 
   const dynamicMeta = {
-    textAfterTitle: 'ARBER',
+    textAfterTitle: 'Купити онлайн',
     title: title ? `${title}` : '',
     description: description || '',
     descriptionUsesTitle: title ? `${title}` : '',
     textBeforeDescription: 'Замовляйте',
-    textAfterDescription: 'ARBER. Швидка доставка по всій Україні, гарантія якості.',
+    textAfterDescription: 'ARBER. Швидка доставка по Україні. Замовити',
     textEndDescription: 'ARBER за вигідною ціною зараз!',
   };
 
