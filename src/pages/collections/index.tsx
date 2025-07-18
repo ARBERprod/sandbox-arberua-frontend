@@ -7,7 +7,6 @@ import { getRunningQueriesThunk } from '@/shared/api/rtkApi';
 import { ParamsService } from '@/shared/lib/services/params.service';
 
 export default function CollectionsPage() {
-
   return (
     <MainLayout metaData={{
       title: 'Колекції одягу ARBER - Інтернет-магазин чоловічого та жіночого одягу',
