@@ -328,7 +328,7 @@
   "required": "required",
   "order": "Order",
   "product-article": "Vendor code",
-  "product-delivery-text": "Free delivery for purchases over UAH 3000.",
+  "product-delivery-text": "Free delivery for orders over 2500 UAH with full payment.",
   "bonuses.cashback-to.text": "Cashback",
   "cookie-modal.paragraph": "We use cookies to ensure the smooth operation of the website (essential cookies) and to create services and  offers tailored to your needs (Optional cookies - you must additionally agree to them).",
   "cookie-modal.setting": "Settings",

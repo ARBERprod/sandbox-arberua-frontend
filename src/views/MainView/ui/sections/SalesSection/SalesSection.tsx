@@ -25,7 +25,7 @@ export const SalesSection = memo(({ className, sliderData = [] }: SalesSectionPr
       <Container>
         <ManWomanSlider
           tabs={tabs}
-          title="Outlet"
+          title="Arber Basic"
           linkText={t('sales_view_all')}
           href={href}
           products={products}

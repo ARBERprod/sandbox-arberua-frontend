@@ -55,7 +55,7 @@ export const ProductDetails = ({
           {article}
         </Typography>
       )}
-      <Typography variant="title-1" className={styles.title}>{title}</Typography>
+      <Typography variant="title-2" className={styles.title}>{title}</Typography>
       {Number(commentsCount) > 0 && (
         <Flex gap="8" align="center" className={styles.rating}>
           <StarRating className="pb-2" readonly value={rating || 0} />
