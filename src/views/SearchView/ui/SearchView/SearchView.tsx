@@ -19,7 +19,7 @@ import { cookieService } from '@/shared/lib/services/cookie.service';
 import styles from './SearchView.module.scss';
 import { usePaginate } from '@/widgets/CatalogPagination';
 import { FilterUtils } from '@/entities/Filter';
-import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
+import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
 
 interface SearchViewProps {
@@ -31,7 +31,6 @@ export const SearchView = memo(({ className }:SearchViewProps) => {
   const queryString = query.q as string;
   const { pageChangeHandler, page } = usePaginate();
   const filters = FilterUtils.getFiltersStringFromQuery(query);
-  console.log('filters', filters);
   const {
     data,
     isLoading,
@@ -60,8 +59,6 @@ export const SearchView = memo(({ className }:SearchViewProps) => {
         image: product.pictures?.[0] || '',
         brand: product.brand,
       }));
-
-      console.log('data', data);
 
       const itemsMeasurements = data.data.products.map((product, index) => ({
         item_id: product.id,
@@ -97,6 +94,17 @@ export const SearchView = memo(({ className }:SearchViewProps) => {
         name: 'view_item_list',
         params,
         client_id: clientId,
+      });
+
+      // Google Ads Dynamic Remarketing
+      const totalValue = data.data.products.reduce((sum, product) => sum + product.price.value, 0);
+      pushGAdsEvent({
+        event: 'GAds_view_search_results',
+        value: totalValue,
+        items: data.data.products.map((product) => ({
+          id: product.parent_id || product.id,
+          google_business_vertical: 'retail',
+        })),
       });
     }
   }, [data, clientId]);

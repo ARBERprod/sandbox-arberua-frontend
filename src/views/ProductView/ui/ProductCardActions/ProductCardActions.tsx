@@ -13,7 +13,7 @@ import styles from './ProductCardActions.module.scss';
 // import { AvailabilityStoresButton } from '@/widgets/ProductAvailability';
 import { useProductSkus } from '@/views/ProductView/lib/ProductSkusContext';
 import { DetailedProduct } from '@/entities/Product';
-import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
+import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
 
 interface ProductCardActionsProps {
@@ -39,8 +39,6 @@ export const ProductCardActions = memo(({
   };
 
   const onAddToCart = (eventId: string) => {
-    console.log('product', product);
-
     const items = [{
       id: product?.parent_id || productId,
       name: product?.title || '',
@@ -88,6 +86,16 @@ export const ProductCardActions = memo(({
       name: 'add_to_cart',
       params,
       client_id: clientId,
+    });
+
+    // Google Ads Dynamic Remarketing
+    pushGAdsEvent({
+      event: 'GAds_add_to_cart',
+      value: product?.price.value || 0,
+      items: [{
+        id: product?.parent_id || productId,
+        google_business_vertical: 'retail',
+      }],
     });
 
     if (typeof window !== 'undefined' && window?.fbq) {

@@ -12,7 +12,7 @@ import { ProductComments } from '../ProductComments';
 import { Typography } from '@/shared/ui/Typography';
 import { ProductSizeSlot } from '../ProductSizeSlot';
 import { useProductSkus } from '../../lib/ProductSkusContext';
-import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
+import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
 import { useRouter } from 'next/router';
 import { useViewContentMutation } from '@/entities/Events';
@@ -101,6 +101,16 @@ export const ProductDetailedCard = memo(({
       name: 'view_item',
       params,
       client_id: clientId,
+    });
+
+    // Google Ads Dynamic Remarketing
+    pushGAdsEvent({
+      event: 'GAds_view_item',
+      value: product.price.value,
+      items: [{
+        id: product.parent_id || product.id,
+        google_business_vertical: 'retail',
+      }],
     });
   }, [product, chosenSku, clientId]);
 

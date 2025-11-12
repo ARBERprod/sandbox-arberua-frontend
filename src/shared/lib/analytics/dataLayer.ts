@@ -3,9 +3,26 @@ type DataLayerEvent = {
     ecommerce: Record<string, any>;
   };
 
+type GAdsItem = {
+  id: string | number;
+  google_business_vertical: 'retail';
+};
+
+type GAdsEvent = {
+  event: 'GAds_view_item' | 'GAds_add_to_cart' | 'GAds_purchase' | 'GAds_view_search_results' | 'GAds_view_item_list';
+  value: number;
+  items: GAdsItem[];
+};
+
 export const pushDataLayerEvent = (eventData: DataLayerEvent): void => {
   if (typeof window !== 'undefined' && 'dataLayer' in window) {
     window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push(eventData);
+  }
+};
+
+export const pushGAdsEvent = (eventData: GAdsEvent): void => {
+  if (typeof window !== 'undefined' && 'dataLayer' in window) {
     window.dataLayer.push(eventData);
   }
 };

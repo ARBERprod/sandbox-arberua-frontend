@@ -13,7 +13,7 @@ import { Svg } from '@/shared/ui/Svg';
 import styles from './CheckoutSuccesView.module.scss';
 import { OrderDto } from '@/entities/Order';
 import { ClothesItem, SmallProductCard } from '@/entities/Product';
-import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
+import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
 
 interface CheckoutSuccessViewProps {
@@ -88,6 +88,16 @@ export const CheckoutSuccessView = memo(
       pushDataLayerEvent({
         event: 'purchase',
         ecommerce: orderInfo,
+      });
+
+      // Google Ads Dynamic Remarketing
+      pushGAdsEvent({
+        event: 'GAds_purchase',
+        value: order.cost.value,
+        items: order.products.map((item) => ({
+          id: item.parent_id || item.id,
+          google_business_vertical: 'retail',
+        })),
       });
 
       if (typeof window !== 'undefined' && window?.fbq) {
