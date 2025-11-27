@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import Select, { components, InputProps } from 'react-select';
+import Select, { components, InputProps, createFilter } from 'react-select';
 import { useCallback, useId } from 'react';
 import { Label } from '@/shared/ui/Form/Label';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
@@ -10,6 +10,14 @@ import { getSelectedOption } from './utils/getSelectedOption';
 import { selectClassNames } from './styles/styles';
 import { useTranslation } from 'next-i18next';
 import styles from './SelectField.module.scss';
+
+// Search only by label, not by value (id)
+const filterOption = createFilter({
+  ignoreCase: true,
+  ignoreAccents: true,
+  matchFrom: 'any',
+  stringify: (option) => String(option.label),
+});
 
 export const SelectField = <Option extends SingleSelectOption>(props: SelectFieldProps<Option>) => {
   const {
@@ -63,6 +71,7 @@ export const SelectField = <Option extends SingleSelectOption>(props: SelectFiel
         isDisabled={disabled}
         options={options}
         hideSelectedOptions={false}
+        filterOption={filterOption}
         components={{
           Option: OptionComponent,
           Input,
