@@ -12,6 +12,7 @@ export type IsPopupShowed = 'shouldBe' | 'showed' | 'notShouldBe';
 export type SignUpBody = {
   first_name: string;
   last_name: string;
+  middle_name?: string;
   email: string;
   birthday: string;
   phone: string;
