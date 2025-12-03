@@ -1,4 +1,5 @@
-import { fireEvent, screen } from '@testing-library/dom';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderComponent } from '@/shared/lib/test/renderComponent';
 import { Gallery } from '@/shared/ui/Gallery/Gallery';
 import GalleryImage1 from '@/shared/assets/images/totallook/gallery/1.jpg';
@@ -37,33 +38,39 @@ describe('Gallery', () => {
     expect(moreBtn).not.toBeInTheDocument();
   });
 
-  it('Should open fullscreen slider by more button click', () => {
+  it('Should open fullscreen slider by more button click', async () => {
     renderComponent(<Gallery images={gallery} />);
     const moreBtn = screen.getByText(/Більше фото/);
     expect(screen.queryByTestId('FullscreenThumbsSlider')).not.toBeInTheDocument();
-    fireEvent.click(moreBtn);
+    await userEvent.click(moreBtn);
 
-    expect(screen.getByTestId('FullscreenThumbsSlider')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('FullscreenThumbsSlider')).toBeInTheDocument();
+    });
   });
 
-  it('Should open fullscreen slider by image click', () => {
+  it('Should open fullscreen slider by image click', async () => {
     renderComponent(<Gallery images={gallery} />);
     expect(screen.queryByTestId('FullscreenThumbsSlider')).not.toBeInTheDocument();
     const images = screen.getAllByTestId('GalleryDesktopGrid.ImageButton');
 
-    fireEvent.click(images[0]);
+    await userEvent.click(images[0]);
 
-    expect(screen.getByTestId('FullscreenThumbsSlider')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('FullscreenThumbsSlider')).toBeInTheDocument();
+    });
   });
 
-  it('Should set active slide by click image', () => {
+  it('Should set active slide by click image', async () => {
     renderComponent(<Gallery images={gallery} />);
     expect(screen.queryByTestId('FullscreenThumbsSlider')).not.toBeInTheDocument();
     const images = screen.getAllByTestId('GalleryDesktopGrid.ImageButton');
 
-    fireEvent.click(images[1]);
+    await userEvent.click(images[1]);
 
-    expect(screen.getByTestId('FullscreenThumbsSlider')).toBeInTheDocument();
-    expect(screen.getByTestId('FullscreenThumbsSlider.activeSlide')).toHaveTextContent('1');
+    await waitFor(() => {
+      expect(screen.getByTestId('FullscreenThumbsSlider')).toBeInTheDocument();
+      expect(screen.getByTestId('FullscreenThumbsSlider.activeSlide')).toHaveTextContent('1');
+    });
   });
 });

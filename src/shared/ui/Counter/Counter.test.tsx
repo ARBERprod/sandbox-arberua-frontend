@@ -1,6 +1,7 @@
 import { renderComponent } from '@/shared/lib/test/renderComponent';
 import { Counter } from '@/shared/ui/Counter/Counter';
-import { fireEvent, screen } from '@testing-library/dom';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 describe('Counter', () => {
   beforeEach(() => {
@@ -19,14 +20,18 @@ describe('Counter', () => {
   it('Should increment counter', async () => {
     const incrementButton = screen.getByTestId('Counter.incr');
     expect(screen.getByTestId('Counter')).toBeInTheDocument();
-    fireEvent.click(incrementButton);
-    expect(screen.getByTestId('Counter.count')).toHaveTextContent('11');
+    await userEvent.click(incrementButton);
+    await waitFor(() => {
+      expect(screen.getByTestId('Counter.count')).toHaveTextContent('11');
+    });
   });
 
   it('Should decrement counter', async () => {
     const decrementButton = screen.getByTestId('Counter.decr');
     expect(screen.getByTestId('Counter')).toBeInTheDocument();
-    fireEvent.click(decrementButton);
-    expect(screen.getByTestId('Counter.count')).toHaveTextContent('9');
+    await userEvent.click(decrementButton);
+    await waitFor(() => {
+      expect(screen.getByTestId('Counter.count')).toHaveTextContent('9');
+    });
   });
 });

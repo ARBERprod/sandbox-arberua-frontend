@@ -21,10 +21,11 @@ module.exports = async () => {
       'node_modules/(?!(swiper|ssr-window|dom7)/)',
     ],
     moduleNameMapper: {
-      '\\.svg$': '<rootDir>/jest/jestMockSvg.js',
-      '^(?!.*\\.module\\.(css|scss$)).+\\.(css|scss)$': '<rootDir>/jest/jestStyleMock.js',
-      '^@/(.*)$': '<rootDir>/src/$1',
       ...nextJestConfig.moduleNameMapper,
+      '^swiper/css.*$': '<rootDir>/jest/jestStyleMock.js',
+      '\\.svg$': '<rootDir>/jest/jestMockSvg.js',
+      '\\.(css|scss)$': '<rootDir>/jest/jestStyleMock.js',
+      '^@/(.*)$': '<rootDir>/src/$1',
     },
   };
 };

@@ -3,6 +3,10 @@ import { render } from '@testing-library/react';
 import { AccordionList } from './AccordionList';
 import { IAccordionItem } from '../AccordionItem';
 
+jest.mock('@/shared/ui/Svg', () => ({
+  Svg: ({ className }: { className?: string }) => <span className={className} data-testid="svg-mock" />,
+}));
+
 const ITEMS:IAccordionItem[] = [
   {
     title: 'title1',

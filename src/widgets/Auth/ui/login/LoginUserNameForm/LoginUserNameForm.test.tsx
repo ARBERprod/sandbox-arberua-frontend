@@ -13,7 +13,7 @@ const renderComponent = (props?: Partial<LoginUserNameFormProps>) => {
 
 const getSubmitButton = () => screen.getByRole('button', { name: /продовжити/i });
 const getFormComponent = () => screen.getByRole('form', { name: 'username' });
-const getInputElement = () => screen.getByPlaceholderText(/телефон або електронна пошта/i);
+const getInputElement = () => screen.getByPlaceholderText(/електронна пошта/i);
 const getErrorMessage = () => screen.queryByText("Введіть ім'я користувача");
 
 const getFormElements = () => {
@@ -54,11 +54,11 @@ describe('LoginUserNameForm', () => {
 
     expect(form).toHaveClass(CLASS_NAME);
   });
-  it('Should set new value to input', () => {
+  it('Should set new value to input', async () => {
     const INPUT_VALUE = 'someUserName';
     renderComponent();
     const input = getInputElement();
-    userEvent.type(input, INPUT_VALUE);
+    await userEvent.type(input, INPUT_VALUE);
 
     expect(input).toHaveValue(INPUT_VALUE);
   });
@@ -68,20 +68,22 @@ describe('LoginUserNameForm', () => {
       renderComponent();
       const { button, input } = getFormElements();
 
-      userEvent.type(input, INPUT_VALUE);
-      userEvent.click(button);
+      await userEvent.type(input, INPUT_VALUE);
+      await userEvent.click(button);
 
       await waitFor(() => {
         expect(onSubmitHandler).toBeCalled();
-        expect(onSubmitHandler).toBeCalledWith({ username: INPUT_VALUE });
       });
+
+      // useForm calls onSubmit with (formData, eventId), so check first arg only
+      expect(onSubmitHandler).toBeCalledWith({ username: INPUT_VALUE }, expect.any(String));
     });
   });
   describe('When input data is invalid', () => {
     it('Should show error message if field is empty', async () => {
       renderComponent();
       const button = getSubmitButton();
-      userEvent.click(button);
+      await userEvent.click(button);
 
       await waitFor(() => {
         const errorMessage = getErrorMessage();
@@ -91,7 +93,7 @@ describe('LoginUserNameForm', () => {
     it('Should not call passed onSubmit callback', async () => {
       renderComponent();
       const button = getSubmitButton();
-      userEvent.click(button);
+      await userEvent.click(button);
 
       await waitFor(() => {
         expect(onSubmitHandler).not.toBeCalled();

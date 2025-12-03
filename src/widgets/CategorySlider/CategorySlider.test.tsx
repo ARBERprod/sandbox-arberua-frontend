@@ -4,6 +4,7 @@ import { CategorySlider, CategorySliderProps } from './CategorySlider';
 import { screen } from '@testing-library/dom';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
+import { CardView } from '@/shared/types/common';
 
 interface CategoryItem {
   category: Category;
@@ -18,16 +19,31 @@ jest.mock('@/entities/Category', () => ({
   SubcategoryLabelSlide: jest.fn(),
 }));
 
+jest.mock('@/shared/ui/GridViewSwitcher', () => ({
+  GridViewSwitcher: () => null,
+}));
+
+jest.mock('@/shared/ui/Svg', () => ({
+  Svg: ({ className }: { className?: string }) => <span className={className} data-testid="svg-mock" />,
+}));
+
+jest.mock('next-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 const CATEGORIES: Category[] = [
   {
+    id: '1',
     url: '/1',
     title: 'title 1',
   },
   {
+    id: '2',
     url: '/2',
     title: 'title 2',
   },
   {
+    id: '3',
     url: '/3',
     title: 'title 3',
   },
@@ -38,10 +54,14 @@ const mockedSubcategoryLabelSlide = jest.mocked(SubcategoryLabelSlide);
 
 const renderComponent = (props?: Partial<CategorySliderProps>) => {
   render(<CategorySlider
+    basePath="/"
     categories={CATEGORIES}
     category={null}
     isSubcategory={false}
     onCategoryChange={onCategoryChange}
+    onViewChange={() => {}}
+    view={CardView.NORMAL}
+    filters={[]}
     {...props}
   />);
 };
@@ -65,6 +85,7 @@ describe('CategorySlider', () => {
   });
   it('Should render category title, if category passed', () => {
     const CATEGORY: Category = {
+      id: 'test',
       title: 'category title',
       url: '/',
     };
@@ -74,25 +95,19 @@ describe('CategorySlider', () => {
   });
 
   describe('when is not subcategory', () => {
-    it('Should render slider', () => {
+    it('Should render slides', () => {
       renderComponent();
 
-      const categoryCircles = screen.queryAllByText('category circle');
-      expect(categoryCircles.length).toBeGreaterThan(0);
-    });
-    it('Should not render subcategory labels', () => {
-      renderComponent();
-
-      const labels = screen.queryAllByText('subcategory label slide');
-      expect(labels.length).toBe(0);
+      const slides = screen.queryAllByText('subcategory label slide');
+      expect(slides.length).toBeGreaterThan(0);
     });
     it('Should render correct count of slides', () => {
       renderComponent();
 
-      expect(mockedCategoryCircle).toBeCalledTimes(CATEGORIES.length);
+      expect(mockedSubcategoryLabelSlide).toBeCalledTimes(CATEGORIES.length);
     });
     it('Should call onCategoryChange callback by clicking on slide', () => {
-      const CATEGORY = { title: 'category', url: '/' };
+      const CATEGORY = { id: 'test', title: 'category', url: '/' };
       const CATEGORIES = [
         CATEGORY,
       ];
@@ -125,7 +140,7 @@ describe('CategorySlider', () => {
       expect(mockedSubcategoryLabelSlide).toBeCalledTimes(CATEGORIES.length);
     });
     it('Should call onCategoryChange callback by clicking on label', () => {
-      const CATEGORY = { title: 'category', url: '/' };
+      const CATEGORY = { id: 'test', title: 'category', url: '/' };
       const CATEGORIES = [
         CATEGORY,
       ];

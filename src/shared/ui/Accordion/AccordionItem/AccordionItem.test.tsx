@@ -3,6 +3,10 @@ import { AccordionItem } from './AccordionItem';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
+jest.mock('@/shared/ui/Svg', () => ({
+  Svg: ({ className }: { className?: string }) => <span className={className} data-testid="svg-mock" />,
+}));
+
 const mockToggleFunction = jest.fn();
 
 const mockUseAccordion = jest.fn(() => ({

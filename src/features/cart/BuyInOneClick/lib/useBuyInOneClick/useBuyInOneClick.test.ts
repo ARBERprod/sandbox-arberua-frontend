@@ -6,19 +6,33 @@ import { StatusCode, ValidationError } from '@/shared/types/api';
 const CART_ITEMS: any = [];
 
 const mockCloseCart = jest.fn();
-const mockDeleteCart = jest.fn(() => ({ unwrap: jest.fn() }));
-const mockCheckout = jest.fn(() => ({ unwrap: jest.fn() }));
+const mockClearCartItems = jest.fn();
+const mockShowSuccessModal = jest.fn();
+const mockCheckout = jest.fn(() => ({ unwrap: jest.fn().mockResolvedValue({}) }));
 
 const mockUseBuiInOneClickMutation = jest.fn(() => [mockCheckout]);
-const mockUseDeleteCartMutation = jest.fn(() => [mockDeleteCart]);
 
 jest.mock('../../api/buyInOneClickApi', () => ({
   useBuyInOneClickMutation: () => mockUseBuiInOneClickMutation(),
 }));
 
-jest.mock('@/entities/Cart', () => ({
-  useCartActions: () => ({ closeCart: mockCloseCart }),
-  useDeleteCartMutation: () => mockUseDeleteCartMutation(),
+jest.mock('../../model/buyInOneClickCartSlice', () => ({
+  useBuyInOneClickCartActions: () => ({
+    closeCart: mockCloseCart,
+    clearCartItems: mockClearCartItems,
+    showSuccessModal: mockShowSuccessModal,
+  }),
+}));
+
+jest.mock('../../model/buyInOneClickCartSelectors', () => ({
+  buyInOneClickCartSelectors: {
+    getCartItems: () => CART_ITEMS,
+  },
+}));
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: (selector: any) => selector(),
 }));
 
 describe('useBuyInOneClick', () => {
@@ -33,29 +47,30 @@ describe('useBuyInOneClick', () => {
     const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
     const CHECKOUT_DATA = {
       phone: result.current.phone,
+      items: [],
     };
 
-    await act(() => {
-      result.current.clickHandler();
+    await act(async () => {
+      await result.current.clickHandler();
     });
 
     expect(mockCheckout).toBeCalledWith(CHECKOUT_DATA);
   });
 
-  it('Should delete cart', async () => {
+  it('Should clear cart items', async () => {
     const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
-    await act(() => {
-      result.current.clickHandler();
+    await act(async () => {
+      await result.current.clickHandler();
     });
 
-    expect(mockDeleteCart).toBeCalled();
+    expect(mockClearCartItems).toBeCalled();
   });
 
   it('Should close cart after success', async () => {
     const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
 
-    await act(() => {
-      result.current.clickHandler();
+    await act(async () => {
+      await result.current.clickHandler();
     });
 
     expect(mockCloseCart).toBeCalled();
@@ -70,10 +85,11 @@ describe('useBuyInOneClick', () => {
 
     const CHECKOUT_DATA = {
       phone: PHONE_VALUE,
+      items: [],
     };
 
-    await act(() => {
-      result.current.clickHandler();
+    await act(async () => {
+      await result.current.clickHandler();
     });
 
     expect(mockCheckout).toBeCalledWith(CHECKOUT_DATA);
@@ -90,12 +106,12 @@ describe('useBuyInOneClick', () => {
         },
       },
     };
-    mockCheckout.mockImplementation(() => {
-      throw ERROR;
-    });
+    mockCheckout.mockImplementation(() => ({
+      unwrap: jest.fn().mockRejectedValue(ERROR),
+    }));
 
-    await act(() => {
-      result.current.clickHandler();
+    await act(async () => {
+      await result.current.clickHandler();
     });
 
     expect(result.current.fieldError).toBe(ERROR_MESSAGE);
