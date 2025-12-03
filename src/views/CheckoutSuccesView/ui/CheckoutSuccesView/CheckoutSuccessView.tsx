@@ -14,10 +14,10 @@ import styles from './CheckoutSuccesView.module.scss';
 import { OrderDto } from '@/entities/Order';
 import { ClothesItem, SmallProductCard } from '@/entities/Product';
 import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
-import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
-import { useAuth, useUserId } from '@/entities/Session';
+import { useAuth , useUserId } from '@/entities/Session';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 import { User } from '@/entities/User';
+import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 
 interface CheckoutSuccessViewProps {
   className?: string;
@@ -121,6 +121,16 @@ export const CheckoutSuccessView = memo(
         event_id: eventId,
         ecommerce: orderInfo,
         ...(user_data && { user_data }),
+      });
+
+      // Google Ads Dynamic Remarketing
+      pushGAdsEvent({
+        event: 'GAds_purchase',
+        value: order.cost.value,
+        items: order.products.map((item) => ({
+          id: item.parent_id || item.id,
+          google_business_vertical: 'retail',
+        })),
       });
 
       if (typeof window !== 'undefined' && window?.fbq) {

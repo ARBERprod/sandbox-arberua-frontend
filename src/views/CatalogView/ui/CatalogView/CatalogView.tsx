@@ -22,7 +22,7 @@ import { useGetCatalogQuery } from '../../api/catalogApi';
 import styles from './CatalogView.module.scss';
 import { FilterUtils } from '@/entities/Filter';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
-import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
+import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
 import { useFixedHeader } from '@/shared/lib/hooks/useFixedHeader';
 import { useGetPromotionsQuery, PromotionsGrid } from '@/entities/Promotion';
@@ -135,6 +135,17 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
         name: 'view_item_list',
         params,
         client_id: clientId,
+      });
+
+      // Google Ads Dynamic Remarketing
+      const totalValue = data.data.products.reduce((sum, product) => sum + product.price.value, 0);
+      pushGAdsEvent({
+        event: 'GAds_view_item_list',
+        value: totalValue,
+        items: data.data.products.map((product) => ({
+          id: product.parent_id || product.id,
+          google_business_vertical: 'retail',
+        })),
       });
     }
   }, [data, clientId]);

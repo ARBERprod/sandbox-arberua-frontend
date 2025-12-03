@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import {
   CartDrawer,
@@ -8,6 +8,7 @@ import {
   useDeleteProductMutation,
   useUpdateProductMutation,
 } from '@/entities/Cart';
+import { useLazySessionFetchQuery } from '@/entities/Session';
 import { PageLoader } from '@/shared/ui/Loader';
 import { CartActions } from '../CartActions';
 import styles from './Cart.module.scss';
@@ -22,6 +23,16 @@ export const Cart = memo(({ className }: CartProps) => {
     cartData, isError, isOpen, isLoading,
   } = useSelector(cartSelectors.getCart);
   const quantity = useSelector(cartSelectors.getCartProductQuantity);
+  const [refetchSession] = useLazySessionFetchQuery();
+  const prevIsOpenRef = useRef(false);
+
+  // Refetch session when cart drawer opens to get actual prices
+  useEffect(() => {
+    if (isOpen && !prevIsOpenRef.current) {
+      refetchSession();
+    }
+    prevIsOpenRef.current = isOpen;
+  }, [isOpen, refetchSession]);
   const [updateCartQuantity, { isLoading: updateLoading }] = useUpdateProductMutation();
   const [deleteCartItem, { isLoading: deleteLoading }] = useDeleteProductMutation();
   const onClose = () => {

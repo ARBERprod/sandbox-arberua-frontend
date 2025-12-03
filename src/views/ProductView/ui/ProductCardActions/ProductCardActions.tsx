@@ -1,22 +1,19 @@
 import { memo, useState } from 'react';
 import cn from 'classnames';
 import { Flex, FlexCol } from '@/shared/ui/Flex';
-// import { Button } from '@/shared/ui/Button';
 import { PreorderProductButton } from '@/features/PreOrderProduct';
 import { ToggleWishListButton } from '@/features/wish-list/ToggleWishListButton';
 import { useTranslation } from 'next-i18next';
-// import { BuyInOneClickButton } from '@/features/cart/BuyInOneClick';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { AddToCardButton } from '@/features/cart/AddToCart';
 import { ProductTryOnDrawer } from '../ProductTryOnDrawer';
 import styles from './ProductCardActions.module.scss';
-// import { AvailabilityStoresButton } from '@/widgets/ProductAvailability';
 import { useProductSkus } from '@/views/ProductView/lib/ProductSkusContext';
 import { DetailedProduct } from '@/entities/Product';
 import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
-import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useAuth, useUserId } from '@/entities/Session';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
+import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 
 interface ProductCardActionsProps {
     className?: string;
@@ -43,7 +40,7 @@ export const ProductCardActions = memo(({
     setIsOpenTryOn(false);
   };
 
-  const onAddToCart = () => {
+  const onAddToCart = (eventId: string) => {
     const items = [{
       id: product?.parent_id || productId,
       name: product?.title || '',
@@ -97,6 +94,16 @@ export const ProductCardActions = memo(({
       name: 'add_to_cart',
       params,
       client_id: clientId,
+    });
+
+    // Google Ads Dynamic Remarketing
+    pushGAdsEvent({
+      event: 'GAds_add_to_cart',
+      value: product?.price.value || 0,
+      items: [{
+        id: product?.parent_id || productId,
+        google_business_vertical: 'retail',
+      }],
     });
 
     if (typeof window !== 'undefined' && window?.fbq) {
