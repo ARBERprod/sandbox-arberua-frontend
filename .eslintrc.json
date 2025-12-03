@@ -12,7 +12,6 @@
   },
   "extends": [
     "next/core-web-vitals",
-    "plugin:storybook/recommended",
     "airbnb",
     "plugin:react/recommended",
     "plugin:i18next/recommended"
@@ -28,7 +27,6 @@
   "plugins": [
     "react",
     "@typescript-eslint",
-    "react-hooks",
     "i18next"
   ],
   "rules": {

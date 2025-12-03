@@ -1,14 +1,13 @@
 import {
-  FC, ReactNode, useEffect, useRef, useState,
+  FC, PropsWithChildren, useEffect, useRef, useState,
 } from 'react';
 import { createPortal } from 'react-dom';
 
 interface PortalProps {
-  children: ReactNode;
   mountInBody?: boolean;
 }
 
-export const Portal: FC<PortalProps> = (props) => {
+export const Portal: FC<PropsWithChildren<PortalProps>> = (props) => {
   const {
     children,
     mountInBody,
@@ -19,5 +18,6 @@ export const Portal: FC<PortalProps> = (props) => {
     ref.current = mountInBody ? document.body : document.querySelector<HTMLElement>('#portal');
     setMounted(true);
   }, [mountInBody]);
-  return (mounted && ref.current) ? createPortal(children, ref.current) : null;
+  // Type assertion needed due to @types/react version mismatch between react and react-dom
+  return (mounted && ref.current) ? createPortal(children as Parameters<typeof createPortal>[0], ref.current) : null;
 };
