@@ -29,7 +29,7 @@ export const Cart = memo(({ className }: CartProps) => {
   // Refetch session when cart drawer opens to get actual prices
   useEffect(() => {
     if (isOpen && !prevIsOpenRef.current) {
-      refetchSession(undefined, false);
+      refetchSession();
     }
     prevIsOpenRef.current = isOpen;
   }, [isOpen, refetchSession]);
