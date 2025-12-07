@@ -9,7 +9,7 @@ import { Redirect } from '@/shared/lib/components/Redirect';
 import { routerPaths } from '@/shared/config/router';
 import { sessionFetch } from '@/entities/Session';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { rtkApi, SESSION_TAG } from '@/shared/api/rtkApi';
+import { rtkApi } from '@/shared/api/rtkApi';
 
 interface CheckoutViewProps {
     className?: string;
@@ -22,8 +22,8 @@ export const CheckoutView = memo(({ className }: CheckoutViewProps) => {
 
   // Refetch session on checkout page load to get actual prices
   useEffect(() => {
-    dispatch(rtkApi.util.invalidateTags([SESSION_TAG]));
-    dispatch(sessionFetch.initiate(undefined, { forceRefetch: true, subscribe: false }));
+    dispatch(rtkApi.util.resetApiState());
+    dispatch(sessionFetch.initiate());
   }, [dispatch]);
 
   if (!cartLoading && cartItems.length === 0) return <Redirect path={routerPaths.main} />;
