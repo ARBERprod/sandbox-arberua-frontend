@@ -10,16 +10,16 @@ echo "⬇️ Updating base code: main branch"
 
 git pull
 
-echo "📦 Installing Yarn dependencies"
+echo "📦 Installing dependencies"
 
-yarn install
+npm ci --legacy-peer-deps
 
 echo "🏗️ Compiling assets"
 
-yarn build
+npm run build
 
 echo "⬆️ Rising PM2"
 
-pm2 start yarn --name "Arber" -- start -p 3005
+pm2 start npm --name "Arber" -- run start -- -p 3005
 
 echo "🎉 Deployed application"
