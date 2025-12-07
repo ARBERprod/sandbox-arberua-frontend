@@ -8,7 +8,8 @@ import {
   useDeleteProductMutation,
   useUpdateProductMutation,
 } from '@/entities/Cart';
-import { useLazySessionFetchQuery } from '@/entities/Session';
+import { sessionFetch } from '@/entities/Session';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { PageLoader } from '@/shared/ui/Loader';
 import { CartActions } from '../CartActions';
 import styles from './Cart.module.scss';
@@ -19,20 +20,20 @@ interface CartProps {
 
 export const Cart = memo(({ className }: CartProps) => {
   const { closeCart } = useCartActions();
+  const dispatch = useAppDispatch();
   const {
     cartData, isError, isOpen, isLoading,
   } = useSelector(cartSelectors.getCart);
   const quantity = useSelector(cartSelectors.getCartProductQuantity);
-  const [refetchSession] = useLazySessionFetchQuery();
   const prevIsOpenRef = useRef(false);
 
   // Refetch session when cart drawer opens to get actual prices
   useEffect(() => {
     if (isOpen && !prevIsOpenRef.current) {
-      refetchSession();
+      dispatch(sessionFetch.initiate(undefined, { forceRefetch: true }));
     }
     prevIsOpenRef.current = isOpen;
-  }, [isOpen, refetchSession]);
+  }, [isOpen, dispatch]);
   const [updateCartQuantity, { isLoading: updateLoading }] = useUpdateProductMutation();
   const [deleteCartItem, { isLoading: deleteLoading }] = useDeleteProductMutation();
   const onClose = () => {
