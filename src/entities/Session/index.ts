@@ -18,4 +18,5 @@ export { useUserData } from './lib/useUserData';
 export { useUserId } from './lib/useUserId';
 export { hidePopap } from './model/slices/sessionSlice';
 export { sessionSelectors } from './model/selectors/sessionSelectors';
+export { refetchSession } from './lib/refetchSession';
 export type { IsPopupShowed } from './api/types';

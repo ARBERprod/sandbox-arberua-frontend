@@ -7,9 +7,8 @@ import { useSelector } from 'react-redux';
 import { cartSelectors } from '@/entities/Cart';
 import { Redirect } from '@/shared/lib/components/Redirect';
 import { routerPaths } from '@/shared/config/router';
-import { sessionFetch } from '@/entities/Session';
+import { refetchSession } from '@/entities/Session';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { rtkApi } from '@/shared/api/rtkApi';
 
 interface CheckoutViewProps {
     className?: string;
@@ -22,8 +21,7 @@ export const CheckoutView = memo(({ className }: CheckoutViewProps) => {
 
   // Refetch session on checkout page load to get actual prices
   useEffect(() => {
-    dispatch(rtkApi.util.resetApiState());
-    dispatch(sessionFetch.initiate());
+    dispatch(refetchSession());
   }, [dispatch]);
 
   if (!cartLoading && cartItems.length === 0) return <Redirect path={routerPaths.main} />;

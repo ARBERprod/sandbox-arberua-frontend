@@ -1,5 +1,5 @@
 import { buildSlice } from '@/shared/lib/utils/buildSlice';
-import { sessionApi } from '@/entities/Session';
+import { sessionApi, refetchSession } from '@/entities/Session';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { cartApi } from '@/entities/Cart';
 import { CartData } from '../types/types';
@@ -28,6 +28,22 @@ export const cartSlice = buildSlice({
     },
   },
   extraReducers: (builder) => {
+    // addCase must come before addMatcher
+    builder.addCase(refetchSession.fulfilled, (state, action) => {
+      state.cartData = action.payload.data.cart;
+      state.isFetching = false;
+      state.isLoading = false;
+      state.isError = false;
+    });
+    builder.addCase(refetchSession.pending, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addCase(refetchSession.rejected, (state) => {
+      state.isError = true;
+      state.isFetching = false;
+    });
+
     builder.addMatcher(sessionApi.endpoints.sessionFetch.matchFulfilled, (state, action) => {
       state.cartData = action.payload.data.cart;
       state.isFetching = false;

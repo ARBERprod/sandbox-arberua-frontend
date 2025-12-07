@@ -8,9 +8,8 @@ import {
   useDeleteProductMutation,
   useUpdateProductMutation,
 } from '@/entities/Cart';
-import { sessionFetch } from '@/entities/Session';
+import { refetchSession } from '@/entities/Session';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { rtkApi } from '@/shared/api/rtkApi';
 import { PageLoader } from '@/shared/ui/Loader';
 import { CartActions } from '../CartActions';
 import styles from './Cart.module.scss';
@@ -31,8 +30,7 @@ export const Cart = memo(({ className }: CartProps) => {
   // Refetch session when cart drawer opens to get actual prices
   useEffect(() => {
     if (isOpen && !prevIsOpenRef.current) {
-      dispatch(rtkApi.util.resetApiState());
-      dispatch(sessionFetch.initiate());
+      dispatch(refetchSession());
     }
     prevIsOpenRef.current = isOpen;
   }, [isOpen, dispatch]);
