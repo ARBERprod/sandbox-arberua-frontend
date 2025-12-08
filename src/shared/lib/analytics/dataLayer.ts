@@ -23,9 +23,12 @@ export const pushDataLayerEvent = (eventData: DataLayerEvent): void => {
   }
 };
 
+// Google Ads Dynamic Remarketing
 export const pushGAdsEvent = (eventData: GAdsEvent): void => {
   if (typeof window !== 'undefined' && 'dataLayer' in window) {
-    window.dataLayer.push(eventData);
+    // temporary disable because it is new and not supported
+    // more info here https://docs.google.com/document/d/1VpsH32hYuPAI6adh0EuOmw9hgLfn_X0HgUL2F4afhDo/edit?tab=t.0#heading=h.im35brsz1201
+    // window.dataLayer.push(eventData);
   }
 };
 
