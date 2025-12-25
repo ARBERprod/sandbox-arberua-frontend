@@ -19,7 +19,7 @@ export const SOCIALS = {
   },
   telegram: {
     Icon: TelegramIcon,
-    href: 'https://t.me/arber_club_bot',
+    href: 'https://t.me/arber_ukraine_bot',
     stroke: 'none',
     fill: 'black-light-2',
 
