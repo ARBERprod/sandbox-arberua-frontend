@@ -65,6 +65,7 @@ export interface DetailedProduct {
   price: Price;
   old_price: Price | false;
   skus: ProductSku[] | null;
+  sizing_type: 'shoes' | 'female' | 'male' ;
 }
 
 export type ProductQuantity = {
