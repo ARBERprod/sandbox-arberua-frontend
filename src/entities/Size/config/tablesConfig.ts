@@ -18,7 +18,7 @@ type tableColumnsGetter<T extends object> = (t: TFunction<['sizes']>) => TableCo
 
 export const manBottomClothesColumns: tableColumnsGetter<ManBottomClothesUAData> = (t) => [
   {
-    header: t('sizes:size'),
+    header: `${t('sizes:size')} EU`,
     accessor: 'size',
   },
   {
@@ -33,7 +33,7 @@ export const manBottomClothesColumns: tableColumnsGetter<ManBottomClothesUAData>
 
 export const manTopClothesColumns: tableColumnsGetter<ManTopClothesData> = (t) => [
   {
-    header: t('sizes:size'),
+    header: `${t('sizes:size')} EU`,
     accessor: 'size',
   },
   {
@@ -47,7 +47,7 @@ export const manTopClothesColumns: tableColumnsGetter<ManTopClothesData> = (t) =
 ];
 export const manTopClothesUaColumns: tableColumnsGetter<ManTopClothesUaData> = (t) => [
   {
-    header: t('sizes:size'),
+    header: `${t('sizes:size')} EU`,
     accessor: 'size',
   },
   {
@@ -66,8 +66,12 @@ export const manTopClothesUaColumns: tableColumnsGetter<ManTopClothesUaData> = (
 
 export const womanTopClothesColumns: tableColumnsGetter<WomanTopClothesData> = (t) => [
   {
-    header: t('sizes:size'),
+    header: `${t('sizes:size')} UA`,
     accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} EU`,
+    accessor: 'sizes_eu',
   },
   {
     header: t('sizes:bust'),
@@ -81,7 +85,22 @@ export const womanTopClothesColumns: tableColumnsGetter<WomanTopClothesData> = (
 
 export const womanBottomClothesColumns: tableColumnsGetter<WomanBottomClothesData> = (t) => [
   {
-    header: t('sizes:size'),
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} EU`,
+    accessor: 'sizes_eu',
+  },
+  {
+    header: t('sizes:hip_girth'),
+    accessor: 'hip_girth',
+  },
+];
+
+export const womanBottomClothesJeansColumns: tableColumnsGetter<WomanBottomClothesData> = (t) => [
+  {
+    header: `${t('sizes:size')} USA`,
     accessor: 'size',
   },
   {
@@ -92,8 +111,12 @@ export const womanBottomClothesColumns: tableColumnsGetter<WomanBottomClothesDat
 
 export const tShortClothesColumns: tableColumnsGetter<TShirtData> = (t) => [
   {
-    header: t('sizes:size'),
+    header: `${t('sizes:size')} UA`,
     accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} EU`,
+    accessor: 'sizes_eu',
   },
   {
     header: t('sizes:bust'),
@@ -103,7 +126,7 @@ export const tShortClothesColumns: tableColumnsGetter<TShirtData> = (t) => [
 
 export const shortClothesColumns: tableColumnsGetter<ShirtData> = (t) => [
   {
-    header: t('sizes:size'),
+    header: `${t('sizes:size')} EU`,
     accessor: 'size',
   },
   {

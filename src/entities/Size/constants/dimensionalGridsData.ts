@@ -45,60 +45,74 @@ export const womanBottomClothesItem = ():WomanBottomClothesData[] => [
   {
     hip_girth: '88',
     size: '40',
+    sizes_eu: '32',
   },
   {
     hip_girth: '92',
     size: '42',
+    sizes_eu: '34',
   },
   {
     hip_girth: '96',
     size: '44',
+    sizes_eu: '36',
   },
   {
     hip_girth: '100',
     size: '46',
+    sizes_eu: '38',
   },
   {
     hip_girth: '104',
     size: '48',
+    sizes_eu: '40',
   },
   {
     hip_girth: '108',
     size: '50',
+    sizes_eu: '42',
   },
   {
     hip_girth: '112',
     size: '52',
+    sizes_eu: '44',
   },
 ];
 export const womanBottomClothesItemSport = ():WomanBottomClothesData[] => [
   {
     hip_girth: '88-91',
     size: 'XXS',
+    sizes_eu: 'XXS',
   },
   {
     hip_girth: '92-95',
     size: 'XS',
+    sizes_eu: 'XS',
   },
   {
     hip_girth: '96-98',
     size: 'S',
+    sizes_eu: 'S',
   },
   {
     hip_girth: '99-101',
     size: 'M',
+    sizes_eu: 'M',
   },
   {
     hip_girth: '102-104',
     size: 'L',
+    sizes_eu: 'L',
   },
   {
     hip_girth: '105-108',
     size: 'XL',
+    sizes_eu: 'XL',
   },
   {
     hip_girth: '109-112',
     size: 'XXL',
+    sizes_eu: 'XXL',
   },
 ];
 
@@ -107,66 +121,80 @@ export const womanTopClothesItem = ():WomanTopClothesData[] => [
     hip_girth: '88',
     bust: '80',
     size: '40',
+    sizes_eu: '32',
   },
   {
     hip_girth: '92',
     bust: '84',
     size: '42',
+    sizes_eu: '34',
   },
   {
     hip_girth: '96',
     bust: '88',
     size: '44',
+    sizes_eu: '36',
   },
   {
     hip_girth: '100',
     bust: '92',
     size: '46',
+    sizes_eu: '38',
   },
   {
     hip_girth: '104',
     bust: '96',
     size: '48',
+    sizes_eu: '40',
   },
   {
     hip_girth: '108',
     bust: '100',
     size: '50',
+    sizes_eu: '42',
   },
   {
     hip_girth: '112',
     bust: '104',
     size: '52',
+    sizes_eu: '44',
   },
 ];
 export const womanTShortItem = ():TShirtData[] => [
   {
     bust: '80',
     size: 'XXS',
+    sizes_eu: 'XXS',
   },
   {
     bust: '84',
     size: 'XS',
+    sizes_eu: 'XS',
   },
   {
     bust: '88',
     size: 'S',
+    sizes_eu: 'S',
   },
   {
     bust: '92',
     size: 'M',
+    sizes_eu: 'M',
   },
   {
     bust: '96',
     size: 'L',
+    sizes_eu: 'L',
   },
   {
     bust: '100',
     size: 'XL',
+    sizes_eu: 'XL',
   },
   {
     bust: '104',
     size: 'XXL',
+    sizes_eu: 'XXL',
   },
 ];
 export const beltsItem = ():BeltsData[] => [

@@ -36,6 +36,7 @@ export interface ShirtData {
 
 export interface TShirtData {
   size: string;
+  sizes_eu?: string;
   bust: string;
 }
 
@@ -46,11 +47,13 @@ export interface ArberHeightData {
 
 export interface WomanBottomClothesData {
   size: string;
+  sizes_eu?: string;
   hip_girth: string;
 }
 
 export interface WomanTopClothesData {
   size: string;
+  sizes_eu?: string;
   bust: string;
   hip_girth: string;
 }
