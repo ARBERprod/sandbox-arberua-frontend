@@ -26,14 +26,13 @@
     right: 0;
     padding-left: 10px;
     padding-right: 12px;
-    width: 125px;
+    width: fit-content;
     font-size: 12px;
     gap: 0;
     display: none;
 
     @include breakpoint(tablet) {
       display: flex;
-      width: 130px;
       font-size: 14px;
     }
   }
