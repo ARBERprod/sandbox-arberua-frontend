@@ -1,5 +1,5 @@
 import {
-  memo, useCallback, useEffect, useRef, useState,
+  memo, useCallback, useEffect,
 } from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
@@ -24,7 +24,6 @@ import { FilterUtils } from '@/entities/Filter';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
-import { useFixedHeader } from '@/shared/lib/hooks/useFixedHeader';
 import { useGetPromotionsQuery, PromotionsGrid } from '@/entities/Promotion';
 import { useGetPostsQuery, PostsGrid } from '@/entities/Blog';
 import { Typography } from '@/shared/ui/Typography';
@@ -75,10 +74,6 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
       push(category.url);
     }
   }, [push]);
-
-  const isHeaderFixed = useFixedHeader();
-  const actionsRef = useRef<HTMLDivElement>(null);
-  const [isActionsFixed, setIsActionsFixed] = useState(false);
 
   const { data: blogData } = useGetPostsQuery({
     page: 1,
@@ -150,22 +145,6 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
     }
   }, [data, clientId]);
 
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-
-    const handleScroll = () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        if (!actionsRef.current) return;
-        const { top } = actionsRef.current.getBoundingClientRect();
-        setIsActionsFixed(top <= 60);
-      }, 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   if (isLoading) return <PageLoader />;
   if (isError || !data) return <ErrorMessage error="Error" />;
 
@@ -184,12 +163,7 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
           onCategoryChange={onCategoryChange}
           onViewChange={viewChangeHandler}
         />
-        <div
-          ref={actionsRef}
-          className={cn(styles.actionsWrapper, {
-            [styles.fixed]: isActionsFixed && isHeaderFixed,
-          })}
-        >
+        <div className={styles.actionsWrapper}>
           <CatalogActions
             basePath={`${routerPaths.catalog}/${category}`}
             filters={data.data.filters}
