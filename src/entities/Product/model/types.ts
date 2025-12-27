@@ -1,6 +1,8 @@
 import { ImageType, Price } from '@/shared/types/common';
 import { Shop } from '@/entities/Shop';
 
+export type SizingType = 'man' | 'woman' | 'shoes';
+
 export interface Material {
   title: string;
 }
@@ -65,7 +67,7 @@ export interface DetailedProduct {
   price: Price;
   old_price: Price | false;
   skus: ProductSku[] | null;
-  sizing_type: 'shoes' | 'female' | 'male' ;
+  sizing_type: SizingType;
 }
 
 export type ProductQuantity = {

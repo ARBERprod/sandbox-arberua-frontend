@@ -96,4 +96,5 @@ export const getMockDetailedProduct = (options?: {
   category: faker.commerce.department(),
   brand: faker.company.name(),
   parent_id: faker.datatype.uuid(),
+  sizing_type: faker.helpers.arrayElement(['man', 'woman', 'shoes'] as const),
 });

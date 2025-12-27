@@ -2,13 +2,14 @@ import { ProductSkusContextProvider } from '../../lib/ProductSkusContext';
 import {
   ReactNode, useEffect, useMemo, useState,
 } from 'react';
-import { ProductSku } from '@/entities/Product';
+import { ProductSku, SizingType } from '@/entities/Product';
 import { getAvailableSku } from '@/views/ProductView/lib/getAvailableSku';
 
 interface ProductSkusProviderProps {
   children: ReactNode;
   product: {
     skus: ProductSku[] | null;
+    sizing_type?: SizingType;
   };
 }
 
@@ -26,7 +27,8 @@ export const ProductSkusProvider = ({
     productSkus: product.skus || [],
     setChosenSku,
     chosenSku,
-  }), [chosenSku, product.skus]);
+    sizingType: product.sizing_type,
+  }), [chosenSku, product.skus, product.sizing_type]);
 
   return (
     <ProductSkusContextProvider value={providedValue}>

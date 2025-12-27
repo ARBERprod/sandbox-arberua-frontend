@@ -1,12 +1,13 @@
 import {
   createContext, Dispatch, SetStateAction, useContext,
 } from 'react';
-import { ProductSku } from '@/entities/Product';
+import { ProductSku, SizingType } from '@/entities/Product';
 
 interface ProductSkusContextProps {
   productSkus: ProductSku[];
   chosenSku: ProductSku | null;
   setChosenSku: Dispatch<SetStateAction<ProductSku | null>>;
+  sizingType?: SizingType;
 }
 
 const ProductSkusContext = createContext<ProductSkusContextProps | null>(null);

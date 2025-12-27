@@ -19,7 +19,9 @@ interface ProductSizeSlotProps {
 export const ProductSizeSlot = ({
   className,
 }: ProductSizeSlotProps) => {
-  const { productSkus, chosenSku, setChosenSku } = useProductSkus();
+  const {
+    productSkus, chosenSku, setChosenSku, sizingType,
+  } = useProductSkus();
 
   const { t } = useTranslation();
   const { openPreorderProductModal } = usePreorderProduct();
@@ -42,7 +44,7 @@ export const ProductSizeSlot = ({
             {t('size')}
             :
           </Typography>
-          <SizeGridButton variant="icon" />
+          <SizeGridButton variant="icon" sizingType={sizingType} />
           <div className={styles.content}>
             <ProductSkus onClick={clickHandler} activeSkuId={chosenSku?.id} skus={productSkus} />
           </div>

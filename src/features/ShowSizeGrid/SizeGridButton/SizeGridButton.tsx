@@ -5,16 +5,19 @@ import { Typography } from '@/shared/ui/Typography';
 import { Svg } from '@/shared/ui/Svg';
 import SizeGridIcon from '@/shared/assets/icons/size-icon.svg';
 import { SizeGridModal } from '@/features/ShowSizeGrid/SizeGridModal';
+import { SizingType } from '@/entities/Product';
 import styles from './SizeGridButton.module.scss';
 
 interface SizeGridButtonProps {
   className?: string;
   variant: 'default' | 'icon';
+  sizingType?: SizingType;
 }
 
 export const SizeGridButton = memo(({
   className,
   variant = 'icon',
+  sizingType,
 }: SizeGridButtonProps) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +32,11 @@ export const SizeGridButton = memo(({
         {variant === 'icon'
           && <Typography variant="body-2" as="span">{t('size_grid')}</Typography>}
       </button>
-      <SizeGridModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <SizeGridModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        defaultTab={sizingType}
+      />
     </>
   );
 });

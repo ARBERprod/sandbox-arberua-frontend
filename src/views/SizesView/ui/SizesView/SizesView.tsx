@@ -10,6 +10,7 @@ import { ManWomanSwitcherButtons } from '@/shared/ui/ManWomanSwitcherButtons';
 import { Svg } from '@/shared/ui/Svg';
 import InfoIcon from '@/shared/assets/icons/info.svg';
 import { MeasurementsInfo } from '@/entities/Size';
+import { SizingType } from '@/entities/Product';
 import { scrollToRef } from '@/shared/lib/utils/scrollToRef';
 import { SizesTableProxy } from '../SizesTableProxy';
 import styles from './SizesView.module.scss';
@@ -19,12 +20,15 @@ interface SizesViewProps {
   className?: string;
   hideBreadcrumps?: boolean;
   hideSizeInfo?: boolean;
+  defaultTab?: SizingType;
 }
 
-export const SizesView = memo(({ className, hideBreadcrumps = false, hideSizeInfo = false }: SizesViewProps) => {
+export const SizesView = memo(({
+  className, hideBreadcrumps = false, hideSizeInfo = false, defaultTab,
+}: SizesViewProps) => {
   const { t } = useTranslation(['sizes', 'common']);
   const infoRef = useRef<HTMLDivElement>(null);
-  const [chosenTab, setChosenTab] = useState<'man' | 'woman' | 'shoes'>('man');
+  const [chosenTab, setChosenTab] = useState<SizingType>(defaultTab ?? 'man');
   const tabs = [
     {
       title: t('common:man_clothes'),
@@ -64,7 +68,7 @@ export const SizesView = memo(({ className, hideBreadcrumps = false, hideSizeInf
           <ManWomanSwitcherButtons
             tabs={tabs}
             chosenTab={chosenTab}
-            setChosenTab={(tab) => setChosenTab(tab as 'man' | 'woman' | 'shoes')}
+            setChosenTab={(tab) => setChosenTab(tab as SizingType)}
           />
           {!hideSizeInfo && (
             <Typography onClick={goToInfo} centered color="grey-dark" variant="body-2" as="button" className={styles.infoBtn}>

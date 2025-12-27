@@ -1,6 +1,6 @@
 export { QuantityUtils } from './lib/QuantityUtils';
 export type {
-  Product, DetailedProduct, ProductQuantity, SmallProduct, ProductSku,
+  Product, DetailedProduct, ProductQuantity, SmallProduct, ProductSku, SizingType,
 } from './model/types';
 export {
   mockProduct, mockProducts, mockSaleProducts, mockDetailedProduct,
