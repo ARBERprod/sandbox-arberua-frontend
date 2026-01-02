@@ -8,7 +8,10 @@ import {
   TShirtData,
   ArberHeightData,
   AdditionalHeightData,
-  ManBottomClothesUAData, ManTopClothesUaData,
+  ManBottomClothesUAData,
+  ManTopClothesUaData,
+  WomanKnitwearData,
+  WomanMainClothesData,
 } from '../model/types';
 
 export const womanBottomClothesItemJeans = ():WomanBottomClothesData[] => [
@@ -197,6 +200,55 @@ export const womanTShortItem = ():TShirtData[] => [
     sizes_eu: 'XXL',
   },
 ];
+
+export const womanKnitwearItem = (): WomanKnitwearData[] => [
+  {
+    size: 'XXS', sizes_eu: 'XXS', bust: '80', hip_girth: '88',
+  },
+  {
+    size: 'XS', sizes_eu: 'XS', bust: '84', hip_girth: '92',
+  },
+  {
+    size: 'S', sizes_eu: 'S', bust: '88', hip_girth: '96',
+  },
+  {
+    size: 'M', sizes_eu: 'M', bust: '92', hip_girth: '100',
+  },
+  {
+    size: 'L', sizes_eu: 'L', bust: '96', hip_girth: '104',
+  },
+  {
+    size: 'XL', sizes_eu: 'XL', bust: '100', hip_girth: '108',
+  },
+  {
+    size: 'XXL', sizes_eu: 'XXL', bust: '104', hip_girth: '112',
+  },
+];
+
+export const womanMainClothesItem = (): WomanMainClothesData[] => [
+  {
+    size: '40', sizes_eu: '32', bust: '80', waist: '64', hip_girth: '88',
+  },
+  {
+    size: '42', sizes_eu: '34', bust: '84', waist: '68', hip_girth: '92',
+  },
+  {
+    size: '44', sizes_eu: '36', bust: '88', waist: '72', hip_girth: '96',
+  },
+  {
+    size: '46', sizes_eu: '38', bust: '92', waist: '76', hip_girth: '100',
+  },
+  {
+    size: '48', sizes_eu: '40', bust: '96', waist: '80', hip_girth: '104',
+  },
+  {
+    size: '50', sizes_eu: '42', bust: '100', waist: '84', hip_girth: '108',
+  },
+  {
+    size: '52', sizes_eu: '44', bust: '104', waist: '88', hip_girth: '112',
+  },
+];
+
 export const beltsItem = ():BeltsData[] => [
   {
     belts_length: '90',

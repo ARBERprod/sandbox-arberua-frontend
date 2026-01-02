@@ -12,6 +12,8 @@ import {
   BeltsData,
   AdditionalHeightData,
   ManBottomClothesUAData,
+  WomanKnitwearData,
+  WomanMainClothesData,
 } from '../model/types';
 
 type tableColumnsGetter<T extends object> = (t: TFunction<['sizes']>) => TableColumn<T>[];
@@ -121,6 +123,48 @@ export const tShortClothesColumns: tableColumnsGetter<TShirtData> = (t) => [
   {
     header: t('sizes:bust'),
     accessor: 'bust',
+  },
+];
+
+export const womanKnitwearColumns: tableColumnsGetter<WomanKnitwearData> = (t) => [
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} EU`,
+    accessor: 'sizes_eu',
+  },
+  {
+    header: t('sizes:bust'),
+    accessor: 'bust',
+  },
+  {
+    header: t('sizes:hip_girth'),
+    accessor: 'hip_girth',
+  },
+];
+
+export const womanMainClothesColumns: tableColumnsGetter<WomanMainClothesData> = (t) => [
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} EU`,
+    accessor: 'sizes_eu',
+  },
+  {
+    header: t('sizes:bust'),
+    accessor: 'bust',
+  },
+  {
+    header: t('sizes:waist'),
+    accessor: 'waist',
+  },
+  {
+    header: t('sizes:hip_girth'),
+    accessor: 'hip_girth',
   },
 ];
 

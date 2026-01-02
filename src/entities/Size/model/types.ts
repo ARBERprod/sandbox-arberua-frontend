@@ -58,6 +58,21 @@ export interface WomanTopClothesData {
   hip_girth: string;
 }
 
+export interface WomanKnitwearData {
+  size: string;
+  sizes_eu: string;
+  bust: string;
+  hip_girth: string;
+}
+
+export interface WomanMainClothesData {
+  size: string;
+  sizes_eu: string;
+  bust: string;
+  waist: string;
+  hip_girth: string;
+}
+
 export interface ShoesData {
   size: string;
   shoes_height: string;

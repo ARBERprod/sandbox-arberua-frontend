@@ -1,36 +1,45 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import cn from 'classnames';
 import {
   ArberHeightSizesTable,
-  TShirtSizesTable,
-  WomanBottomSizesTable, WomanTopSizesTable, BeltsSizeTable,
+  WomanKnitwearSizesTable,
+  WomanMainSizesTable,
+  BeltsSizeTable,
 } from '@/entities/Size';
 import {
-  womanTopClothesItem,
-  womanBottomClothesItemJeans, womanBottomClothesItem,
-  womanBottomClothesItemSport, arberHeightItem, womanTShortItem, beltsItem,
+  arberHeightItem,
+  beltsItem,
+  womanKnitwearItem,
+  womanMainClothesItem,
 } from '@/entities/Size/constants/dimensionalGridsData';
-import { womanBottomClothesJeansColumns } from '@/entities/Size/config/tablesConfig';
 import { useTranslation } from 'next-i18next';
+import { Typography } from '@/shared/ui/Typography';
 import styles from './WomanTables.module.scss';
 
 interface WomanTablesProps {
   className?: string;
 }
 
-export const WomanTables = memo(({ className }:WomanTablesProps) => {
+export const WomanTables = memo(({ className }: WomanTablesProps) => {
   const { t } = useTranslation(['sizes']);
-  const jeansColumns = useMemo(() => womanBottomClothesJeansColumns(t), [t]);
 
   return (
     <div className={cn(styles.root, className)}>
-      <WomanBottomSizesTable title={t('sizes:woman_sizes_table_title')} data={womanBottomClothesItemJeans()} columnsConfig={jeansColumns} />
-      <WomanBottomSizesTable title={t('sizes:woman_sizes_table_title1')} data={womanBottomClothesItem()} />
-      <WomanBottomSizesTable title={t('sizes:woman_sizes_table_title4')} data={womanBottomClothesItemSport()} />
-      <WomanTopSizesTable title={t('sizes:woman_sizes_table_title2')} data={womanTopClothesItem()} />
-      <TShirtSizesTable title={t('sizes:woman_sizes_table_title3')} data={womanTShortItem()} />
-      <BeltsSizeTable title={t('sizes:woman_sizes_table_title5')} data={beltsItem()} />
+      <Typography className={styles.notification}>
+        {t('sizes:woman_sizes_notice')}
+      </Typography>
+
+      <WomanKnitwearSizesTable
+        title={t('sizes:woman_knitwear_title')}
+        data={womanKnitwearItem()}
+      />
+      <WomanMainSizesTable
+        title={t('sizes:woman_main_clothes_title')}
+        data={womanMainClothesItem()}
+      />
+
       <ArberHeightSizesTable data={arberHeightItem()} />
+      <BeltsSizeTable title={t('sizes:woman_sizes_table_title5')} data={beltsItem()} />
     </div>
   );
 });

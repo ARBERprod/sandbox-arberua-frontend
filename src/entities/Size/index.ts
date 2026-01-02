@@ -8,6 +8,8 @@ export { ManTopSizesTable } from './ui/tables/ManTopSizesTable';
 export { TShirtSizesTable } from './ui/tables/TShirtSizesTable';
 export { WomanBottomSizesTable } from './ui/tables/WomanBottomSizesTable';
 export { WomanTopSizesTable } from './ui/tables/WomanTopSizesTable';
+export { WomanKnitwearSizesTable } from './ui/tables/WomanKnitwearSizesTable';
+export { WomanMainSizesTable } from './ui/tables/WomanMainSizesTable';
 export { BeltsSizeTable } from './ui/tables/BeltsSizeTable';
 export { AdditionalHeightTable } from './ui/tables/AdditionalHeightTable';
 export { ManLightTopSizesTable } from './ui/tables/ManLightTopSizesTable';
