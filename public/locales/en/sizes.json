@@ -45,5 +45,19 @@
 
   "woman_sizes_notice": "Please note: the parameters in the size chart correspond to body measurements, not the finished product. To take correct measurements, use the instructions below.",
   "woman_knitwear_title": "Knitwear (sweaters, cardigans, jumpers, turtlenecks, sweatshirts, hoodies)",
-  "woman_main_clothes_title": "Jackets, vests, coats, jackets, trousers, skirts, dresses, jeans, shorts, shirts"
+  "woman_main_clothes_title": "Jackets, vests, coats, jackets, trousers, skirts, dresses, jeans, shorts, shirts",
+
+  "man_sizes_notice": "Please note: the parameters in the size chart correspond to body measurements, not the finished product. To take correct measurements, use the instructions below.",
+  "man_suits_title": "Suits, blazers, coats",
+  "man_casual_jackets_title": "Casual blazers",
+  "man_jackets_title": "Jackets",
+  "man_trousers_title": "Trousers",
+  "man_casual_trousers_title": "Casual trousers",
+  "man_jeans_title": "Jeans",
+  "man_knitwear_title": "Knitwear (sweaters, jumpers, cardigans, pullovers)",
+  "man_tshirts_title": "Knitwear (t-shirts, polos, hoodies, sweatshirts, sports jackets)",
+  "man_sports_pants_title": "Sports trousers",
+  "man_shirts_title": "Shirts",
+  "man_casual_shirts_title": "Casual shirts",
+  "man_belts_title": "Belts"
 }

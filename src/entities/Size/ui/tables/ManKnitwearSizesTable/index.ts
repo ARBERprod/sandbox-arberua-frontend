@@ -1,0 +1,1 @@
+export { ManKnitwearSizesTable } from './ManKnitwearSizesTable';

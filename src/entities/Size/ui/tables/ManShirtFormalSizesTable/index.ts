@@ -1,0 +1,1 @@
+export { ManShirtFormalSizesTable } from './ManShirtFormalSizesTable';

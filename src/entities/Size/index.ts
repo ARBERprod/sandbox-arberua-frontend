@@ -13,5 +13,13 @@ export { WomanMainSizesTable } from './ui/tables/WomanMainSizesTable';
 export { BeltsSizeTable } from './ui/tables/BeltsSizeTable';
 export { AdditionalHeightTable } from './ui/tables/AdditionalHeightTable';
 export { ManLightTopSizesTable } from './ui/tables/ManLightTopSizesTable';
+export { ManSuitsSizesTable } from './ui/tables/ManSuitsSizesTable';
+export { ManCasualJacketSizesTable } from './ui/tables/ManCasualJacketSizesTable';
+export { ManJacketsSizesTable } from './ui/tables/ManJacketsSizesTable';
+export { ManTrousersSizesTable } from './ui/tables/ManTrousersSizesTable';
+export { ManCasualTrousersSizesTable } from './ui/tables/ManCasualTrousersSizesTable';
+export { ManJeansSizesTable } from './ui/tables/ManJeansSizesTable';
+export { ManKnitwearSizesTable } from './ui/tables/ManKnitwearSizesTable';
+export { ManShirtFormalSizesTable } from './ui/tables/ManShirtFormalSizesTable';
 
 export * from './__mock__/getMockTableData';

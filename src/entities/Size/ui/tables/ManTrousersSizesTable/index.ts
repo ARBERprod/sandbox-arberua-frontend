@@ -1,0 +1,1 @@
+export { ManTrousersSizesTable } from './ManTrousersSizesTable';

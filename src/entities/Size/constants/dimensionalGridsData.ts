@@ -12,6 +12,13 @@ import {
   ManTopClothesUaData,
   WomanKnitwearData,
   WomanMainClothesData,
+  ManFormalTopData,
+  ManCasualJacketData,
+  ManFormalTrousersData,
+  ManCasualTrousersData,
+  ManJeansData,
+  ManKnitwearData,
+  ManShirtFormalData,
 } from '../model/types';
 
 export const womanBottomClothesItemJeans = ():WomanBottomClothesData[] => [
@@ -792,4 +799,162 @@ export const manTopClothesUaItemAverage = ():ManTopClothesData[] => [
     sizes_ua: '60',
     bust: '120',
   },
+];
+
+// New man tables data
+export const manSuitsItem = (): ManFormalTopData[] => [
+  { size_ua: '46', bust: '92', waist: '80' },
+  { size_ua: '48', bust: '96', waist: '84' },
+  { size_ua: '50', bust: '100', waist: '88' },
+  { size_ua: '52', bust: '104', waist: '92' },
+  { size_ua: '54', bust: '108', waist: '96' },
+  { size_ua: '56', bust: '112', waist: '100' },
+  { size_ua: '58', bust: '116', waist: '104' },
+  { size_ua: '60', bust: '120', waist: '108' },
+  { size_ua: '62', bust: '124', waist: '112' },
+  { size_ua: '64', bust: '128', waist: '116' },
+];
+
+export const manCasualJacketsItem = (): ManCasualJacketData[] => [
+  {
+    size: 'S', size_ua: '46-48', bust: '94', waist: '82',
+  },
+  {
+    size: 'M', size_ua: '50', bust: '100', waist: '88',
+  },
+  {
+    size: 'L', size_ua: '52-54', bust: '106', waist: '94',
+  },
+  {
+    size: 'XL', size_ua: '56', bust: '112', waist: '100',
+  },
+  {
+    size: 'XXL', size_ua: '58-60', bust: '118', waist: '106',
+  },
+  {
+    size: 'XXXL', size_ua: '62', bust: '124', waist: '112',
+  },
+];
+
+export const manSuitsHeightItem = (): AdditionalHeightData[] => [
+  { height: '4', height_cm: '176-181' },
+  { height: '5', height_cm: '182-187' },
+  { height: '6', height_cm: '188-190' },
+];
+
+export const manJacketsItem = (): ManFormalTopData[] => [
+  { size_ua: '46', bust: '92', waist: '80' },
+  { size_ua: '48', bust: '96', waist: '84' },
+  { size_ua: '50', bust: '100', waist: '88' },
+  { size_ua: '52', bust: '104', waist: '92' },
+  { size_ua: '54', bust: '108', waist: '96' },
+  { size_ua: '56', bust: '112', waist: '100' },
+  { size_ua: '58', bust: '116', waist: '104' },
+  { size_ua: '60', bust: '120', waist: '108' },
+  { size_ua: '62', bust: '124', waist: '112' },
+];
+
+export const manTrousersItem = (): ManFormalTrousersData[] => [
+  { size_ua: '46', waist: '80' },
+  { size_ua: '48', waist: '84' },
+  { size_ua: '50', waist: '88' },
+  { size_ua: '52', waist: '92' },
+  { size_ua: '54', waist: '96' },
+  { size_ua: '56', waist: '100' },
+  { size_ua: '58', waist: '104' },
+  { size_ua: '60', waist: '108' },
+  { size_ua: '62', waist: '112' },
+  { size_ua: '64', waist: '116' },
+];
+
+export const manCasualTrousersItem = (): ManCasualTrousersData[] => [
+  { size: 'S', size_ua: '44', waist: '76' },
+  { size: 'M', size_ua: '46-48', waist: '82' },
+  { size: 'L', size_ua: '50', waist: '88' },
+  { size: 'XL', size_ua: '52-54', waist: '94' },
+  { size: 'XXL', size_ua: '56', waist: '100' },
+  { size: 'XXXL', size_ua: '58-60', waist: '106' },
+];
+
+export const manCasualTrousersHeightItem = (): AdditionalHeightData[] => [
+  { height: '4', height_cm: '176-181' },
+  { height: '5', height_cm: '182-187' },
+  { height: '6', height_cm: '188-190' },
+];
+
+export const manJeansNewItem = (): ManJeansData[] => [
+  { size: '30', size_ua: '46', waist: '80' },
+  { size: '32', size_ua: '48', waist: '84' },
+  { size: '34', size_ua: '50', waist: '88' },
+  { size: '36', size_ua: '52', waist: '92' },
+  { size: '38', size_ua: '54', waist: '96' },
+  { size: '40', size_ua: '56', waist: '100' },
+  { size: '42', size_ua: '58', waist: '104' },
+];
+
+export const manJeansHeightItem = (): AdditionalHeightData[] => [
+  { height: '32', height_cm: '176-188' },
+  { height: '34', height_cm: '188-190' },
+];
+
+export const manKnitwearItem = (): ManKnitwearData[] => [
+  { size: 'S', size_ua: '46', bust: '92' },
+  { size: 'M', size_ua: '48', bust: '96' },
+  { size: 'L', size_ua: '50-52', bust: '100-104' },
+  { size: 'XL', size_ua: '54-56', bust: '108-112' },
+  { size: 'XXL', size_ua: '58-60', bust: '116-120' },
+];
+
+export const manTShirtsItem = (): ManKnitwearData[] => [
+  { size: 'S', size_ua: '46', bust: '92' },
+  { size: 'M', size_ua: '48-50', bust: '96-100' },
+  { size: 'L', size_ua: '52', bust: '104' },
+  { size: 'XL', size_ua: '54', bust: '108' },
+  { size: 'XXL', size_ua: '56', bust: '112' },
+  { size: 'XXXL', size_ua: '58-60', bust: '116-120' },
+];
+
+export const manSportsPantsItem = (): ManCasualTrousersData[] => [
+  { size: 'S', size_ua: '46', waist: '80' },
+  { size: 'M', size_ua: '48-50', waist: '84-88' },
+  { size: 'L', size_ua: '52', waist: '92' },
+  { size: 'XL', size_ua: '54', waist: '96' },
+  { size: 'XXL', size_ua: '56', waist: '100' },
+  { size: 'XXXL', size_ua: '58-60', waist: '104-108' },
+];
+
+export const manShirtsNewItem = (): ManShirtFormalData[] => [
+  {
+    size: '39', size_ua: '39', neck_girth: '39', bust: '92',
+  },
+  {
+    size: '40', size_ua: '40', neck_girth: '40', bust: '96',
+  },
+  {
+    size: '41', size_ua: '41', neck_girth: '41', bust: '100',
+  },
+  {
+    size: '42', size_ua: '42', neck_girth: '42', bust: '104',
+  },
+  {
+    size: '43', size_ua: '43', neck_girth: '43', bust: '108',
+  },
+  {
+    size: '44', size_ua: '44', neck_girth: '44', bust: '112',
+  },
+  {
+    size: '45', size_ua: '45', neck_girth: '45', bust: '116',
+  },
+  {
+    size: '46', size_ua: '46', neck_girth: '46', bust: '120',
+  },
+];
+
+export const manCasualShirtsItem = (): ManKnitwearData[] => [
+  { size: 'S', size_ua: '39', bust: '92' },
+  { size: 'M', size_ua: '40-41', bust: '98' },
+  { size: 'L', size_ua: '42', bust: '104' },
+  { size: 'XL', size_ua: '43-44', bust: '110' },
+  { size: 'XXL', size_ua: '45-46', bust: '116' },
+  { size: 'XXXL', size_ua: '47', bust: '122' },
 ];

@@ -1,0 +1,1 @@
+export { ManCasualTrousersSizesTable } from './ManCasualTrousersSizesTable';

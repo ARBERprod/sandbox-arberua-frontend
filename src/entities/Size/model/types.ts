@@ -73,6 +73,49 @@ export interface WomanMainClothesData {
   hip_girth: string;
 }
 
+export interface ManFormalTopData {
+  size_ua: string;
+  bust: string;
+  waist: string;
+}
+
+export interface ManCasualJacketData {
+  size: string;
+  size_ua: string;
+  bust: string;
+  waist: string;
+}
+
+export interface ManFormalTrousersData {
+  size_ua: string;
+  waist: string;
+}
+
+export interface ManCasualTrousersData {
+  size: string;
+  size_ua: string;
+  waist: string;
+}
+
+export interface ManJeansData {
+  size: string;
+  size_ua: string;
+  waist: string;
+}
+
+export interface ManKnitwearData {
+  size: string;
+  size_ua: string;
+  bust: string;
+}
+
+export interface ManShirtFormalData {
+  size: string;
+  size_ua: string;
+  neck_girth: string;
+  bust: string;
+}
+
 export interface ShoesData {
   size: string;
   shoes_height: string;

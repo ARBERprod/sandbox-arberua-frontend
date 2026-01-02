@@ -1,0 +1,1 @@
+export { ManJeansSizesTable } from './ManJeansSizesTable';

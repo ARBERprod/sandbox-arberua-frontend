@@ -14,6 +14,13 @@ import {
   ManBottomClothesUAData,
   WomanKnitwearData,
   WomanMainClothesData,
+  ManFormalTopData,
+  ManCasualJacketData,
+  ManFormalTrousersData,
+  ManCasualTrousersData,
+  ManJeansData,
+  ManKnitwearData,
+  ManShirtFormalData,
 } from '../model/types';
 
 type tableColumnsGetter<T extends object> = (t: TFunction<['sizes']>) => TableColumn<T>[];
@@ -226,5 +233,114 @@ export const additionalHeightColumns: tableColumnsGetter<AdditionalHeightData> =
   {
     header: t('sizes:height_cm'),
     accessor: 'height_cm',
+  },
+];
+
+export const manFormalTopColumns: tableColumnsGetter<ManFormalTopData> = (t) => [
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size_ua',
+  },
+  {
+    header: t('sizes:bust'),
+    accessor: 'bust',
+  },
+  {
+    header: t('sizes:waist'),
+    accessor: 'waist',
+  },
+];
+
+export const manCasualJacketColumns: tableColumnsGetter<ManCasualJacketData> = (t) => [
+  {
+    header: t('sizes:size'),
+    accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size_ua',
+  },
+  {
+    header: t('sizes:bust'),
+    accessor: 'bust',
+  },
+  {
+    header: t('sizes:waist'),
+    accessor: 'waist',
+  },
+];
+
+export const manFormalTrousersColumns: tableColumnsGetter<ManFormalTrousersData> = (t) => [
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size_ua',
+  },
+  {
+    header: t('sizes:waist'),
+    accessor: 'waist',
+  },
+];
+
+export const manCasualTrousersColumns: tableColumnsGetter<ManCasualTrousersData> = (t) => [
+  {
+    header: t('sizes:size'),
+    accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size_ua',
+  },
+  {
+    header: t('sizes:waist'),
+    accessor: 'waist',
+  },
+];
+
+export const manJeansColumns: tableColumnsGetter<ManJeansData> = (t) => [
+  {
+    header: t('sizes:size'),
+    accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size_ua',
+  },
+  {
+    header: t('sizes:waist'),
+    accessor: 'waist',
+  },
+];
+
+export const manKnitwearColumns: tableColumnsGetter<ManKnitwearData> = (t) => [
+  {
+    header: t('sizes:size'),
+    accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size_ua',
+  },
+  {
+    header: t('sizes:bust'),
+    accessor: 'bust',
+  },
+];
+
+export const manShirtFormalColumns: tableColumnsGetter<ManShirtFormalData> = (t) => [
+  {
+    header: t('sizes:size'),
+    accessor: 'size',
+  },
+  {
+    header: `${t('sizes:size')} UA`,
+    accessor: 'size_ua',
+  },
+  {
+    header: t('sizes:neck_girth'),
+    accessor: 'neck_girth',
+  },
+  {
+    header: t('sizes:bust'),
+    accessor: 'bust',
   },
 ];
