@@ -47,17 +47,25 @@ export const ManTables = memo(({ className }: ManTablesProps) => {
       </Typography>
 
       <ManSuitsSizesTable title={t('sizes:man_suits_title')} data={manSuitsItem()} />
-      <ManCasualJacketSizesTable title={t('sizes:man_casual_jackets_title')} data={manCasualJacketsItem()} />
-      <AdditionalHeightTable data={manSuitsHeightItem()} />
+
+      <div className={styles.tableGroup}>
+        <ManCasualJacketSizesTable title={t('sizes:man_casual_jackets_title')} data={manCasualJacketsItem()} />
+        <AdditionalHeightTable data={manSuitsHeightItem()} />
+      </div>
 
       <ManJacketsSizesTable title={t('sizes:man_jackets_title')} data={manJacketsItem()} />
 
       <ManTrousersSizesTable title={t('sizes:man_trousers_title')} data={manTrousersItem()} />
-      <ManCasualTrousersSizesTable title={t('sizes:man_casual_trousers_title')} data={manCasualTrousersItem()} />
-      <AdditionalHeightTable data={manCasualTrousersHeightItem()} />
 
-      <ManJeansSizesTable title={t('sizes:man_jeans_title')} data={manJeansNewItem()} />
-      <AdditionalHeightTable data={manJeansHeightItem()} />
+      <div className={styles.tableGroup}>
+        <ManCasualTrousersSizesTable title={t('sizes:man_casual_trousers_title')} data={manCasualTrousersItem()} />
+        <AdditionalHeightTable data={manCasualTrousersHeightItem()} />
+      </div>
+
+      <div className={styles.tableGroup}>
+        <ManJeansSizesTable title={t('sizes:man_jeans_title')} data={manJeansNewItem()} />
+        <AdditionalHeightTable data={manJeansHeightItem()} />
+      </div>
 
       <ManKnitwearSizesTable title={t('sizes:man_knitwear_title')} data={manKnitwearItem()} />
       <ManKnitwearSizesTable title={t('sizes:man_tshirts_title')} data={manTShirtsItem()} />
