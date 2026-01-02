@@ -196,11 +196,11 @@ export const shortClothesColumns: tableColumnsGetter<ShirtData> = (t) => [
 
 export const arberHeightClothesColumns: tableColumnsGetter<ArberHeightData> = (t) => [
   {
-    header: t('sizes:size'),
+    header: t('sizes:height'),
     accessor: 'size',
   },
   {
-    header: t('sizes:height'),
+    header: t('sizes:height_cm'),
     accessor: 'height',
   },
 ];

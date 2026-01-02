@@ -18,7 +18,6 @@ export const ArberHeightSizesTable = memo(({
   return (
     <SizeTable
       className={className}
-      title={`${t('sizes:height')} ARBER`}
       data={data}
       columns={columns}
     />

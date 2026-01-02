@@ -33,12 +33,15 @@ export const WomanTables = memo(({ className }: WomanTablesProps) => {
         title={t('sizes:woman_knitwear_title')}
         data={womanKnitwearItem()}
       />
-      <WomanMainSizesTable
-        title={t('sizes:woman_main_clothes_title')}
-        data={womanMainClothesItem()}
-      />
 
-      <ArberHeightSizesTable data={arberHeightItem()} />
+      <div className={styles.tableGroup}>
+        <WomanMainSizesTable
+          title={t('sizes:woman_main_clothes_title')}
+          data={womanMainClothesItem()}
+        />
+        <ArberHeightSizesTable data={arberHeightItem()} />
+      </div>
+
       <BeltsSizeTable title={t('sizes:woman_sizes_table_title5')} data={beltsItem()} />
     </div>
   );
