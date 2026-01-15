@@ -242,8 +242,8 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
     };
   } else if (query.category?.includes('sal')) {
     meta = {
-      title: 'Весняний розпродаж від Arber — Знижки на одяг',
-      description: 'Купуйте чоловічий та жіночий одяг, та взуття від ARBER вигідно з акцією Весняний розпродаж',
+      title: 'Розпродаж від Arber — Знижки на одяг',
+      description: 'Купуйте чоловічий та жіночий одяг, та взуття від ARBER вигідно з акцією',
       page,
     };
   }
