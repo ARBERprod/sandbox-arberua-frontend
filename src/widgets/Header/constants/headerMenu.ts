@@ -73,6 +73,13 @@ export const headerMenuMainMocked: headerMenuGetter = (t:TFunction) => [
     button: false,
   },
   {
+    id: '4.5',
+    title: 'Sale',
+    url: routerPaths.sale,
+    children: false,
+    button: false,
+  },
+  {
     id: '5',
     title: t('menu.promotions-offers'),
     url: routerPaths.promotions,

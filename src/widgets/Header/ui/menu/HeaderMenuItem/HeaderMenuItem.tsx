@@ -2,6 +2,7 @@ import { memo, ReactNode, useMemo } from 'react';
 import cn from 'classnames';
 import { Svg } from '@/shared/ui/Svg';
 import ArrowRightIcon from '@/shared/assets/icons/arrow-right.svg';
+import { routerPaths } from '@/shared/config/router';
 import { CurrentMenuType, MenuLink, MenuLinkView } from '../../../model/types';
 import { HeaderMenuItemWrap } from '../HeaderMenuItemWrap';
 import { useTranslation } from 'react-i18next';
@@ -59,7 +60,7 @@ export const HeaderMenuItem = memo(({
       <HeaderMenuItemWrap
         className={cn(styles.link, {
           [styles.link_nested]: isNested,
-          [styles.promotions]: href?.includes('promotions'),
+          [styles.sale]: href?.includes(routerPaths.sale),
         })}
         href={href}
         type={type}
