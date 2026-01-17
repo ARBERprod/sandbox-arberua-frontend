@@ -128,9 +128,8 @@ export const FullscreenThumbsSlider = memo(({
   }, [onSlideChange]);
 
   const handleZoomChange = useCallback((swiper: Swiper, scale: number) => {
-    // Disable swiping when zoomed in to allow panning (mobile only)
-    swiper.allowSlideNext = scale <= 1;
-    swiper.allowSlidePrev = scale <= 1;
+    // Disable touch swiping when zoomed in to allow panning, but keep buttons/thumbs working
+    swiper.allowTouchMove = scale <= 1;
   }, []);
 
   const thumbSlides = images.map((image, index) => ({
@@ -173,7 +172,14 @@ export const FullscreenThumbsSlider = memo(({
                 spaceBetween={10}
                 thumbs={{ swiper: thumbsSwiper }}
                 modules={[FreeMode, Navigation, Thumbs, Zoom]}
-                zoom={{ maxRatio: 3, minRatio: 1 }}
+                zoom={{
+                  maxRatio: 5,
+                  minRatio: 1,
+                  toggle: true,
+                  containerClass: 'swiper-zoom-container',
+                  zoomedSlideClass: 'swiper-slide-zoomed',
+                }}
+                passiveListeners={false}
                 className={styles.mainSlider}
                 initialSlide={activeSlideIndex}
                 onSlideChange={slideChangeHandler}
