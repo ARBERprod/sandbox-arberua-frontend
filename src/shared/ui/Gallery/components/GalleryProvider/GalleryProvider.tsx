@@ -1,12 +1,12 @@
 import {
   ReactNode, useCallback, useEffect, useMemo, useState,
 } from 'react';
-import { ImageType } from '@/shared/types/common';
+import { GalleryImage } from '@/shared/types/common';
 import { GalleryContext } from '../../context/GalleryContext';
 
 interface GalleryProviderProps {
   children: ReactNode;
-  initImages: ImageType[];
+  initImages: GalleryImage[];
 }
 
 export const GalleryProvider = ({

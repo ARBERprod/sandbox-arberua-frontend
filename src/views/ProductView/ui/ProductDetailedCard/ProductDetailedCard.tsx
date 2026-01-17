@@ -130,7 +130,7 @@ export const ProductDetailedCard = memo(({
       className={cn(styles.root, className)}
     >
       <div className={styles.left}>
-        <Gallery images={product.pictures} />
+        <Gallery images={product.pictures2} />
       </div>
       <div className={styles.right}>
         <ProductDetails

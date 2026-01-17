@@ -14,10 +14,7 @@ interface GalleryDesktopGridProps {
 }
 
 export const GalleryDesktopGrid = memo(({ className }: GalleryDesktopGridProps) => {
-  const {
-    images,
-    openGallery,
-  } = useGallery();
+  const { images, openGallery } = useGallery();
   const { t } = useTranslation();
   const [renderKey, setRenderKey] = useState(0);
 
@@ -41,8 +38,8 @@ export const GalleryDesktopGrid = memo(({ className }: GalleryDesktopGridProps) 
                 <InnerImageZoom
                   zoomPreload
                   className={styles.img}
-                  src={image as string}
-                  zoomSrc={image as string}
+                  src={image.cropped as string}
+                  zoomSrc={image.original as string || image.cropped as string}
                   zoomScale={1.6}
                   zoomType="hover"
                 />

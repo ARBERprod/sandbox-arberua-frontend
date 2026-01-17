@@ -2,9 +2,11 @@ import {
   memo, useCallback, useId, useRef, useState,
 } from 'react';
 import cn from 'classnames';
-import Swiper, { FreeMode, Navigation, Thumbs } from 'swiper';
+import Swiper, {
+  FreeMode, Navigation, Thumbs, Zoom,
+} from 'swiper';
 import { Slider } from '@/shared/ui/Slider';
-import { ImageType } from '@/shared/types/common';
+import { GalleryImage } from '@/shared/types/common';
 import { useBodyOverflow } from '@/shared/lib/components/FloatingProvider';
 import { AppImage } from '@/shared/ui/AppImage';
 import { useMediaQuery } from '@/shared/lib/hooks/useMediaQuery';
@@ -19,12 +21,11 @@ import styles from './FullscreenThumbsSlider.module.scss';
 
 interface FullscreenThumbsSliderProps {
   className?: string;
-  images: ImageType[];
+  images: GalleryImage[];
   onClose: () => void;
   isOpen: boolean;
   activeSlideIndex: number;
   onSlideChange?: (index: number) => void;
-
 }
 
 export const FullscreenThumbsSlider = memo(({
@@ -52,7 +53,9 @@ export const FullscreenThumbsSlider = memo(({
     id: index,
     slide: (
       <div className={styles.mainSlide}>
-        <AppImage unoptimized alt="slide" src={image} />
+        <div className="swiper-zoom-container">
+          <AppImage unoptimized alt="slide" src={image.original || image.cropped} />
+        </div>
       </div>
     ),
   }));
@@ -64,7 +67,7 @@ export const FullscreenThumbsSlider = memo(({
     id: index,
     slide: (
       <div className={styles.thumbSlide}>
-        <AppImage unoptimized alt="slide" src={image} />
+        <AppImage unoptimized alt="slide" src={image.cropped} />
         <div className={styles.backdrop} />
       </div>
     ),
@@ -99,7 +102,8 @@ export const FullscreenThumbsSlider = memo(({
                 slides={mainSlides}
                 spaceBetween={10}
                 thumbs={{ swiper: thumbsSwiper }}
-                modules={[FreeMode, Navigation, Thumbs]}
+                modules={[FreeMode, Navigation, Thumbs, Zoom]}
+                zoom={{ maxRatio: 3, minRatio: 1 }}
                 className={styles.mainSlider}
                 initialSlide={activeSlideIndex}
                 onSwiper={setMainSlider}

@@ -10,12 +10,12 @@ import GalleryImage5 from '@/shared/assets/images/totallook/gallery/5.jpg';
 import GalleryImage6 from '@/shared/assets/images/totallook/gallery/6.jpg';
 
 const gallery = [
-  GalleryImage1,
-  GalleryImage2,
-  GalleryImage3,
-  GalleryImage4,
-  GalleryImage5,
-  GalleryImage6,
+  { cropped: GalleryImage1, original: GalleryImage1 },
+  { cropped: GalleryImage2, original: GalleryImage2 },
+  { cropped: GalleryImage3, original: GalleryImage3 },
+  { cropped: GalleryImage4, original: GalleryImage4 },
+  { cropped: GalleryImage5, original: GalleryImage5 },
+  { cropped: GalleryImage6, original: GalleryImage6 },
 ];
 
 describe('Gallery', () => {

@@ -1,4 +1,4 @@
-import { ImageType, Price } from '@/shared/types/common';
+import { GalleryImage, ImageType, Price } from '@/shared/types/common';
 import { Shop } from '@/entities/Shop';
 
 export type SizingType = 'man' | 'woman' | 'shoes';
@@ -62,6 +62,7 @@ export interface DetailedProduct {
   brand: string;
   is_sale: boolean;
   pictures: ImageType[];
+  pictures2: GalleryImage[];
   materials: Material[];
   wishlists_count: number;
   price: Price;

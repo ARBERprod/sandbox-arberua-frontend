@@ -6,6 +6,11 @@ export type SvgType = FC<SVGProps<SVGSVGElement>>
 
 export type ImageType = string | StaticImageData | null;
 
+export interface GalleryImage {
+  cropped: ImageType;
+  original: ImageType;
+}
+
 export interface SocialLink {
   href: string;
   Icon: SvgType;

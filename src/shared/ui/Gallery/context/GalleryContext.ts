@@ -1,8 +1,8 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
-import { ImageType } from '@/shared/types/common';
+import { GalleryImage } from '@/shared/types/common';
 
 interface GalleryContextProps {
-  images: ImageType[];
+  images: GalleryImage[];
   isGalleryOpen: boolean;
   activeSlideIndex: number;
   openGallery: (slideIndex: number) => void;

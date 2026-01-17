@@ -19,11 +19,11 @@ type Story = StoryObj<typeof Gallery>;
 export const GalleryDefault: Story = {
   args: {
     images: [
-      image1,
-      image2,
-      image3,
-      image4,
-      image5,
+      { cropped: image1, original: image1 },
+      { cropped: image2, original: image2 },
+      { cropped: image3, original: image3 },
+      { cropped: image4, original: image4 },
+      { cropped: image5, original: image5 },
     ],
   },
 };

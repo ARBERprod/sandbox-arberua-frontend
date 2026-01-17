@@ -16,7 +16,7 @@ export const GalleryMobileSlider = memo(({ className }:GalleryMobileSliderProps)
     id: index,
     slide: (
       <button onClick={() => openGallery(index)} className={styles.imageWrap}>
-        <AppImage unoptimized alt="image" src={image} />
+        <AppImage unoptimized alt="image" src={image.cropped} />
       </button>
     ),
   }));
