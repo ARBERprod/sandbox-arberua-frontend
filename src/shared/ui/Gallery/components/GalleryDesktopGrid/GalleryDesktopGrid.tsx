@@ -40,7 +40,7 @@ export const GalleryDesktopGrid = memo(({ className }: GalleryDesktopGridProps) 
                   className={styles.img}
                   src={image.cropped as string}
                   zoomSrc={image.original as string || image.cropped as string}
-                  zoomScale={1.6}
+                  zoomScale={0.8}
                   zoomType="hover"
                 />
               </div>

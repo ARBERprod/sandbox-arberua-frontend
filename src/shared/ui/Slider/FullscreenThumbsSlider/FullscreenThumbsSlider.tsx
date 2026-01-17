@@ -1,5 +1,5 @@
 import {
-  memo, useCallback, useId, useRef, useState,
+  memo, useCallback, useId, useRef, useState, MouseEvent,
 } from 'react';
 import cn from 'classnames';
 import Swiper, {
@@ -28,6 +28,62 @@ interface FullscreenThumbsSliderProps {
   onSlideChange?: (index: number) => void;
 }
 
+// Custom zoomable image component for desktop hover zoom
+interface ZoomableImageProps {
+  src: string;
+  zoomSrc?: string;
+  alt?: string;
+  zoomScale?: number;
+}
+
+const ZoomableImage = memo(({
+  src,
+  zoomSrc,
+  alt = 'image',
+  zoomScale = 2,
+}: ZoomableImageProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [transformOrigin, setTransformOrigin] = useState('center center');
+
+  const handleMouseMove = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setTransformOrigin(`${x}% ${y}%`);
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsZoomed(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsZoomed(false);
+    setTransformOrigin('center center');
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className={styles.zoomableContainer}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <img
+        src={isZoomed ? (zoomSrc || src) : src}
+        alt={alt}
+        className={styles.zoomableImage}
+        style={{
+          transform: isZoomed ? `scale(${zoomScale})` : 'scale(1)',
+          transformOrigin,
+        }}
+      />
+    </div>
+  );
+});
+
 export const FullscreenThumbsSlider = memo(({
   isOpen,
   images,
@@ -37,7 +93,6 @@ export const FullscreenThumbsSlider = memo(({
   className,
 }: FullscreenThumbsSliderProps) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<Swiper | null>(null);
-  const [, setMainSlider] = useState<Swiper | null>(null);
   const id = useId();
   const navigationPrevRef = useRef<HTMLButtonElement>(null);
   const navigationNextRef = useRef<HTMLButtonElement>(null);
@@ -53,15 +108,30 @@ export const FullscreenThumbsSlider = memo(({
     id: index,
     slide: (
       <div className={styles.mainSlide}>
-        <div className="swiper-zoom-container">
-          <AppImage unoptimized alt="slide" src={image.original || image.cropped} />
-        </div>
+        {isDesktop ? (
+          <ZoomableImage
+            src={image.cropped as string}
+            zoomSrc={image.original as string || image.cropped as string}
+            alt="slide"
+            zoomScale={2.7}
+          />
+        ) : (
+          <div className="swiper-zoom-container">
+            <AppImage unoptimized alt="slide" src={image.original || image.cropped} />
+          </div>
+        )}
       </div>
     ),
   }));
   const slideChangeHandler = useCallback((swiper: Swiper) => {
     onSlideChange?.(swiper.realIndex);
   }, [onSlideChange]);
+
+  const handleZoomChange = useCallback((swiper: Swiper, scale: number) => {
+    // Disable swiping when zoomed in to allow panning (mobile only)
+    swiper.allowSlideNext = scale <= 1;
+    swiper.allowSlidePrev = scale <= 1;
+  }, []);
 
   const thumbSlides = images.map((image, index) => ({
     id: index,
@@ -106,8 +176,8 @@ export const FullscreenThumbsSlider = memo(({
                 zoom={{ maxRatio: 3, minRatio: 1 }}
                 className={styles.mainSlider}
                 initialSlide={activeSlideIndex}
-                onSwiper={setMainSlider}
                 onSlideChange={slideChangeHandler}
+                onZoomChange={handleZoomChange}
                 loop
                 navigation={{
                   nextEl: navigationNextRef.current,
