@@ -61,8 +61,7 @@ export interface DetailedProduct {
   category: string;
   brand: string;
   is_sale: boolean;
-  pictures: ImageType[];
-  pictures2: GalleryImage[];
+  pictures: GalleryImage[];
   materials: Material[];
   wishlists_count: number;
   price: Price;

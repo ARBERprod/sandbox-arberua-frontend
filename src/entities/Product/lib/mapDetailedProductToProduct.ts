@@ -7,7 +7,7 @@ export const mapDetailedProductToProduct = (detailed: DetailedProduct): Product 
   title: detailed.title,
   wishlists_count: detailed.wishlists_count,
   url: detailed.url,
-  pictures: detailed.pictures,
+  pictures: detailed.pictures.map((p) => p.cropped),
   skus: detailed.skus,
   category: detailed.category,
   brand: detailed.brand,

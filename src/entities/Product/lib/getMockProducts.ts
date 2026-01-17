@@ -65,8 +65,7 @@ export const getMockDetailedProduct = (options?: {
   description: faker.commerce.productDescription(),
   price: getMockPrice(),
   old_price: getMockPrice(),
-  pictures: [faker.image.abstract(450, 575, false)],
-  pictures2: [{
+  pictures: [{
     cropped: faker.image.abstract(450, 575, false),
     original: faker.image.abstract(800, 1000, false),
   }],

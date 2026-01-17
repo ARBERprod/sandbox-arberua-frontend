@@ -50,7 +50,7 @@ export const ProductCardActions = memo(({
       price: product?.price.value || 0,
       quantity: 1,
       currency: 'UAH',
-      image: product?.pictures?.[0] || '',
+      image: product?.pictures?.[0]?.cropped || '',
       url: product?.url || '',
     }];
 

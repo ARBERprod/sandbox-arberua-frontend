@@ -68,7 +68,7 @@ export const ProductDetailedCard = memo(({
       currency: 'UAH',
       quantity: 1,
       url: product.url,
-      image: product.pictures?.[0] || '',
+      image: product.pictures?.[0]?.cropped || '',
     }];
 
     const itemsMeasurements = [{
@@ -130,7 +130,7 @@ export const ProductDetailedCard = memo(({
       className={cn(styles.root, className)}
     >
       <div className={styles.left}>
-        <Gallery images={product.pictures2} />
+        <Gallery images={product.pictures} />
       </div>
       <div className={styles.right}>
         <ProductDetails
