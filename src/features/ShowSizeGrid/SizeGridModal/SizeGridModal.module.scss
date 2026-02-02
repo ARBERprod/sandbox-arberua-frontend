@@ -4,6 +4,10 @@
 
 .wrapper {
   padding: 52px 40px;
+
+  @include breakpoint(only-mobile) {
+    padding: 52px 10px;
+  }
 }
 
 .measurements {

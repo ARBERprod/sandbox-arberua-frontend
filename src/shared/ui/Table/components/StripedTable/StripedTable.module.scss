@@ -1,8 +1,15 @@
+@import '@/styles/mixins/index';
+
 .root {
   overflow-x: auto;
 }
 .headingTitle {
   white-space: nowrap;
+
+  @include breakpoint(only-mobile) {
+    white-space: normal;
+    word-break: break-word;
+  }
 }
 
 .table {
