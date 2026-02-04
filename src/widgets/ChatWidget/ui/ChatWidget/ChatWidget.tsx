@@ -38,9 +38,9 @@ export const ChatWidget = memo(({ className }: ChatWidgetProps) => {
         {menuOpened
           && (
             <>
-              {/* <button onClick={viberClickHandler} className={styles.btn} data-gtm-id="widget-viber" data-gtm-event="click" data-gtm-action="go_to_viber">
+              <button onClick={viberClickHandler} className={styles.btn} data-gtm-id="widget-viber" data-gtm-event="click" data-gtm-action="go_to_viber">
                 <Svg Icon={ViberIcon} />
-              </button> */}
+              </button>
               <button onClick={telegramClickHandler} className={styles.btn} data-gtm-id="widget-telegram" data-gtm-event="click" data-gtm-action="go_to_telegram">
                 <Svg Icon={TelegramIcon} />
               </button>
