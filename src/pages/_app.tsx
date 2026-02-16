@@ -22,7 +22,6 @@ import { AuthBySocialsModals } from '@/features/auth/AuthBySocials';
 import { BuyInOneClickCartDrawer } from '@/features/cart/BuyInOneClick';
 import { PreorderProductProvider } from '@/features/PreOrderProduct';
 import { CookieModal } from '@/features/CookieModal';
-import { BinotelWidget } from '@/widgets/Binotel';
 import { ExternalScripts } from '@/widgets/ExternalScripts';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -115,7 +114,6 @@ function App({
               </AppLoader>
             </NotificationsProvider>
           </Provider>
-          <BinotelWidget />
         </ConfirmModalProvider>
       </FloatingProvider>
     </>
