@@ -7,7 +7,7 @@ import FacebookIcon from '@/shared/assets/icons/facebook.svg';
 export const SOCIALS = {
   viber: {
     Icon: ViberIcon,
-    href: 'https://tinyurl.com/bddk7txh',
+    href: 'viber://chat?number=%2B380999783544',
     stroke: 'none',
     fill: 'black-light-2',
   },
