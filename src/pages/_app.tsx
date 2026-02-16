@@ -8,7 +8,6 @@ import '@/styles/globals.scss';
 import { wrapper } from '@/shared/config/store/makeStore';
 import cn from 'classnames';
 import { FloatingProvider } from '@/shared/lib/components/FloatingProvider';
-import { ChatWidget } from '@/widgets/ChatWidget';
 import { Cart } from '@/widgets/Cart';
 import { AppLoader } from '@/layouts/AppLoader';
 import { SettingsModal } from '@/features/SiteSettings';
@@ -107,7 +106,6 @@ function App({
                     <Component {...props.pageProps} />
                   </PreorderProductProvider>
                   <div id="portal" />
-                  <ChatWidget />
                   <GoToPageTopFAB />
                   <Auth />
                   <AuthBySocialsModals />
