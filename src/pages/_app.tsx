@@ -20,7 +20,6 @@ import { CardView } from '@/shared/types/common';
 import { NotificationsProvider } from '@/providers/NotificationProvider';
 import { AuthBySocialsModals } from '@/features/auth/AuthBySocials';
 import { BuyInOneClickCartDrawer } from '@/features/cart/BuyInOneClick';
-import { GoToPageTopFAB } from '@/shared/ui/GoToPageTopFAB';
 import { PreorderProductProvider } from '@/features/PreOrderProduct';
 import { CookieModal } from '@/features/CookieModal';
 import { BinotelWidget } from '@/widgets/Binotel';
@@ -106,7 +105,6 @@ function App({
                     <Component {...props.pageProps} />
                   </PreorderProductProvider>
                   <div id="portal" />
-                  <GoToPageTopFAB />
                   <Auth />
                   <AuthBySocialsModals />
                   <Cart />
