@@ -1,7 +1,4 @@
 const {
-  withSentryConfig,
-} = require('@sentry/nextjs');
-const {
   i18n,
 } = require('./next-i18next.config');
 const axios = require('axios');
@@ -66,13 +63,6 @@ const nextConfig = {
     },
     ],
   },
-  sentry: {
-    hideSourceMaps: true,
-  },
 };
 
-const sentryWebpackPluginOptions = {
-  silent: true,
-};
-
-module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
+module.exports = nextConfig;
