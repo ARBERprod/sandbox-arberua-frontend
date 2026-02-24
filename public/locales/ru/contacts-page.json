@@ -2,7 +2,14 @@
   "contact.title": "Контакты",
 
   "contact.tel.text": "Телефон:",
-  "contact.tel": "+38 0800 333 083",
+
+  "contact.tel.shop": "+38 0800 333 083",
+  "contact.tel.shop.text": "Интернет-магазин",
+  "contact.tel.shop.description": "Вопросы по оформлению онлайн-заказов, помощь с выбором и подбором образов, оплата и доставка.",
+
+  "contact.tel.care": "+38 0800 332 012",
+  "contact.tel.care.text": "Отдел заботы",
+  "contact.tel.care.description": "Жалобы, отзывы, обмен и возврат товара, технические вопросы и консультации после покупки.",
 
   "contact.mail.text": "Электронная почта:",
   "contact.mail": "ecommerce@arber.ua",

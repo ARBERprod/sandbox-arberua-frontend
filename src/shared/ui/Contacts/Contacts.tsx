@@ -28,8 +28,19 @@ export const Contacts = memo(({
             <Svg Icon={PhoneIcon} />
           </div>
           <div className={styles.content}>
-            <Typography variant="body-1" className={styles.title}>{t('contacts-page:contact.tel.text')}</Typography>
-            <Typography as="a" href={t('common:contact.tel.link')} variant="body-2" className={styles.subtitle}>{t('common:contact.tel')}</Typography>
+            <Typography variant="body-1" className={styles.title}>{t('contacts-page:contact.tel.shop.text')}</Typography>
+            <Typography as="a" href={t('common:contact.tel.shop.link')} variant="body-2" className={styles.subtitle}>{t('contacts-page:contact.tel.shop')}</Typography>
+            <Typography variant="body-2" className={styles.description}>{t('contacts-page:contact.tel.shop.description')}</Typography>
+          </div>
+        </li>
+        <li className={cn(styles.item, styles[variant])}>
+          <div className={styles.icon_wrap}>
+            <Svg Icon={PhoneIcon} />
+          </div>
+          <div className={styles.content}>
+            <Typography variant="body-1" className={styles.title}>{t('contacts-page:contact.tel.care.text')}</Typography>
+            <Typography as="a" href={t('common:contact.tel.care.link')} variant="body-2" className={styles.subtitle}>{t('contacts-page:contact.tel.care')}</Typography>
+            <Typography variant="body-2" className={styles.description}>{t('contacts-page:contact.tel.care.description')}</Typography>
           </div>
         </li>
         <li className={cn(styles.item, styles[variant])}>

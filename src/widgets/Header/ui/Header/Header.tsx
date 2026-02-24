@@ -79,10 +79,10 @@ export const Header = ({
           {router.pathname !== '/checkout' && <HeaderAuthActions className={cn(styles.actions, styles.item)} />}
 
           {router.pathname === '/checkout' && (
-            <a href={t('contact.tel.link')} className={cn(styles.contact)}>
+            <a href={t('contact.tel.shop.link')} className={cn(styles.contact)}>
               <Svg className={cn(styles.contact_icon)} Icon={PhoneIcon} width={24} height={24} />
               <span className={cn(styles.contact_text)}>
-                {t('contact.tel')}
+                {t('contact.tel.shop')}
               </span>
             </a>
           )}

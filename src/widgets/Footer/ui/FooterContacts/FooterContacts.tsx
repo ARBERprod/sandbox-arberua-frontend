@@ -11,9 +11,16 @@ export const FooterContacts = ({ className }: FooterContactsProps) => {
   return (
     <ul className={cn(styles.root, className)}>
       <li className={cn(styles.contacts_item)}>
-        <a href={t('contact.tel.link')} className={cn(styles.contacts_link)}>
-          {t('contact.tel')}
+        <a href={t('contact.tel.shop.link')} className={cn(styles.contacts_link)}>
+          {t('contact.tel.shop')}
         </a>
+        <span className={styles.contacts_description}>{t('contact.tel.shop.text')}</span>
+      </li>
+      <li className={cn(styles.contacts_item)}>
+        <a href={t('contact.tel.care.link')} className={cn(styles.contacts_link)}>
+          {t('contact.tel.care')}
+        </a>
+        <span className={styles.contacts_description}>{t('contact.tel.care.text')}</span>
       </li>
       <li className={cn(styles.contacts_item)}>
         <a href={t('contact.mail.link')} className={cn(styles.contacts_link)}>

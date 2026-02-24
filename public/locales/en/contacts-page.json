@@ -1,7 +1,14 @@
 {
   "contact.title": "Contacts",
-  "contact.tel.text": "Telephone:",
-  "contact.tel": "+38 0800 333 083",
+  "contact.tel.text": "Phone:",
+
+  "contact.tel.shop": "+38 0800 333 083",
+  "contact.tel.shop.text": "Online store",
+  "contact.tel.shop.description": "Questions about placing online orders, help with choosing and selecting outfits, payment and delivery.",
+
+  "contact.tel.care": "+38 0800 332 012",
+  "contact.tel.care.text": "Customer care",
+  "contact.tel.care.description": "Complaints, reviews, exchange and return of goods, technical questions and after-purchase consultations.",
   "contact.mail.text": "Email:",
   "contact.mail": "ecommerce@arber.ua",
   "contact.schedule.text": "Work schedule:",
