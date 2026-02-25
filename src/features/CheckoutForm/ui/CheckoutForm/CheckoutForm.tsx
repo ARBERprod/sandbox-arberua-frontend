@@ -18,6 +18,7 @@ import { getInitialState } from '../../lib/getInitialState';
 import styles from './CheckoutForm.module.scss';
 import { CitySearchField } from '@/entities/Location';
 import { useWarehouses } from '../../lib/useWarehouses';
+import { warehouseFilterOption } from '../../lib/warehouseFilterOption';
 import { useSelector } from 'react-redux';
 import { cartSelectors } from '@/entities/Cart';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
@@ -170,6 +171,7 @@ export const CheckoutForm = memo(({
             isLoading={wareHousesLoading}
             label={t('branch-number')}
             placeholder={t('select-branch-number')}
+            filterOption={warehouseFilterOption}
           />
         )}
         {showStoreWarehouses && (
