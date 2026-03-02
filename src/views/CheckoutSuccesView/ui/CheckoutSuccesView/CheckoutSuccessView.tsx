@@ -18,6 +18,7 @@ import { useAuth, useUserId } from '@/entities/Session';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 import { User } from '@/entities/User';
 import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
+import { esputnikOrderConfirmed } from '@/shared/lib/esputnik';
 
 interface CheckoutSuccessViewProps {
   className?: string;
@@ -130,6 +131,30 @@ export const CheckoutSuccessView = memo(
         items: order.products.map((item) => ({
           id: item.parent_id || item.id,
           google_business_vertical: 'retail',
+        })),
+      });
+
+      // eSputnik: order confirmed event
+      esputnikOrderConfirmed({
+        email: order.customer.email,
+        phone: order.customer.phone,
+        firstName: order.customer.first_name,
+        lastName: order.customer.last_name,
+        externalId: order.customer.id,
+        orderId: order.id,
+        orderNumber: order.order_number,
+        orderDate: order.created_at,
+        totalAmount: order.cost.value,
+        currency: 'UAH',
+        paymentMethod: order.payment_method.title,
+        deliveryMethod: order.delivery_method.title,
+        items: order.products.map((item) => ({
+          sku: item.id,
+          name: item.title,
+          qty: item.quantity,
+          price: item.price.value,
+          image_url: typeof item.picture === 'string' ? item.picture : undefined,
+          product_url: item.url,
         })),
       });
 

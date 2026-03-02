@@ -9,6 +9,7 @@ import { Redirect } from '@/shared/lib/components/Redirect';
 import { routerPaths } from '@/shared/config/router';
 import { refetchSession } from '@/entities/Session';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { useCheckoutAbandoned } from '@/shared/lib/esputnik';
 
 interface CheckoutViewProps {
     className?: string;
@@ -18,6 +19,7 @@ export const CheckoutView = memo(({ className }: CheckoutViewProps) => {
   const dispatch = useAppDispatch();
   const cartItems = useSelector(cartSelectors.getCartItems);
   const cartLoading = useSelector(cartSelectors.getCartIsLoading);
+  useCheckoutAbandoned();
 
   // Refetch session on checkout page load to get actual prices
   useEffect(() => {
