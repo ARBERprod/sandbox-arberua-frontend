@@ -10,12 +10,12 @@ export const ExternalScripts = () => {
     btnSize: 'small',
     primaryColor: '#0b87e7',
     abonCode: 5930366,
-    // invitations: {
-    //   invitationText: t('chatbullet.invitation_text'),
-    //   messageTime: 60,
-    //   timeAfterClose: 5,
-    //   timeAfterInvite: 3,
-    // },
+    invitations: {
+      invitationText: t('chatbullet.invitation_text'),
+      messageTime: 60,
+      timeAfterClose: 5,
+      timeAfterInvite: 3,
+    },
   });
 
   return (
@@ -39,13 +39,13 @@ export const ExternalScripts = () => {
         `}
       </Script>
 
-      <Script
+      {/* <Script
         id="chatbullet"
         src="https://livechat.chatbullet.com/widget.chatbullet.js"
         defer
         strategy="afterInteractive"
         data-config={chatbulletConfig}
-      />
+      /> */}
     </>
   );
 };
