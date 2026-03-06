@@ -10,12 +10,12 @@ export const ExternalScripts = () => {
     btnSize: 'small',
     primaryColor: '#0b87e7',
     abonCode: 5930366,
-    invitations: {
-      invitationText: t('chatbullet.invitation_text'),
-      messageTime: 60,
-      timeAfterClose: 5,
-      timeAfterInvite: 3,
-    },
+    // invitations: {
+    //   invitationText: t('chatbullet.invitation_text'),
+    //   messageTime: 60,
+    //   timeAfterClose: 5,
+    //   timeAfterInvite: 3,
+    // },
   });
 
   return (
