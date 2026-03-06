@@ -39,13 +39,13 @@ export const ExternalScripts = () => {
         `}
       </Script>
 
-      {/* <Script
+      <Script
         id="chatbullet"
         src="https://livechat.chatbullet.com/widget.chatbullet.js"
         defer
         strategy="afterInteractive"
         data-config={chatbulletConfig}
-      /> */}
+      />
     </>
   );
 };
