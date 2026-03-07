@@ -14,7 +14,6 @@ import { authReducer } from '@/widgets/Auth';
 import { UIReducer } from '@/entities/UI';
 import { createReducerManager } from './createReducerManager';
 import { buyInOneClickCartReducer } from '@/features/cart/BuyInOneClick';
-import { esputnikMiddleware } from '@/shared/lib/esputnik';
 
 export const makeStore = (
   initialState?:StoreSchema,
@@ -51,8 +50,7 @@ export const makeStore = (
         extraArgument: extraArg,
       },
     })
-      .concat(rtkApi.middleware)
-      .concat(esputnikMiddleware),
+      .concat(rtkApi.middleware),
   });
 
   // @ts-ignore
