@@ -12,7 +12,7 @@ export const ExternalScripts = () => {
     abonCode: 5930366,
     invitations: {
       invitationText: t('chatbullet.invitation_text'),
-      messageTime: 60,
+      messageTime: 99999,
       timeAfterClose: 5,
       timeAfterInvite: 3,
     },
