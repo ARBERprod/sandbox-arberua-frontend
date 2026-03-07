@@ -33,5 +33,5 @@ export const SOCIALS = {
 } as const;
 
 export const FOOTER_SOCIALS: SocialLink[] = [SOCIALS.facebook, SOCIALS.instagram];
-export const HEADER_SOCIALS: SocialLink[] = [SOCIALS.viber, SOCIALS.instagram, SOCIALS.telegram, SOCIALS.facebook];
-export const CONTACTS_SOCIALS: SocialLink[] = [SOCIALS.viber, SOCIALS.instagram, SOCIALS.telegram, SOCIALS.facebook];
+export const HEADER_SOCIALS: SocialLink[] = [SOCIALS.instagram, SOCIALS.telegram, SOCIALS.facebook];
+export const CONTACTS_SOCIALS: SocialLink[] = [SOCIALS.instagram, SOCIALS.telegram, SOCIALS.facebook];
