@@ -56,7 +56,11 @@ export const MainLayout = ({
 
   const getMetaTitle = () => {
     if (dynamicMeta?.title) {
-      return `${dynamicMeta.title}  ${dynamicMeta.textAfterTitle ? `| ${dynamicMeta.textAfterTitle}` : ''} ${dynamicMeta.page ? ` - ${t('page')} ${dynamicMeta.page}` : ''}`;
+      return [
+        dynamicMeta.title,
+        dynamicMeta.textAfterTitle && `| ${dynamicMeta.textAfterTitle}`,
+        dynamicMeta.page && `- ${t('page')} ${dynamicMeta.page}`,
+      ].filter(Boolean).join(' ');
     }
 
     const baseTitle = metaData?.title ? t(metaData.title as any) : title;
@@ -74,7 +78,13 @@ export const MainLayout = ({
         </title>
         <meta
           name="description"
-          content={(dynamicMeta?.description && `${dynamicMeta.textBeforeDescription ? `${dynamicMeta.textBeforeDescription}` : ''} ${dynamicMeta.description} ${dynamicMeta.textAfterDescription ? `${dynamicMeta.textAfterDescription}` : ''} ${dynamicMeta.descriptionUsesTitle ? dynamicMeta.descriptionUsesTitle : ''} ${dynamicMeta.textEndDescription ? `${dynamicMeta.textEndDescription}` : ''}`)
+          content={(dynamicMeta?.description && [
+            dynamicMeta.textBeforeDescription,
+            dynamicMeta.description,
+            dynamicMeta.textAfterDescription,
+            dynamicMeta.descriptionUsesTitle,
+            dynamicMeta.textEndDescription,
+          ].filter(Boolean).join(' '))
                         || (metaData?.description && t(metaData.description as any))
                         || 'Офіційний сайт українського бренду ARBER – стильний чоловічий і жіночий одяг, взуття та аксесуари. Сезонні знижки, вигідні акції та великий асортимент для створення вашого ідеального образу.'}
         />

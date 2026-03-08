@@ -12,7 +12,7 @@ type AvailabilityItem = {
 export type GetProductDto = {
   product: DetailedProduct;
   breadcrumbs: Breadcrumb[];
-  similar: Product[];
+  recommended: Product[];
   markup: SeoData;
 }
 

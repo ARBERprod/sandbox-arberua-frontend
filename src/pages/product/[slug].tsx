@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import { MainLayout, DynamicMeta } from '@/layouts/MainLayout/MainLayout';
 import { ProductView } from '@/views/ProductView';
 import { wrapper } from '@/shared/config/store/makeStore';
@@ -14,7 +16,6 @@ interface ProductPageProps {
     breadcrumbs: Breadcrumb[];
     recommendations: Product[];
     seo: SeoData;
-    dynamicMeta: DynamicMeta;
 }
 
 export default function ProductPage({
@@ -22,8 +23,19 @@ export default function ProductPage({
   breadcrumbs,
   recommendations,
   seo,
-  dynamicMeta,
 }: ProductPageProps) {
+  const { t } = useTranslation('product-card');
+
+  const dynamicMeta: DynamicMeta = useMemo(() => ({
+    textAfterTitle: t('seo.title_suffix'),
+    title: product.title || '',
+    description: product.description || '',
+    descriptionUsesTitle: product.title || '',
+    textBeforeDescription: t('seo.description_prefix'),
+    textAfterDescription: t('seo.description_suffix'),
+    textEndDescription: t('seo.description_end'),
+  }), [product.title, product.description, t]);
+
   return (
     <MainLayout dynamicMeta={dynamicMeta}>
       <ProductView
@@ -66,28 +78,12 @@ export const getServerSideProps = wrapper.getServerSideProps<ProductPageProps>((
     };
   }
 
-  const {
-    title,
-    description,
-  } = data.product;
-
-  const dynamicMeta = {
-    textAfterTitle: 'Купити онлайн',
-    title: title ? `${title}` : '',
-    description: description || '',
-    descriptionUsesTitle: title ? `${title}` : '',
-    textBeforeDescription: 'Замовляйте',
-    textAfterDescription: 'ARBER. Швидка доставка по Україні. Замовити',
-    textEndDescription: 'ARBER за вигідною ціною зараз!',
-  };
-
   return {
     props: {
       product: data.product,
       breadcrumbs: data.breadcrumbs || [],
-      recommendations: data.similar || [],
+      recommendations: data.recommended || [],
       seo: data.markup,
-      dynamicMeta,
       ...(await serverSideTranslations(locale as string, [
         'common',
         'product-card',
