@@ -42,6 +42,8 @@ const measurementId = 'G-6DRBNRFYC9';
 const apiSecret = '<a2f8_9KgTVeRWPPiU_XmBg>';
 
 export const measurementsPost = (eventData: MeasurementsPost): void => {
+  if (!measurementId || !apiSecret) return;
+
   const { name, params, client_id } = eventData;
   fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${measurementId}&api_secret=${apiSecret}`, {
     method: 'POST',
@@ -52,5 +54,5 @@ export const measurementsPost = (eventData: MeasurementsPost): void => {
         params,
       }],
     }),
-  });
+  }).catch(() => {});
 };
