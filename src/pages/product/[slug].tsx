@@ -81,6 +81,8 @@ export const getServerSideProps = wrapper.getServerSideProps<ProductPageProps>((
 
   await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
+  console.log({ data });
+
   return {
     props: {
       product: data.product,
