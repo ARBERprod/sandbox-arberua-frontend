@@ -1,9 +1,10 @@
+import React from 'react';
 import { renderComponent } from '@/shared/lib/test/renderComponent';
 import { MainLayout, DynamicMeta } from './MainLayout';
 
 jest.mock('next/head', () => ({
   __esModule: true,
-  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 jest.mock('@/widgets/Header', () => ({
@@ -97,7 +98,7 @@ describe('MainLayout meta tags', () => {
 
       const content = getDescription() || '';
       expect(content).toBe('Замовляйте Якісна сорочка ARBER.');
-      expect(content).not.toMatch(/  /);
+      expect(content).not.toMatch(/ {2}/);
     });
 
     it('falls back to default when description is empty string', () => {
