@@ -5,6 +5,7 @@ import { MainLayout, DynamicMeta } from '@/layouts/MainLayout/MainLayout';
 import { ProductView } from '@/views/ProductView';
 import { wrapper } from '@/shared/config/store/makeStore';
 import { DetailedProduct, getProduct, Product } from '@/entities/Product';
+import { getRunningQueriesThunk } from '@/shared/api/rtkApi';
 import { routerPaths } from '@/shared/config/router';
 import { SeoData } from '@/shared/types/common';
 import { Seo } from '@/shared/lib/components/Seo';
@@ -77,6 +78,8 @@ export const getServerSideProps = wrapper.getServerSideProps<ProductPageProps>((
       },
     };
   }
+
+  await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
   return {
     props: {
