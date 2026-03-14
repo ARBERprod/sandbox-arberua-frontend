@@ -61,7 +61,7 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
     filters: filtersString,
     merge,
     page,
-    sort: query.sort as string || null,
+    sort: (query.sort as string) || undefined,
   });
 
   const viewChangeHandler = useCallback((view: CardView) => {
