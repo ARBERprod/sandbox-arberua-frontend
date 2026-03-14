@@ -28,6 +28,12 @@ export const getInitFilterValues = (
         .filter((val) => val.is_chosen)
         .map((val) => val.slug);
     }
+    if (filter.type === FilterType.RADIO) {
+      const chosen = filter.values.find((val) => val.is_chosen);
+      if (chosen) {
+        acc[filter.slug] = chosen.slug;
+      }
+    }
     return acc;
   },
     {} as { [key: string]: FilterValue },
