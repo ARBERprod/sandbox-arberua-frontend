@@ -24,7 +24,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
     category: query.category as string,
     filters: FilterUtils.getFilterStringFromQueryArray(query.filters as string[]),
     page: getPageFromQuery(query),
-    sort: (query.sort as string) || undefined,
+    ...(query.sort && { sort: query.sort as string }),
   }));
 
   const { page: pageQuery } = query;

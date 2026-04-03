@@ -20,7 +20,7 @@ export const catalogApi = rtkApi.injectEndpoints({
           ? `${process.env.NEXT_PUBLIC_API_URL_V2}/categories/${category}?${filters}`
           : `${process.env.NEXT_PUBLIC_API_URL_V2}/categories/${category}`,
         params: {
-          sort: sort ?? undefined, page,
+          ...(sort && { sort }), page,
         },
       }),
       merge(currentCacheData, responseData, otherArgs) {
