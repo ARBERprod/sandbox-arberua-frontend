@@ -40,6 +40,12 @@ export const cartApi = rtkApi.injectEndpoints({
       }),
       transformResponse: (response: SuccessApiResponse<CartData>) => response.data,
     }),
+    markCheckoutStarted: build.mutation<void, void>({
+      query: () => ({
+        method: 'POST',
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/cart-se/checkout-started`,
+      }),
+    }),
     updateProduct: build.mutation<CartData, UpdateProductParams>({
       query: ({
         itemId,
@@ -63,4 +69,5 @@ export const {
   useDeleteCartMutation,
   useUpdateProductMutation,
   useAddManyProductsToCartMutation,
+  useMarkCheckoutStartedMutation,
 } = cartApi;

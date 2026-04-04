@@ -1,10 +1,10 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import cn from 'classnames';
 import { Container } from '@/shared/ui/Container';
 import { Checkout } from '@/widgets/Checkout';
 import styles from './CheckoutView.module.scss';
 import { useSelector } from 'react-redux';
-import { cartSelectors } from '@/entities/Cart';
+import { cartSelectors, useMarkCheckoutStartedMutation } from '@/entities/Cart';
 import { Redirect } from '@/shared/lib/components/Redirect';
 import { routerPaths } from '@/shared/config/router';
 import { refetchSession } from '@/entities/Session';
@@ -16,12 +16,21 @@ interface CheckoutViewProps {
 
 export const CheckoutView = memo(({ className }: CheckoutViewProps) => {
   const dispatch = useAppDispatch();
+  const [markCheckoutStarted] = useMarkCheckoutStartedMutation();
   const cartItems = useSelector(cartSelectors.getCartItems);
   const cartLoading = useSelector(cartSelectors.getCartIsLoading);
   // Refetch session on checkout page load to get actual prices
   useEffect(() => {
     dispatch(refetchSession());
   }, [dispatch]);
+
+  const checkoutMarkedRef = useRef(false);
+  useEffect(() => {
+    if (cartItems.length > 0 && !checkoutMarkedRef.current) {
+      checkoutMarkedRef.current = true;
+      markCheckoutStarted().unwrap().catch(() => {});
+    }
+  }, [cartItems.length, markCheckoutStarted]);
 
   if (!cartLoading && cartItems.length === 0) return <Redirect path={routerPaths.main} />;
 
