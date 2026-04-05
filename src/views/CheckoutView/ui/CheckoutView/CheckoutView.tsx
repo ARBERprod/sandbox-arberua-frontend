@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect } from 'react';
 import cn from 'classnames';
 import { Container } from '@/shared/ui/Container';
 import { Checkout } from '@/widgets/Checkout';
@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { cartSelectors, useMarkCheckoutStartedMutation } from '@/entities/Cart';
 import { Redirect } from '@/shared/lib/components/Redirect';
 import { routerPaths } from '@/shared/config/router';
-import { refetchSession } from '@/entities/Session';
+import { refetchSession, sessionSelectors } from '@/entities/Session';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
 interface CheckoutViewProps {
@@ -19,18 +19,22 @@ export const CheckoutView = memo(({ className }: CheckoutViewProps) => {
   const [markCheckoutStarted] = useMarkCheckoutStartedMutation();
   const cartItems = useSelector(cartSelectors.getCartItems);
   const cartLoading = useSelector(cartSelectors.getCartIsLoading);
-  // Refetch session on checkout page load to get actual prices
+  const isAuth = useSelector(sessionSelectors.getIsAuth);
+  const isSessionLoaded = useSelector(sessionSelectors.getIsSessionDataLoaded);
+
   useEffect(() => {
     dispatch(refetchSession());
   }, [dispatch]);
 
-  const checkoutMarkedRef = useRef(false);
+  // Track checkout page visit for eSputnik abandoned checkout detection.
+  // Fires once session is loaded — does not wait for refetchSession to complete,
+  // as tracking only needs user identity, not refreshed prices.
+  const hasCartItems = cartItems.length > 0;
   useEffect(() => {
-    if (cartItems.length > 0 && !checkoutMarkedRef.current) {
-      checkoutMarkedRef.current = true;
+    if (isSessionLoaded && isAuth && hasCartItems) {
       markCheckoutStarted().unwrap().catch(() => {});
     }
-  }, [cartItems.length, markCheckoutStarted]);
+  }, [isSessionLoaded, isAuth, hasCartItems, markCheckoutStarted]);
 
   if (!cartLoading && cartItems.length === 0) return <Redirect path={routerPaths.main} />;
 
