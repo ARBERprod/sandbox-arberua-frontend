@@ -23,12 +23,12 @@ export const catalogApi = rtkApi.injectEndpoints({
           ...(sort && { sort }), page,
         },
       }),
-      merge(currentCacheData, responseData, otherArgs) {
+      merge(state, responseData, otherArgs) {
         if (otherArgs.arg.merge) {
-          currentCacheData.data.products.push(...responseData.data.products);
-          currentCacheData.data.filters = responseData.data.filters;
-          currentCacheData.data.sorter = responseData.data.sorter;
-          currentCacheData.meta = responseData.meta;
+          state.data.products.push(...responseData.data.products);
+          state.data.filters = responseData.data.filters;
+          state.data.sorter = responseData.data.sorter;
+          state.meta = responseData.meta;
         } else {
           return responseData;
         }
