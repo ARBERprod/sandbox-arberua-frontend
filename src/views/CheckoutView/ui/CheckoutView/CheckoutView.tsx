@@ -19,7 +19,6 @@ export const CheckoutView = memo(({ className }: CheckoutViewProps) => {
   const [markCheckoutStarted] = useMarkCheckoutStartedMutation();
   const cartItems = useSelector(cartSelectors.getCartItems);
   const cartLoading = useSelector(cartSelectors.getCartIsLoading);
-  const isAuth = useSelector(sessionSelectors.getIsAuth);
   const isSessionLoaded = useSelector(sessionSelectors.getIsSessionDataLoaded);
 
   useEffect(() => {
@@ -27,14 +26,13 @@ export const CheckoutView = memo(({ className }: CheckoutViewProps) => {
   }, [dispatch]);
 
   // Track checkout page visit for eSputnik abandoned checkout detection.
-  // Fires once session is loaded — does not wait for refetchSession to complete,
-  // as tracking only needs user identity, not refreshed prices.
+  // Waits for session to load to ensure CSRF token is available.
   const hasCartItems = cartItems.length > 0;
   useEffect(() => {
-    if (isSessionLoaded && isAuth && hasCartItems) {
+    if (isSessionLoaded && hasCartItems) {
       markCheckoutStarted().unwrap().catch(() => {});
     }
-  }, [isSessionLoaded, isAuth, hasCartItems, markCheckoutStarted]);
+  }, [isSessionLoaded, hasCartItems, markCheckoutStarted]);
 
   if (!cartLoading && cartItems.length === 0) return <Redirect path={routerPaths.main} />;
 
