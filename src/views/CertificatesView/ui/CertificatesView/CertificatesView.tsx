@@ -39,47 +39,14 @@ export const CertificatesView = memo(({ className }:CertificatesViewProps) => {
           </div>
           <div className={styles.content}>
             <Typography variant="title-1" className={styles.title}>{t('certificates:certificates.title')}</Typography>
-            <Typography variant="body-1" className={styles.paragraph}>
-              {t('certificates:certificates.title.paragraph')}
-            </Typography>
+            <Typography variant="body-1" className={styles.paragraph}>{t('certificates:certificates.title.paragraph')}</Typography>
             <Typography variant="body-1" className={styles.paragraph}>{t('certificates:certificates.title.paragraph1')}</Typography>
 
             <Typography variant="title-3" className={styles.title}>{t('certificates:certificates.title1')}</Typography>
-            <Typography variant="body-1" className={styles.paragraph}>
-              {t('certificates:certificates.paragraph')}
+            <Typography variant="body-1" className={styles.paragraph}>{t('certificates:certificates.title1.paragraph')}</Typography>
+            <Typography variant="body-1" className={styles.paragraph}>{t('certificates:certificates.title1.paragraph1')}</Typography>
 
-            </Typography>
-            <Typography variant="body-1" className={styles.paragraph}>
-              {t('certificates:certificates.title1.paragraph1')}
-              {' '}
-              <span className={styles.bold}>500</span>
-              ,
-              {' '}
-              <span className={styles.bold}>1000</span>
-              ,
-              {' '}
-              <span className={styles.bold}>3000</span>
-              ,
-              {' '}
-              <span className={styles.bold}>5000</span>
-              {' '}
-              {t('certificates:certificates.title1.paragraph2')}
-              {' '}
-              <span className={styles.bold}>10000</span>
-              {' '}
-              {t('certificates:certificates.title1.paragraph3')}
-            </Typography>
-            <Typography variant="body-1" className={styles.paragraph}>{t('certificates:certificates.title1.paragraph4')}</Typography>
-
-            <Typography variant="title-3" color="red" className={styles.title}>{t('certificates:certificates.title2')}</Typography>
-            <Typography variant="body-1" className={styles.paragraph}>{t('certificates:certificates.title2.paragraph')}</Typography>
-            <Typography variant="body-1" className={styles.paragraph}>
-              {t('certificates:certificates.title2.paragraph1')}
-              {' '}
-              <Typography as="span" color="red">{t('certificates:certificates.title2.paragraph2')}</Typography>
-            </Typography>
-            <Typography variant="body-1" className={styles.paragraph}>{t('certificates:certificates.title3.paragraph')}</Typography>
-            <Typography variant="title-3" className={styles.title}>{t('certificates:certificates.title3')}</Typography>
+            <Typography variant="title-3" className={styles.title}>{t('certificates:certificates.title2')}</Typography>
             <CertificateCardList
               items={data.certificates}
               className={styles.certificates}
