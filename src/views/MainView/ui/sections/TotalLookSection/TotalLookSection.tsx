@@ -30,7 +30,7 @@ export const TotalLookSection = memo(({ className, totalLook }: TotalLookSection
         backgroundMobile={totallookBanner}
         man={totallookBannerMan}
         woman={totallookBannerWoman}
-        title="Total Look"
+        title={t('total_look.title')}
         description={t('total_look.text')}
         onManButtonClick={() => goToCatalog(totalLook?.man.value)}
         onWomanButtonClick={() => goToCatalog(totalLook?.women.value)}
