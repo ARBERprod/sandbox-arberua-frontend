@@ -146,12 +146,8 @@
   "menu.promotions-offers": "Promotions",
   "heading.promotions-title": "Promotions and discounts from ARBER",
   "menu.outfit-builder": "Image designer",
-<<<<<<< HEAD
   "menu.total-look": "Stylist’s Picks",
-=======
-  "menu.total-look": "Total look",
   "menu.sale": "Special offer",
->>>>>>> parent of c598842 (Revert "Change Sale to Special Offer naming in nav bar")
   "menu.promotions": "Promotions",
   "menu.size-charts": "Size chart",
   "menu.payment-delivery": "Payment and delivery",
