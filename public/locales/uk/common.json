@@ -146,7 +146,12 @@
   "menu.promotions-offers": "Акції",
   "heading.promotions-title": "Акції та знижки від ARBER",
   "menu.outfit-builder": "Конструктор образів",
+<<<<<<< HEAD
   "menu.total-look": "Образи від стиліста",
+=======
+  "menu.total-look": "Total look",
+  "menu.sale": "Спеціальна пропозиція",
+>>>>>>> parent of c598842 (Revert "Change Sale to Special Offer naming in nav bar")
   "menu.promotions": "Акції",
   "menu.size-charts": "Розмірні сітки",
   "menu.payment-delivery": "Оплата і доставка",

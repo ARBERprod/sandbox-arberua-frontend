@@ -74,7 +74,7 @@ export const headerMenuMainMocked: headerMenuGetter = (t:TFunction) => [
   },
   {
     id: '4.5',
-    title: 'Sale',
+    title: t('menu.sale'),
     url: routerPaths.sale,
     children: false,
     button: false,
