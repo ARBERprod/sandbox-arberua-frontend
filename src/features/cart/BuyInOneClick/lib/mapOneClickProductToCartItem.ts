@@ -16,4 +16,5 @@ export const mapOneClickProductToCartItem = (product: OneClickProduct):ICartItem
   category: product.category,
   brand: product.brand,
   variant: product.variant,
+  promocode_discount: null,
 });

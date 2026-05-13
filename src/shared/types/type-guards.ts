@@ -1,5 +1,10 @@
 import { Fragment, ReactFragment } from 'react';
-import { CredentialsError, StatusCode, ValidationError } from '@/shared/types/api';
+import {
+  BusinessError,
+  CredentialsError,
+  StatusCode,
+  ValidationError,
+} from '@/shared/types/api';
 import { AnyFunction } from '@/shared/types/common';
 
 export function isReactFragment(variableToInspect: any): variableToInspect is ReactFragment {
@@ -39,6 +44,28 @@ export function isCredentialsError(error: unknown): error is CredentialsError {
     && (error.data.errors !== null)
     && ('success' in error.data)
     && error.data.success === false
+  );
+}
+
+export function isBusinessError<TCode extends string = string>(
+  error: unknown,
+): error is BusinessError<TCode> {
+  if (error === null || error === undefined) return false;
+  if (typeof error !== 'object') return false;
+
+  return (
+    ('data' in error)
+    && typeof error.data === 'object'
+    && error.data !== null
+    && ('success' in error.data)
+    && error.data.success === false
+    && ('error' in error.data)
+    && typeof error.data.error === 'object'
+    && error.data.error !== null
+    && ('code' in error.data.error)
+    && typeof error.data.error.code === 'string'
+    && ('message' in error.data.error)
+    && typeof error.data.error.message === 'string'
   );
 }
 

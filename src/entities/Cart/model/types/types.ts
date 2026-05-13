@@ -20,6 +20,7 @@ export interface ICartItem {
   brand: string;
   variant: string;
   parent_id: string;
+  promocode_discount: number | null;
 }
 
 export interface CartHistoryItem {
@@ -27,9 +28,17 @@ export interface CartHistoryItem {
   price: Price;
 }
 
+export interface PromocodeMeta {
+  code: string;
+  discount: number;
+  period_to: string | null;
+  total_discount: number;
+}
+
 export interface CartData {
   totals: CartHistoryItem[];
   items: ICartItem[];
   total: number;
   quantity: number;
+  promocode: PromocodeMeta | null;
 }

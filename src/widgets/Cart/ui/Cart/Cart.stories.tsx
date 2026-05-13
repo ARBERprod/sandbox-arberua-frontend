@@ -35,6 +35,7 @@ export const CartWithProducts: Story = {
               price: getMockPrice(),
             },
           ],
+          promocode: null,
         },
       },
     }),

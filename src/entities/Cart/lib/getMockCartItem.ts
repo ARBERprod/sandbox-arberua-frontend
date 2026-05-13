@@ -26,6 +26,7 @@ export const getMockCartItem = (): ICartItem => (
     brand: faker.company.name(),
     variant: faker.commerce.productMaterial(),
     parent_id: faker.datatype.uuid(),
+    promocode_discount: null,
   }
 );
 

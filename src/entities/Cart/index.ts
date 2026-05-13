@@ -1,4 +1,4 @@
-export type { ICartItem, CartData } from './model/types/types';
+export type { ICartItem, CartData, PromocodeMeta } from './model/types/types';
 export type { CartSchema } from './model/types/cartSchema';
 export { CartDrawer } from './ui/CartDrawer';
 export { CartItem } from './ui/CartItem';

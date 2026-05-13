@@ -42,3 +42,14 @@ export type CredentialsError = {
     success: false;
   }
 }
+
+export type BusinessError<TCode extends string = string> = {
+  status: number;
+  data: {
+    success: false;
+    error: {
+      code: TCode;
+      message: string;
+    };
+  };
+}
