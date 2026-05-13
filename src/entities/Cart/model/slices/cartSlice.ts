@@ -122,6 +122,32 @@ export const cartSlice = buildSlice({
     builder.addMatcher(cartApi.endpoints.updateProduct.matchRejected, (state) => {
       state.isError = true;
     });
+
+    builder.addMatcher(cartApi.endpoints.applyPromocode.matchFulfilled, (state, action) => {
+      state.isFetching = false;
+      state.isError = false;
+      state.cartData = action.payload;
+    });
+    builder.addMatcher(cartApi.endpoints.applyPromocode.matchPending, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addMatcher(cartApi.endpoints.applyPromocode.matchRejected, (state) => {
+      state.isFetching = false;
+    });
+
+    builder.addMatcher(cartApi.endpoints.removePromocode.matchFulfilled, (state, action) => {
+      state.isFetching = false;
+      state.isError = false;
+      state.cartData = action.payload;
+    });
+    builder.addMatcher(cartApi.endpoints.removePromocode.matchPending, (state) => {
+      state.isFetching = true;
+      state.isError = false;
+    });
+    builder.addMatcher(cartApi.endpoints.removePromocode.matchRejected, (state) => {
+      state.isFetching = false;
+    });
   },
 
 });

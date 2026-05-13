@@ -60,6 +60,21 @@ export const cartApi = rtkApi.injectEndpoints({
       }),
       transformResponse: (response: SuccessApiResponse<CartData>) => response.data,
     }),
+    applyPromocode: build.mutation<CartData, { code: string }>({
+      query: ({ code }) => ({
+        method: 'POST',
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/cart-se/apply-promocode`,
+        body: { code },
+      }),
+      transformResponse: (response: SuccessApiResponse<CartData>) => response.data,
+    }),
+    removePromocode: build.mutation<CartData, void>({
+      query: () => ({
+        method: 'DELETE',
+        url: `${process.env.NEXT_PUBLIC_API_URL_V2}/cart-se/remove-promocode`,
+      }),
+      transformResponse: (response: SuccessApiResponse<CartData>) => response.data,
+    }),
   }),
 });
 
@@ -70,4 +85,6 @@ export const {
   useUpdateProductMutation,
   useAddManyProductsToCartMutation,
   useMarkCheckoutStartedMutation,
+  useApplyPromocodeMutation,
+  useRemovePromocodeMutation,
 } = cartApi;

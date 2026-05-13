@@ -12,6 +12,7 @@ const getCartProductQuantity = createSelector(
   getCartItems,
   (items) => items.reduce((acc, item) => acc + item.quantity, 0),
 );
+const getPromocode = (state: StoreSchema) => state.cart.cartData?.promocode ?? null;
 
 const getCart = (state: StoreSchema) => state.cart;
 
@@ -24,4 +25,5 @@ export const cartSelectors = {
   getCartHasError,
   getCart,
   getCartProductQuantity,
+  getPromocode,
 };
