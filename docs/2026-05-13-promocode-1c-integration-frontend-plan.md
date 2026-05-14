@@ -330,21 +330,16 @@ checkout-page:promocode.error.unknown
 
 ### 6.2 Маппінг `error.code` → ключ
 
-Утиліта `features/PromoCodeForm/lib/getPromocodeErrorKey.ts`:
+Усі промокодні коди централізовані в `entities/Cart/model/types/promocodeCodes.ts` (`PROMOCODE_VALIDATION_CODES`, `PROMOCODE_CTA_CODES`, `PROMOCODE_SERVICE_CODES`, `PROMOCODE_CHECKOUT_RACE_CODES` + predicates). Утиліта `entities/Cart/lib/getPromocodeErrorKey.ts` повертає типизований `PromocodeErrorI18nKey`:
+
 ```ts
-const KNOWN_CODES = new Set([
-  'PROMOCODE_CODE_REQUIRED', 'PROMOCODE_CART_EMPTY',
-  'PROMOCODE_NOT_FOUND', 'PROMOCODE_NOT_FOR_WEB',
-  'PROMOCODE_ALREADY_USED', 'PROMOCODE_EXPIRED',
-  'PROMOCODE_NO_ELIGIBLE_ITEMS',
-]);
-export const getPromocodeErrorKey = (code: string) =>
-  KNOWN_CODES.has(code)
+export const getPromocodeErrorKey = (code: string | null | undefined): PromocodeErrorI18nKey =>
+  (code && isPromocodeValidationCode(code))
     ? `checkout-page:promocode.error.${code}`
     : 'checkout-page:promocode.error.unknown';
 ```
 
-CTA / banner коди (`PROMOCODE_USER_PHONE_MISSING`, `PROMOCODE_CLIENT_NOT_FOUND`, `PROMOCODE_SERVICE_UNAVAILABLE`) обробляються окремими гілками рендеру, не через цю утиліту.
+CTA / banner коди (`PROMOCODE_USER_PHONE_MISSING`, `PROMOCODE_CLIENT_NOT_FOUND`, `PROMOCODE_SERVICE_UNAVAILABLE`) обробляються окремими гілками рендеру через `categorizePromocodeError` (повертає `{ kind: 'validation' | 'cta' | 'service', code }` — для невідомих бізнес-кодів `kind: 'validation', code: null`, що активує forward-compat `console.error` у формі).
 
 ---
 
@@ -531,11 +526,12 @@ Auth sub-task (зберігання `access_token` у `signIn` + `Authorization:
 > - **Endpoints/cartApi** (`src/entities/Cart/api/cartApi.ts`): `applyPromocode` (POST `/cart-se/apply-promocode`, body `{code}`), `removePromocode` (DELETE `/cart-se/remove-promocode`). Все cart-мутации возвращают плоский `CartData` через `transformResponse`.
 > - **Selector**: `cartSelectors.getPromocode` → `state.cart.cartData?.promocode ?? null`.
 > - **Type-guard**: `isBusinessError<TCode>(error)` из `@/shared/types/type-guards` — проверяет `data.success === false && data.error.{code,message}`.
-> - **Утилита**: `getPromocodeErrorKey(code)` из `@/features/PromoCodeForm/lib/getPromocodeErrorKey` — известные коды → `checkout-page:promocode.error.{CODE}`, остальные → `checkout-page:promocode.error.unknown`.
-> - **Категоризатор**: `categorizePromocodeError(error)` из `@/features/PromoCodeForm/lib/categorizePromocodeError` (создан в S1, проверить файл) — возвращает `{kind: 'validation'|'cta'|'service', code}`.
-> - **Listener middleware** (`src/entities/Cart/model/middleware/promocodeInvalidationListener.ts`): матчеры `addProductToCart`, `addManyProductsToCart`, `updateProduct`, `deleteProduct`, `deleteCart` → если `prev.promocode != null && next.promocode === null` → `getNotify({type:'info', content: i18n t('checkout-page:promocode.toast.cart_changed')}).notify()`. SSR-гард внутри effect.
-> - **CheckoutForm flow**: `useCheckout.submitCheckoutForm` — `try checkout().unwrap()` → `catch`: ветка `isBusinessError(e) && PROMOCODE_CHECKOUT_ERROR_CODES.has(code)` → toast + `dispatch(refetchSession())` + `return`. Затем `isValidationError` → `throw getCheckoutFormErrors(e)`.
-> - **Локали**: `public/locales/{uk,ru,en}/checkout-page.json` содержат полный набор `promocode.*` ключей. В `PromoCodeForm.tsx` остались `defaultValue` fallbacks — можно убрать или оставить (не критично для тестов).
+> - **Централизованные коды** (`src/entities/Cart/model/types/promocodeCodes.ts`): `PROMOCODE_VALIDATION_CODES`, `PROMOCODE_CTA_CODES`, `PROMOCODE_SERVICE_CODES`, `PROMOCODE_CHECKOUT_RACE_CODES` + predicates `isPromocode*Code`. Все потребители (`getPromocodeErrorKey`, `categorizePromocodeError`, `useCheckout`) импортируют отсюда — единственный источник правды.
+> - **Утилита**: `getPromocodeErrorKey(code)` из `@/entities/Cart` — известные validation-коды → `checkout-page:promocode.error.{CODE}`, остальные → `checkout-page:promocode.error.unknown`. Возвращаемый тип — `PromocodeErrorI18nKey` (template literal union), совместим со strict-typing i18next 22.
+> - **Категоризатор**: `categorizePromocodeError(error)` из `@/features/PromoCodeForm/lib/categorizePromocodeError` — возвращает `{kind: 'validation', code: PromocodeValidationCode|null} | {kind: 'cta', code: PromocodeCtaCode} | {kind: 'service'}`. Для неизвестных бизнес-кодов → `{kind: 'validation', code: null}` (форма логирует `console.error`). Для не-business ошибок → `{kind: 'service'}`.
+> - **Listener middleware** (`src/entities/Cart/model/middleware/promocodeInvalidationListener.ts`): матчеры `addProductToCart`, `addManyProductsToCart`, `updateProduct`, `deleteProduct`, `deleteCart` → если `prev.promocode != null && next.promocode === null` → `getNotify({type:'info', content: i18next.t('checkout-page:promocode.toast.cart_changed')}).notify()`. SSR-гард внутри effect.
+> - **CheckoutForm flow**: `useCheckout.submitCheckoutForm` — `try checkout().unwrap()` → `catch`: ветка `isBusinessError(e) && isPromocodeCheckoutRaceCode(code)` → локализованный toast (`t(getPromocodeErrorKey(code), { defaultValue: e.data.error.message })`) + `await dispatch(refetchSession()).unwrap().catch(noop)` + **throw e** (форма видит провал). `isValidationError` → `throw getCheckoutFormErrors(e)`. Все остальные ошибки тоже пробрасываются (no silent swallow). После успешного checkout — `deleteCart` в собственном try/catch (best-effort cleanup, не откатывает успешный заказ).
+> - **Локали**: `public/locales/{uk,ru,en}/checkout-page.json` содержат полный набор `promocode.*` ключей. `defaultValue` fallbacks в `PromoCodeForm.tsx` / listener сняты — i18n catalog обязателен.
 > - **i18n для тестов**: `src/shared/lib/test/i18nForTest.ts` + `src/shared/lib/test/renderComponent.tsx` — существующая инфраструктура.
 > - **MSW**: проверить наличие в `package.json` и существующих handlers (если есть). Если нет — план §11 предполагает MSW есть, но в проекте RTL+Jest+Storybook (см. CLAUDE.md). Если MSW не настроен — оценить scope: либо настройка как часть S3, либо тесты только на mock-fetch.
 >

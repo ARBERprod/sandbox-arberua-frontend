@@ -1,10 +1,12 @@
 # Контракт фронтенду: промокоди (1С-інтеграція)
 
-**Дата:** 2026-05-13
+**Дата:** 2026-05-13 (v3) → 2026-05-14 (v4, post-review)
 **Базовий план:** [2026-04-30-promocode-1c-integration-plan.md](./2026-04-30-promocode-1c-integration-plan.md)
 **Результати розвідки 1С:** [2026-04-30-1c-promo-investigation.md](./2026-04-30-1c-promo-investigation.md)
+**Бек-архітектурні правки після ревʼю:** [test-arberua-backend/docs/2026-05-14-promocode-1c-architecture-revisions.md](../../test-arberua-backend/docs/2026-05-14-promocode-1c-architecture-revisions.md)
 **API base:** `http://localhost:8088/api/v2` (prod URL — окремо)
-**Статус:** v3 (2026-05-13) — виправлено префікс маршрутів `/cart/` → `/cart-se/` (відповідно до існуючої групи в `CoreRouteRegistrar`). Решта правок з v2: §5.5 (bonus mutex), §6 edge case.
+**Статус:** v4 (2026-05-14) — code-review pass. Канонізація `code` на беці, legacy alias `aply-promocode` лишається відкритим (без `auth:sanctum`), idempotency-кеш тепер додатково перевіряє склад кошика, UNIQUE(code,user_id) знята з `promocode_usages` (race resolves через pre-flight 1С + commit-log).
+v3 (2026-05-13) — префікс маршрутів `/cart/` → `/cart-se/`, §5.5 (bonus mutex), §6 edge case.
 
 ---
 
@@ -29,7 +31,9 @@ Content-Type: application/json
 { "code": "SALE15" }
 ```
 
-Правила: `code` — `required|string|max:64`. Кошик мусить мати ≥ 1 позицію.
+Правила: `code` — `required|string|max:64|regex:/^[A-Z0-9_\-]+$/`. Кошик мусить мати ≥ 1 позицію.
+
+**Канонізація на беці (v4):** перед валідацією бек робить `mb_strtoupper(trim($code))`. Тобто `summer`, `SUMMER`, ` Summer ` — еквівалентні запити. Фронт може як завгодно нормалізувати або не нормалізувати ввід; кінцевий regex після канонізації — `^[A-Z0-9_\-]+$`, тож символи на кшталт ZWSP, пробілів усередині, кирилиці, юнікод-zero-width дадуть `422` (валідація request). До v4 такі вводи пропускалися й відбивалися 1С як `NOT_FOUND` — тепер відлам ближче до користувача й без зайвого HTTP-хіта.
 
 **200 OK:**
 ```json
@@ -66,7 +70,11 @@ Authorization: Bearer <token>
 POST /api/v2/cart-se/aply-promocode   ← друкарська помилка, БУДЕ ВИДАЛЕНО
 ```
 
-Той самий контракт, що `/apply-promocode`. Бек логує `legacy aply-promocode endpoint hit`. **Фронт повинен мігрувати на `/apply-promocode` до видалення.** Дата видалення — окремий PR після підтвердження міграції.
+Той самий контракт, що `/apply-promocode`, **АЛЕ маршрут лишається відкритим** — без `auth:sanctum`-middleware на роутингу (v4 правка для backward compatibility деплойнутого старого фронта). Бек логує `legacy aply-promocode endpoint hit`.
+
+Через `auth:sanctum` на новому ендпоінті, неавторизований клієнт отримує `401`. На legacy-alias же неавторизований запит дійде до `ApplyPromocodeAction`, де action сам перевіряє `Auth::user()` і повертає типізований **`422 PROMOCODE_USER_PHONE_MISSING`** (бо 1С потребує телефон). Іншими словами: HTTP-код на гостьовому запиті різний (`401` vs `422`), але контракт помилки той самий через типізований envelope.
+
+**Фронт повинен мігрувати на `/apply-promocode` до видалення.** Дата видалення — окремий PR після підтвердження міграції.
 
 ---
 
@@ -105,7 +113,7 @@ POST /api/v2/cart-se/aply-promocode   ← друкарська помилка, �
 | `PROMOCODE_USER_PHONE_MISSING` | 422 | local | "Заповніть телефон у профілі" + CTA → /profile |
 | `PROMOCODE_NOT_FOUND` | 422 | 1С `Промокод <X> не найден!` | "Промокод не знайдено" |
 | `PROMOCODE_NOT_FOR_WEB` | 422 | 1С `Промокод не действует на сайте!` | "Промокод недійсний для онлайн-замовлень" |
-| `PROMOCODE_ALREADY_USED` | 422 | 1С `Клиент уже использовал промокод!` АБО race на checkout | "Ви вже використовували цей промокод" |
+| `PROMOCODE_ALREADY_USED` | 422 | 1С `Клиент уже использовал промокод!` АБО pre-flight commit-log на checkout | "Ви вже використовували цей промокод" |
 | `PROMOCODE_CLIENT_NOT_FOUND` | 422 | 1С `Клиент не найден!` | "Профіль не знайдено в системі лояльності" |
 | `PROMOCODE_EXPIRED` | 422 | local перевірка `period_to` | "Термін дії промокоду минув" |
 | `PROMOCODE_NO_ELIGIBLE_ITEMS` | 422 | local | "Промокод не діє на товари у кошику" |
@@ -188,11 +196,16 @@ Earn (нарахування) cashback бонусів **не зачіпаєть�
 
 ### 5.4 Checkout
 
-Жодних додаткових дій для фронта. Бек сам:
+Бек сам:
 - фіналізує знижку при створенні замовлення;
 - може повернути `PROMOCODE_ALREADY_USED` / `PROMOCODE_EXPIRED` / `PROMOCODE_NO_ELIGIBLE_ITEMS` як 422 у відповіді на створення замовлення (race condition між пристроями).
 
-Фронт показує `error.message`, повертає користувача на крок кошика, оновлює cart-стейт.
+Контракт `useCheckout.submitCheckoutForm` (`src/features/CheckoutForm/lib/useCheckout.ts`):
+
+1. Гонка по промокоду (`isPromocodeCheckoutRaceCode(code)`): показує локалізований тост (`t(getPromocodeErrorKey(code), { defaultValue: error.message })`), синхронно тягне свіжу сесію (`await dispatch(refetchSession()).unwrap()` з catch-all), **повторно кидає виключення** — форма не вважає сабміт успішним. Помилка `refetchSession` сама — best-effort, користувач уже бачить тост.
+2. `isValidationError(e)` — кидає `getCheckoutFormErrors(e)` (мапінг field-level), потрапляє в `serverErrors` форми.
+3. Інші помилки (network, 5xx, невідомий business code) — пробрасуються `as-is` (no silent swallow). Форма виводить generic-toast і лишає кнопку активною.
+4. На успіх — навігація (URL або `/checkout-success/{order}`), після чого `deleteCart` виконується в окремому `try/catch` як best-effort cleanup. Падіння `deleteCart` (включно з промокодними кодами) **не відкочує** успішний заказ і не показує помилковий race-toast.
 
 ---
 
@@ -204,6 +217,10 @@ Earn (нарахування) cashback бонусів **не зачіпаєть�
 - **Зміна phone у профілі після apply.** Без особливої обробки. Якщо на checkout 1С відмовить — фронт побачить стандартний 422.
 - **Bonus reset after apply** (див. §5.5). Якщо до apply було `bonuses_deducted > 0`, після apply воно стає 0. Single source of truth — response від `/apply-promocode`. Не намагатися «merge'нути» з локальним стейтом.
 - **Re-apply того ж промокоду в межах 60s.** Бек повертає кешовану відповідь (idempotency). `bonuses_deducted` уже буде = 0, повторний toast про reset не показувати (порівнювати з `cart.bonuses_deducted` *до* кліку, не зі станом сервера).
+- **Підряд кілька implicit-мутацій після apply.** Listener порівнює `prev !== null && next === null` — тост спрацьовує лише на **першій** мутації, що скинула промокод. Наступні `null → null` тихі.
+- **Невідомий `error.code` від бекенда.** Категоризатор повертає `{kind: 'validation', code: null}` → форма показує fallback `"Не вдалося застосувати промокод"` і логує payload через `console.error('[PromoCodeForm] unknown business error payload:', err)` (forward-compat).
+- **Empty `error.code`.** `isBusinessError` відхиляє payload з порожнім `code` (контракт вимагає непорожнього коду) — помилка тоді проходить як generic.
+- **Whitespace / zero-width input.** Frontend trim тільки на стандартні пробіли (`String.prototype.trim`). ZWSP-only або інші non-trim unicode символи **не** блокуються — фронт відправляє запит, бек відмовляє `PROMOCODE_NOT_FOUND`.
 
 ---
 
