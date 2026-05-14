@@ -1,7 +1,8 @@
+import i18next from 'i18next';
 import { isBusinessError, isValidationError } from '@/shared/types/type-guards';
 import { CheckoutFormData } from '../model/types/CheckoutFormData';
 import { useCheckoutMutation, useGetDeliveryMethodsQuery, useGetPaymentMethodsQuery } from '../api/checkoutApi';
-import { useDeleteCartMutation } from '@/entities/Cart';
+import { getPromocodeErrorKey, isPromocodeCheckoutRaceCode, useDeleteCartMutation } from '@/entities/Cart';
 import { prepareCheckoutData } from './prepareCheckoutData';
 import { useMemo } from 'react';
 import { checkoutOptionsMapper } from './checkoutOptionsMapper';
@@ -14,12 +15,6 @@ import { refetchSession } from '@/entities/Session';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getNotify } from '@/shared/ui/Notification';
 
-const PROMOCODE_CHECKOUT_ERROR_CODES = new Set<string>([
-  'PROMOCODE_ALREADY_USED',
-  'PROMOCODE_EXPIRED',
-  'PROMOCODE_NO_ELIGIBLE_ITEMS',
-]);
-
 export const useCheckout = () => {
   const { push } = useRouter();
   const dispatch = useAppDispatch();
@@ -29,29 +24,52 @@ export const useCheckout = () => {
   const [deleteCart] = useDeleteCartMutation();
 
   const submitCheckoutForm = async (data: CheckoutFormData) => {
+    let response;
     try {
-      const response = await checkout(
+      response = await checkout(
         prepareCheckoutData(data, deliveryMethods),
       ).unwrap();
-      if (isCheckoutResponseUrlDto(response)) {
-        await push(response.url);
-      } else if (response.order) {
-        await push(routerPaths.checkout_success(response.order));
-      }
-      await deleteCart().unwrap();
     } catch (e) {
-      if (isBusinessError(e) && PROMOCODE_CHECKOUT_ERROR_CODES.has(e.data.error.code)) {
+      if (isBusinessError(e) && isPromocodeCheckoutRaceCode(e.data.error.code)) {
         // Race between devices: promocode invalidated server-side after the
-        // cart was rendered. Surface the backend-localised message and pull
-        // a fresh cart so the user sees the corrected totals.
-        const { notify } = getNotify({ type: 'error', content: e.data.error.message });
-        notify();
-        dispatch(refetchSession());
-        return;
+        // cart was rendered. Show a locale-specific message (backend message
+        // as fallback) and pull a fresh cart so the user sees corrected totals
+        // before re-submitting.
+        const { code, message } = e.data.error;
+        getNotify({
+          type: 'error',
+          content: i18next.t(getPromocodeErrorKey(code), { defaultValue: message }),
+        }).notify();
+        try {
+          await dispatch(refetchSession()).unwrap();
+        } catch {
+          // Best-effort refresh; cart state remains stale but the user is
+          // already informed via the toast above.
+        }
+        // Re-throw so the consuming form treats the submit as failed (keeps
+        // isSubmitting=false, no fake success, no navigation).
+        throw e;
       }
       if (isValidationError(e)) {
         throw getCheckoutFormErrors(e);
       }
+      // Anything else (network, 5xx, unknown business code) — surface to the
+      // form so the user sees an error state instead of a silent no-op.
+      throw e;
+    }
+
+    if (isCheckoutResponseUrlDto(response)) {
+      await push(response.url);
+    } else if (response.order) {
+      await push(routerPaths.checkout_success(response.order));
+    }
+
+    // Cart cleanup is best-effort: a failure here must not roll back the
+    // order or surface a confusing promocode-race toast post-success.
+    try {
+      await deleteCart().unwrap();
+    } catch {
+      // Intentionally swallowed — order is already placed.
     }
   };
 
