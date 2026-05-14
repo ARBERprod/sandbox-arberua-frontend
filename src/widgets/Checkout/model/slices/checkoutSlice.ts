@@ -4,7 +4,6 @@ import { CheckoutSchema } from '../types/checkoutSchema';
 
 const initialState:CheckoutSchema = {
   currentTab: 'new',
-  promoCode: '',
 };
 
 export const checkoutSlice = buildSlice({
@@ -13,9 +12,6 @@ export const checkoutSlice = buildSlice({
   reducers: {
     setTab: (state, action: PayloadAction<'new' | 'regular'>) => {
       state.currentTab = action.payload;
-    },
-    setPromoCode: (state, action: PayloadAction<string>) => {
-      state.promoCode = action.payload;
     },
   },
 

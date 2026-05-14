@@ -28,7 +28,6 @@ interface CheckoutFormProps {
   className?: string;
   initState?: Partial<CheckoutFormData>;
   cartSlot?: ReactElement;
-  promoCode: string;
 }
 
 export const CheckoutForm = memo(({

@@ -28,7 +28,6 @@ export const Checkout = memo(({ className }: CheckoutProps) => {
   } = useAuth();
   const isTablet = useMediaQuery(breakpoints.tablet);
   const currentTab = useSelector(checkoutSelectors.getCurrentTab);
-  const promoCode = useSelector(checkoutSelectors.getPromoCode);
   const { setTab } = useCheckoutActions();
   const showCheckoutCard = isTablet || currentTab === 'regular';
 
@@ -58,7 +57,6 @@ export const Checkout = memo(({ className }: CheckoutProps) => {
         {currentTab === 'new'
                     && (
                       <CheckoutForm
-                        promoCode={promoCode}
                         cartSlot={isTablet ? undefined : <CheckoutCart />}
                         initState={initState}
                       />
