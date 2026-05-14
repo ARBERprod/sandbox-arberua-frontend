@@ -27,13 +27,10 @@ startListening({
     const next = listenerApi.getState().cart.cartData?.promocode ?? null;
 
     if (prev !== null && next === null) {
-      const { notify } = getNotify({
+      getNotify({
         type: 'info',
-        content: i18next.t('checkout-page:promocode.toast.cart_changed', {
-          defaultValue: 'Кошик змінено, додайте промокод повторно',
-        }) as string,
-      });
-      notify();
+        content: i18next.t('checkout-page:promocode.toast.cart_changed'),
+      }).notify();
     }
   },
 });

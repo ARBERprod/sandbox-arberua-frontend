@@ -1,4 +1,5 @@
 import { configureStore, createAction, Reducer } from '@reduxjs/toolkit';
+import type { PromocodeMeta } from '../../types/types';
 
 // Mock the notification surface so we can assert side effects without touching
 // react-toastify. notify() is the function the listener actually invokes.
@@ -12,13 +13,11 @@ jest.mock('i18next', () => ({
   t: jest.fn((_key: string, opts?: { defaultValue?: string }) => opts?.defaultValue ?? _key),
 }));
 
-/* eslint-disable @typescript-eslint/no-var-requires, global-require, import/first */
+/* eslint-disable @typescript-eslint/no-var-requires, global-require */
 const { getNotify } = require('@/shared/ui/Notification') as { getNotify: jest.Mock };
 const { promocodeInvalidationListener } = require('../promocodeInvalidationListener');
 const { cartApi } = require('../../../api/cartApi');
 /* eslint-enable */
-
-import type { PromocodeMeta } from '../../types/types';
 
 type CartState = { cartData: { promocode: PromocodeMeta | null } | null };
 
@@ -32,14 +31,16 @@ const seed = createAction<{ promocode: PromocodeMeta | null }>('test/seed');
 // Tiny cart reducer that mirrors prod behaviour: any RTKQ-fulfilled mutation
 // payload replaces cartData entirely. That way prev/next promocode tracks the
 // action payload — same invariant the real cartSlice maintains.
-const cartReducer: Reducer<CartState, any> = (state = { cartData: null }, action) => {
+const initialCart: CartState = { cartData: null };
+const cartReducer: Reducer<CartState, any> = (state, action) => {
+  const current = state ?? initialCart;
   if (seed.match(action)) {
     return { cartData: { promocode: action.payload.promocode } };
   }
   if (action?.type === 'api/executeMutation/fulfilled') {
     return { cartData: { promocode: action.payload?.promocode ?? null } };
   }
-  return state;
+  return current;
 };
 
 const makeStore = () => configureStore({
@@ -49,11 +50,19 @@ const makeStore = () => configureStore({
 });
 
 // Hand-rolled fulfilled action matching `cartApi.endpoints.X.matchFulfilled`.
-const fulfilledAction = (endpointName: string, payload: Partial<{ promocode: PromocodeMeta | null }> = {}) => ({
+const fulfilledAction = (
+  endpointName: string,
+  payload: Partial<{ promocode: PromocodeMeta | null }> = {},
+) => ({
   type: 'api/executeMutation/fulfilled',
   payload,
   meta: {
-    arg: { endpointName, type: 'mutation', originalArgs: undefined, fixedCacheKey: undefined },
+    arg: {
+      endpointName,
+      type: 'mutation',
+      originalArgs: undefined,
+      fixedCacheKey: undefined,
+    },
     requestId: 'req-id',
     requestStatus: 'fulfilled',
     fulfilledTimeStamp: Date.now(),
@@ -91,7 +100,7 @@ describe('promocodeInvalidationListener', () => {
       expect(getNotify).toHaveBeenCalledTimes(1);
       expect(getNotify).toHaveBeenCalledWith({
         type: 'info',
-        content: expect.stringContaining('Кошик змінено'),
+        content: 'checkout-page:promocode.toast.cart_changed',
       });
       expect(mockNotify).toHaveBeenCalledTimes(1);
     });
@@ -148,6 +157,36 @@ describe('promocodeInvalidationListener', () => {
 
       store.dispatch(fulfilledAction('removePromocode', { promocode: null }));
       expect(getNotify).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('contract drift', () => {
+    it('applyPromocode.matchFulfilled with promocode: null (server silently rejected) → no toast', () => {
+      // Backend contract: apply should return promocode != null on success.
+      // But even if it ever ships a null in the payload, the listener must
+      // still ignore apply/remove matchers — only implicit mutations toast.
+      const store = makeStore();
+      store.dispatch(seed({ promocode: null }));
+      jest.clearAllMocks();
+
+      store.dispatch(fulfilledAction('applyPromocode', { promocode: null }));
+      expect(getNotify).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('back-to-back implicit mutations (Edge Case 3 — documents toast multiplicity)', () => {
+    it('fires the toast on the first invalidating mutation; subsequent null→null mutations are silent', () => {
+      const store = makeStore();
+      store.dispatch(seed({ promocode: APPLIED }));
+      jest.clearAllMocks();
+
+      // 1st mutation invalidates the promocode → one toast.
+      store.dispatch(fulfilledAction('addProductToCart', { promocode: null }));
+      // 2nd mutation finds promocode already null → no second toast (guard:
+      // `prev !== null && next === null`).
+      store.dispatch(fulfilledAction('updateProduct', { promocode: null }));
+
+      expect(mockNotify).toHaveBeenCalledTimes(1);
     });
   });
 
