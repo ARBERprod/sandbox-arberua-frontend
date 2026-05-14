@@ -64,6 +64,7 @@ export function isBusinessError<TCode extends string = string>(
     && error.data.error !== null
     && ('code' in error.data.error)
     && typeof error.data.error.code === 'string'
+    && error.data.error.code.length > 0
     && ('message' in error.data.error)
     && typeof error.data.error.message === 'string'
   );

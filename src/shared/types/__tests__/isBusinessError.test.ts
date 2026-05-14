@@ -58,6 +58,13 @@ describe('isBusinessError type-guard', () => {
     })).toBe(false);
   });
 
+  it('rejects when data.error.code is an empty string (contract requires a non-empty code)', () => {
+    expect(isBusinessError({
+      status: 422,
+      data: { success: false, error: { code: '', message: 'msg' } },
+    })).toBe(false);
+  });
+
   it('rejects when data is not an object', () => {
     expect(isBusinessError({ status: 422, data: 'string-body' })).toBe(false);
   });
@@ -86,8 +93,9 @@ describe('isBusinessError type-guard', () => {
     };
     if (isBusinessError<PromoCode>(err)) {
       // Compile-time check: code should narrow to PromoCode union.
-      const code: PromoCode = err.data.error.code;
-      expect(code).toBe('PROMOCODE_EXPIRED');
+      const { code } = err.data.error;
+      const _typed: PromoCode = code;
+      expect(_typed).toBe('PROMOCODE_EXPIRED');
     } else {
       throw new Error('expected isBusinessError to narrow');
     }
