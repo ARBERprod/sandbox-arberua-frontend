@@ -5,8 +5,6 @@ import userEvent from '@testing-library/user-event';
 import { renderComponent } from '@/shared/lib/test/renderComponent';
 import { PromoCodeForm } from './PromoCodeForm';
 
-const V2 = process.env.NEXT_PUBLIC_API_URL_V2 || 'https://api.arber.ua/v2';
-
 const cartWithPromo = {
   totals: [],
   items: [],
@@ -49,7 +47,7 @@ const queueRemoveResponse = (response: (req: any, res: any, ctx: any) => any) =>
   server.use(rest.delete('*/cart-se/remove-promocode', response));
 };
 
-beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
+beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
@@ -195,6 +193,18 @@ describe('PromoCodeForm integration (acceptance scenarios §7)', () => {
       await userEvent.click(screen.getByRole('button', { name: /застосувати/i }));
 
       await waitFor(() => expect(screen.getByText(/не вдалося застосувати промокод/i)).toBeInTheDocument());
+      // The form must log unknown business-error payloads (forward-compat hook):
+      // see PromoCodeForm:43-47. If this expectation fails, the dead-code regression has returned.
+      expect(errorSpy).toHaveBeenCalledWith(
+        '[PromoCodeForm] unknown business error payload:',
+        expect.objectContaining({
+          status: 422,
+          data: expect.objectContaining({
+            success: false,
+            error: expect.objectContaining({ code: 'PROMOCODE_BRAND_NEW_THING' }),
+          }),
+        }),
+      );
       errorSpy.mockRestore();
     });
   });

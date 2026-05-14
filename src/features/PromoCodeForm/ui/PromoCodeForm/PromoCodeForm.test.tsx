@@ -10,31 +10,38 @@ import { createMockRouter } from '@/shared/lib/test/createMockRouter';
 import type { PromocodeMeta } from '@/entities/Cart';
 
 // Mock only the two RTK Query hooks the component pulls from the barrel.
-// We re-export everything else as-is. requireActual on the barrel triggers
-// circular initialization of cartSlice — but in this test we do NOT call
-// renderComponent (no real store is built), so cartReducer/cartApi are
-// never touched. Mock factory simply replaces the two named exports.
-jest.mock('@/entities/Cart', () => ({
-  __esModule: true,
-  useApplyPromocodeMutation: jest.fn(),
-  useRemovePromocodeMutation: jest.fn(),
-  cartSelectors: {
-    getPromocode: (state: any) => state?.cart?.cartData?.promocode ?? null,
-  },
-}));
+// We re-export the centralised promocode-code predicates and getPromocodeErrorKey
+// from their concrete modules (no circular init through cartSlice). The mock
+// factory replaces the entire @/entities/Cart barrel — every symbol used at
+// render time must be re-declared here.
+/* eslint-disable @typescript-eslint/no-var-requires, global-require */
+jest.mock('@/entities/Cart', () => {
+  const codes = require('@/entities/Cart/model/types/promocodeCodes');
+  const keyMod = require('@/entities/Cart/lib/getPromocodeErrorKey');
+  return {
+    __esModule: true,
+    useApplyPromocodeMutation: jest.fn(),
+    useRemovePromocodeMutation: jest.fn(),
+    cartSelectors: {
+      getPromocode: (state: any) => state?.cart?.cartData?.promocode ?? null,
+    },
+    ...codes,
+    ...keyMod,
+  };
+});
+/* eslint-enable @typescript-eslint/no-var-requires, global-require */
 
 /* eslint-disable @typescript-eslint/no-var-requires, global-require */
-const { useApplyPromocodeMutation, useRemovePromocodeMutation } =
-  require('@/entities/Cart') as {
-    useApplyPromocodeMutation: jest.Mock;
-    useRemovePromocodeMutation: jest.Mock;
-  };
+const { useApplyPromocodeMutation, useRemovePromocodeMutation } = require('@/entities/Cart') as {
+  useApplyPromocodeMutation: jest.Mock;
+  useRemovePromocodeMutation: jest.Mock;
+};
 /* eslint-enable @typescript-eslint/no-var-requires, global-require */
 
 // eslint-disable-next-line import/first
 import { PromoCodeForm } from './PromoCodeForm';
 
-const makeUnwrap = (resolved: unknown = undefined, rejected?: unknown) => () => ({
+const makeUnwrap = (rejected?: unknown, resolved?: unknown) => () => ({
   unwrap: () => (rejected ? Promise.reject(rejected) : Promise.resolve(resolved)),
 });
 
@@ -133,6 +140,45 @@ describe('PromoCodeForm', () => {
       await act(async () => { await Promise.resolve(); });
       expect(trigger).toHaveBeenCalledWith({ code: 'SALE15' });
     });
+
+    it('Edge Case 5: passes a long code through verbatim without truncation', async () => {
+      const trigger = jest.fn(makeUnwrap());
+      setApply({}, trigger);
+      renderWithPromocode(null);
+      const longCode = 'A'.repeat(120);
+      await userEvent.type(screen.getByPlaceholderText(/промокод/i), longCode);
+      await userEvent.click(screen.getByRole('button', { name: /застосувати/i }));
+      await act(async () => { await Promise.resolve(); });
+      expect(trigger).toHaveBeenCalledWith({ code: longCode });
+    });
+
+    it('Edge Case 5: a zero-width-space–only input enables Apply (frontend trim() does not strip ZWSP — backend rejects via PROMOCODE_NOT_FOUND)', async () => {
+      const trigger = jest.fn(makeUnwrap());
+      setApply({}, trigger);
+      renderWithPromocode(null);
+      // U+200B is NOT whitespace per String.prototype.trim() spec.
+      const zwsp = '​';
+      await userEvent.type(screen.getByPlaceholderText(/промокод/i), zwsp);
+      expect(screen.getByRole('button', { name: /застосувати/i })).toBeEnabled();
+      await userEvent.click(screen.getByRole('button', { name: /застосувати/i }));
+      await act(async () => { await Promise.resolve(); });
+      expect(trigger).toHaveBeenCalledWith({ code: zwsp });
+    });
+  });
+
+  describe('Edge Case 2: applyPromocode succeeds but cart.promocode stays null', () => {
+    it('keeps the empty state (input visible, no error) — render reflects cart, not mutation success', async () => {
+      const trigger = jest.fn(makeUnwrap());
+      setApply({}, trigger);
+      // Cart state still has promocode === null even after a "successful" apply.
+      // The component's `applied` selector reads cart, so the empty view persists.
+      renderWithPromocode(null);
+      await userEvent.type(screen.getByPlaceholderText(/промокод/i), 'NOAPPLY');
+      await userEvent.click(screen.getByRole('button', { name: /застосувати/i }));
+      await act(async () => { await Promise.resolve(); });
+      expect(screen.getByPlaceholderText(/промокод/i)).toBeInTheDocument();
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    });
   });
 
   describe('applied state', () => {
@@ -176,7 +222,7 @@ describe('PromoCodeForm', () => {
       expect(screen.getByPlaceholderText(/промокод/i)).toBeInTheDocument();
     });
 
-    it('validation: unknown business code falls back to "Не вдалося застосувати промокод"', () => {
+    it('validation: unknown business code falls back to "Не вдалося застосувати промокод" and logs to console', () => {
       setApply({
         isError: true,
         isUninitialized: false,
@@ -184,9 +230,18 @@ describe('PromoCodeForm', () => {
       });
       const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
       renderWithPromocode(null);
-      // For unknown business code, categorizePromocodeError returns kind: 'validation'
-      // (only non-business errors go to service-banner).
+      // Unknown business codes map to { kind: 'validation', code: null } so the
+      // form's forward-compat console.error branch fires (PromoCodeForm:43-47).
       expect(screen.getByText(/не вдалося застосувати промокод/i)).toBeInTheDocument();
+      expect(errorSpy).toHaveBeenCalledWith(
+        '[PromoCodeForm] unknown business error payload:',
+        expect.objectContaining({
+          status: 422,
+          data: expect.objectContaining({
+            error: expect.objectContaining({ code: 'PROMOCODE_FROM_THE_FUTURE' }),
+          }),
+        }),
+      );
       errorSpy.mockRestore();
     });
 

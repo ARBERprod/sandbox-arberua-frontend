@@ -1,4 +1,4 @@
-import { getPromocodeErrorKey } from '../getPromocodeErrorKey';
+import { getPromocodeErrorKey } from './getPromocodeErrorKey';
 
 describe('getPromocodeErrorKey', () => {
   const knownCodes = [

@@ -24,14 +24,14 @@ describe('categorizePromocodeError', () => {
   describe('Service category', () => {
     it('categorizes PROMOCODE_SERVICE_UNAVAILABLE as { kind: "service" }', () => {
       expect(categorizePromocodeError(makeBusinessError('PROMOCODE_SERVICE_UNAVAILABLE', 503)))
-        .toEqual({ kind: 'service', code: 'PROMOCODE_SERVICE_UNAVAILABLE' });
+        .toEqual({ kind: 'service' });
     });
 
-    it('falls back to { kind: "service", code: null } for non-business errors (network / 5xx)', () => {
+    it('falls back to { kind: "service" } for non-business errors (network / 5xx)', () => {
       expect(categorizePromocodeError({ status: 'FETCH_ERROR', error: 'Network error' }))
-        .toEqual({ kind: 'service', code: null });
-      expect(categorizePromocodeError(undefined)).toEqual({ kind: 'service', code: null });
-      expect(categorizePromocodeError(null)).toEqual({ kind: 'service', code: null });
+        .toEqual({ kind: 'service' });
+      expect(categorizePromocodeError(undefined)).toEqual({ kind: 'service' });
+      expect(categorizePromocodeError(null)).toEqual({ kind: 'service' });
     });
   });
 
@@ -51,9 +51,9 @@ describe('categorizePromocodeError', () => {
         .toEqual({ kind: 'validation', code });
     });
 
-    it('categorizes unknown business code as validation (fallback)', () => {
+    it('categorizes unknown business code as validation with code: null (so the form logs)', () => {
       expect(categorizePromocodeError(makeBusinessError('PROMOCODE_FUTURE_CODE')))
-        .toEqual({ kind: 'validation', code: 'PROMOCODE_FUTURE_CODE' });
+        .toEqual({ kind: 'validation', code: null });
     });
   });
 });

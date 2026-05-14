@@ -1,20 +1,32 @@
 import { isBusinessError } from '@/shared/types/type-guards';
+import {
+  isPromocodeCtaCode,
+  isPromocodeServiceCode,
+  isPromocodeValidationCode,
+  PromocodeCtaCode,
+  PromocodeValidationCode,
+} from '@/entities/Cart';
 
 export type PromocodeErrorCategory =
-  | { kind: 'validation'; code: string | null }
-  | { kind: 'cta'; code: 'PROMOCODE_USER_PHONE_MISSING' | 'PROMOCODE_CLIENT_NOT_FOUND' }
-  | { kind: 'service'; code: 'PROMOCODE_SERVICE_UNAVAILABLE' | null };
+  | { kind: 'validation'; code: PromocodeValidationCode | null }
+  | { kind: 'cta'; code: PromocodeCtaCode }
+  | { kind: 'service' };
 
 export const categorizePromocodeError = (error: unknown): PromocodeErrorCategory => {
   if (isBusinessError(error)) {
     const { code } = error.data.error;
-    if (code === 'PROMOCODE_USER_PHONE_MISSING' || code === 'PROMOCODE_CLIENT_NOT_FOUND') {
+    if (isPromocodeCtaCode(code)) {
       return { kind: 'cta', code };
     }
-    if (code === 'PROMOCODE_SERVICE_UNAVAILABLE') {
-      return { kind: 'service', code };
+    if (isPromocodeServiceCode(code)) {
+      return { kind: 'service' };
     }
-    return { kind: 'validation', code };
+    if (isPromocodeValidationCode(code)) {
+      return { kind: 'validation', code };
+    }
+    // Unknown business code — fall back to "unknown" rendering and signal the
+    // null so the form logs the unrecognised payload.
+    return { kind: 'validation', code: null };
   }
-  return { kind: 'service', code: null };
+  return { kind: 'service' };
 };
