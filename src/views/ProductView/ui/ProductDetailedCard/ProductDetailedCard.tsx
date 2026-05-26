@@ -18,6 +18,7 @@ import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/li
 import { useRouter } from 'next/router';
 import { useViewContentMutation } from '@/entities/Events';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
+import { NightSaleTimer } from '@/features/NightSaleTimer';
 
 interface ProductDetailedCardProps {
   className?: string;
@@ -133,6 +134,7 @@ export const ProductDetailedCard = memo(({
         <Gallery images={product.pictures} />
       </div>
       <div className={styles.right}>
+        <NightSaleTimer />
         <ProductDetails
           article={product.article}
           rating={product.comments.rating || 0}

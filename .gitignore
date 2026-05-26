@@ -40,3 +40,5 @@ next-env.d.ts
 
 .ecosystem.config.js
 /.playwright-mcp/
+/docs/
+/.mcp.json

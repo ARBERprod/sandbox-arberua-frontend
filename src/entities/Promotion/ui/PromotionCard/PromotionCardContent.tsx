@@ -1,16 +1,18 @@
 import { useTranslation } from 'next-i18next';
 import { AppImage } from '@/shared/ui/AppImage';
 import { Typography } from '@/shared/ui/Typography';
+import { formatCountdown } from '@/shared/lib/promotions/formatCountdown';
 import styles from './PromotionCard.module.scss';
 import { PromotionsItem } from '../../model/types/Promotions';
 import { memo } from 'react';
 
 interface PromotionCardContentProps {
     promotion: PromotionsItem;
-    formattedDate: string;
+    diff: number;
+    isExpired: boolean;
 }
 
-export const PromotionCardContent = memo(({ promotion, formattedDate }: PromotionCardContentProps) => {
+export const PromotionCardContent = memo(({ promotion, diff, isExpired }: PromotionCardContentProps) => {
   const { t } = useTranslation();
 
   return (
@@ -25,7 +27,7 @@ export const PromotionCardContent = memo(({ promotion, formattedDate }: Promotio
           {promotion.title}
         </Typography>
         {
-          promotion.has_seconds_until_end > 0 ? (
+          !isExpired ? (
             <Typography
               color="red"
               variant="body-2"
@@ -34,7 +36,7 @@ export const PromotionCardContent = memo(({ promotion, formattedDate }: Promotio
               {t('end_of_promotion')}
               :
               {' '}
-              {formattedDate}
+              {formatCountdown(diff, t)}
             </Typography>
           ) : (
             <Typography
