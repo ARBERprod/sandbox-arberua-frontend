@@ -62,13 +62,13 @@ describe('ProductDetailedCard more_colors heading', () => {
     render(
       <ProductDetailedCard product={{ ...mockDetailedProduct, color_variants: variants }} />,
     );
-    expect(screen.getByText('product-card:more_colors')).toBeInTheDocument();
+    expect(screen.getByText('more_colors')).toBeInTheDocument();
   });
 
   it('does not render the more_colors heading when there are no color variants', () => {
     render(
       <ProductDetailedCard product={{ ...mockDetailedProduct, color_variants: [] }} />,
     );
-    expect(screen.queryByText('product-card:more_colors')).not.toBeInTheDocument();
+    expect(screen.queryByText('more_colors')).not.toBeInTheDocument();
   });
 });
