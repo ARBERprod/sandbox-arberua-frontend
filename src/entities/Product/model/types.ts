@@ -45,6 +45,15 @@ export interface Product {
   discount?: string;
 }
 
+export type ProductColorVariant = {
+  id: string;
+  url: string;
+  color_value: string;
+  color_title: string;
+  is_current: boolean;
+  is_available: boolean;
+};
+
 export interface DetailedProduct {
   id: string;
   parent_id: string;
@@ -68,6 +77,7 @@ export interface DetailedProduct {
   old_price: Price | false;
   skus: ProductSku[] | null;
   sizing_type: SizingType;
+  color_variants: ProductColorVariant[];
 }
 
 export type ProductQuantity = {
@@ -84,4 +94,6 @@ export type ProductPickerSize = {
 export type ProductPickerColor = {
   url: string;
   value: string;
+  title?: string; // tooltip / aria-label
+  isAvailable?: boolean; // false → dimmed
 };
