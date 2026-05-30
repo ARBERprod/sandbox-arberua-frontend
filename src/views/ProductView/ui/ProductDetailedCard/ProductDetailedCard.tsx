@@ -1,5 +1,5 @@
 import {
-  memo, useEffect, useState,
+  memo, useEffect, useMemo, useState,
 } from 'react';
 import cn from 'classnames';
 import {
@@ -27,6 +27,8 @@ interface ProductDetailedCardProps {
   className?: string;
   product: DetailedProduct;
 }
+
+const productHref = (slug: string) => routerPaths[Routes.PRODUCT](slug);
 
 export const ProductDetailedCard = memo(({
   className,
@@ -130,11 +132,14 @@ export const ProductDetailedCard = memo(({
 
   const { price, oldPrice } = getItemPrices(product, chosenSku);
 
-  const productHref = (slug: string) => routerPaths[Routes.PRODUCT](slug);
-  const colorVariants = product.color_variants ?? [];
-  const currentVariant = colorVariants.find((v) => v.is_current);
-  const colorSlot = colorVariants.length
-    ? (
+  const colorSlot = useMemo(() => {
+    const colorVariants = product.color_variants ?? [];
+    if (!colorVariants.length) {
+      return undefined;
+    }
+    const currentVariant = colorVariants.find((v) => v.is_current);
+
+    return (
       <ProductColorModifications
         colors={colorVariants.map((v) => ({
           value: v.color_value,
@@ -150,8 +155,8 @@ export const ProductDetailedCard = memo(({
           }
           : undefined}
       />
-    )
-    : undefined;
+    );
+  }, [product.color_variants]);
 
   return (
     <div
