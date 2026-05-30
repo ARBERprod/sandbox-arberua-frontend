@@ -27,10 +27,10 @@ export const ProductDetailsDefault: Story = {
       color: (
         <ProductColorModifications
           colors={[
-            { value: 'red', url: '/red' },
-            { value: 'green', url: '/' },
+            { value: 'red', url: '/red', title: 'Красный' },
+            { value: 'green', url: '/', title: 'Зелёный' },
           ]}
-          activeColor={{ url: '/red', value: 'red' }}
+          activeColor={{ url: '/red', value: 'red', title: 'Красный' }}
         />
       ),
       size: (
@@ -53,10 +53,10 @@ export const ProductDetailsWithSlotsColor: Story = {
       color: (
         <ProductColorModifications
           colors={[
-            { value: 'red', url: '/red' },
-            { value: 'green', url: '/' },
+            { value: 'red', url: '/red', title: 'Красный' },
+            { value: 'green', url: '/', title: 'Зелёный' },
           ]}
-          activeColor={{ url: '/red', value: 'red' }}
+          activeColor={{ url: '/red', value: 'red', title: 'Красный' }}
         />
       ),
     },
@@ -91,15 +91,69 @@ export const ProductDetailsWithSlotsSizeColor: Story = {
       color: (
         <ProductColorModifications
           colors={[
-            { value: 'red', url: '/red' },
-            { value: 'green', url: '/' },
+            { value: 'red', url: '/red', title: 'Красный' },
+            { value: 'green', url: '/', title: 'Зелёный' },
           ]}
-          activeColor={{ url: '/red', value: 'red' }}
+          activeColor={{ url: '/red', value: 'red', title: 'Красный' }}
         />
       ),
       size: (
         <ProductSkus
           skus={getMockSkus()}
+        />
+      ),
+    },
+  },
+};
+
+export const ProductDetailsWithSlotsColorUnavailable: Story = {
+  args: {
+    title: 'Жакет женский Arber голубого цвета',
+    price: getMockPrice(),
+    oldPrice: getMockPrice(),
+    canWriteOff: 100,
+    cashback: 100,
+    slots: {
+      color: (
+        <ProductColorModifications
+          colors={[
+            {
+              value: '#000000', url: '/black', title: 'Чёрный', isAvailable: true,
+            },
+            {
+              value: '#1d4ed8', url: '/blue', title: 'Синий', isAvailable: false,
+            },
+            {
+              value: '#9ca3af', url: '/grey', title: 'Серый', isAvailable: false,
+            },
+          ]}
+          activeColor={{
+            url: '/black', value: '#000000', title: 'Чёрный', isAvailable: true,
+          }}
+        />
+      ),
+    },
+  },
+};
+
+export const ProductDetailsWithSlotsColorSingle: Story = {
+  args: {
+    title: 'Жакет женский Arber голубого цвета',
+    price: getMockPrice(),
+    oldPrice: getMockPrice(),
+    canWriteOff: 100,
+    cashback: 100,
+    slots: {
+      color: (
+        <ProductColorModifications
+          colors={[
+            {
+              value: '#7c2d12', url: '/brown', title: 'Коричневый', isAvailable: true,
+            },
+          ]}
+          activeColor={{
+            url: '/brown', value: '#7c2d12', title: 'Коричневый', isAvailable: true,
+          }}
         />
       ),
     },
