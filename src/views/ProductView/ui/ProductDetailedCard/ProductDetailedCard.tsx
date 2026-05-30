@@ -135,26 +135,21 @@ export const ProductDetailedCard = memo(({
   const currentVariant = colorVariants.find((v) => v.is_current);
   const colorSlot = colorVariants.length
     ? (
-      <>
-        <Typography variant="body-3" color="grey" className="mb-3">
-          {t('product-card:more_colors')}
-        </Typography>
-        <ProductColorModifications
-          colors={colorVariants.map((v) => ({
-            value: v.color_value,
-            url: productHref(v.url),
-            title: v.color_title,
-            isAvailable: v.is_available,
-          }))}
-          activeColor={currentVariant
-            ? {
-              value: currentVariant.color_value,
-              url: productHref(currentVariant.url),
-              title: currentVariant.color_title,
-            }
-            : undefined}
-        />
-      </>
+      <ProductColorModifications
+        colors={colorVariants.map((v) => ({
+          value: v.color_value,
+          url: productHref(v.url),
+          title: v.color_title,
+          isAvailable: v.is_available,
+        }))}
+        activeColor={currentVariant
+          ? {
+            value: currentVariant.color_value,
+            url: productHref(currentVariant.url),
+            title: currentVariant.color_title,
+          }
+          : undefined}
+      />
     )
     : undefined;
 
