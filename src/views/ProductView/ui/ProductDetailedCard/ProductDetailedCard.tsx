@@ -2,7 +2,10 @@ import {
   memo, useEffect, useState,
 } from 'react';
 import cn from 'classnames';
-import { DetailedProduct, getItemPrices, ProductDetails } from '@/entities/Product';
+import {
+  DetailedProduct, getItemPrices, ProductColorModifications, ProductDetails,
+} from '@/entities/Product';
+import { Routes, routerPaths } from '@/shared/config/router';
 import { Gallery } from '@/shared/ui/Gallery';
 import { useTranslation } from 'next-i18next';
 import { AccordionItem } from '@/shared/ui/Accordion/AccordionItem';
@@ -126,6 +129,35 @@ export const ProductDetailedCard = memo(({
   }, [product, chosenSku, clientId, userData, eventId]);
 
   const { price, oldPrice } = getItemPrices(product, chosenSku);
+
+  const productHref = (slug: string) => routerPaths[Routes.PRODUCT](slug);
+  const colorVariants = product.color_variants ?? [];
+  const currentVariant = colorVariants.find((v) => v.is_current);
+  const colorSlot = colorVariants.length
+    ? (
+      <>
+        <Typography variant="body-3" color="grey" className="mb-3">
+          {t('product-card:more_colors')}
+        </Typography>
+        <ProductColorModifications
+          colors={colorVariants.map((v) => ({
+            value: v.color_value,
+            url: productHref(v.url),
+            title: v.color_title,
+            isAvailable: v.is_available,
+          }))}
+          activeColor={currentVariant
+            ? {
+              value: currentVariant.color_value,
+              url: productHref(currentVariant.url),
+              title: currentVariant.color_title,
+            }
+            : undefined}
+        />
+      </>
+    )
+    : undefined;
+
   return (
     <div
       className={cn(styles.root, className)}
@@ -143,6 +175,7 @@ export const ProductDetailedCard = memo(({
           oldPrice={oldPrice}
           cashback={product.bonus_accrual}
           slots={{
+            color: colorSlot,
             actions: (
               <ProductCardActions
                 productId={product.id}

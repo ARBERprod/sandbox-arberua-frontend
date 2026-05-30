@@ -100,4 +100,5 @@ export const getMockDetailedProduct = (options?: {
   brand: faker.company.name(),
   parent_id: faker.datatype.uuid(),
   sizing_type: faker.helpers.arrayElement(['man', 'woman', 'shoes'] as const),
+  color_variants: [],
 });
