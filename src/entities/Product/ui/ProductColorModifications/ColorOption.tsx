@@ -17,7 +17,14 @@ export const ColorOption = ({
   <Link
     href={color.url}
     onClick={onClick}
+    aria-label={color.title ?? color.value}
+    title={color.title}
+    data-active={active || undefined}
+    data-unavailable={color.isAvailable === false || undefined}
     style={{ '--color': color.value } as CSSProperties}
-    className={cn(styles.color, { [styles.active]: active }, className)}
+    className={cn(styles.color, {
+      [styles.active]: active,
+      [styles.unavailable]: color.isAvailable === false,
+    }, className)}
   />
 );

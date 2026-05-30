@@ -9,6 +9,11 @@
   &.active {
     box-shadow: 0 0 0 0.5px #5c5c5c, 0 0 0 2px var(--white), 0 0 0 2.5px #5c5c5c;
   }
+
+  // Dimmed but still clickable: the variant page itself shows the out-of-stock state.
+  &.unavailable {
+    opacity: .4;
+  }
 }
 
 
