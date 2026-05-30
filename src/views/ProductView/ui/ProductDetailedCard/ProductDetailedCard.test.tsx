@@ -22,12 +22,6 @@ jest.mock('next/link', () => ({
   default: ({ children, ...props }: any) => <a {...props}>{children}</a>,
 }));
 
-// Identity proxy so swatch CSS-module modifier classes (active) survive the style mock.
-jest.mock(
-  '@/entities/Product/ui/ProductColorModifications/ProductColorModifications.module.scss',
-  () => new Proxy({}, { get: (_t, prop) => String(prop) }),
-);
-
 // Passthrough translation so heading keys are deterministic and i18n is not required.
 jest.mock('next-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
@@ -98,15 +92,15 @@ describe('ProductDetailedCard color slot wiring', () => {
     expect(screen.getByRole('link', { name: 'Brown' })).toBeInTheDocument();
   });
 
-  it('marks the is_current variant as active', () => {
+  it('marks the is_current variant as active via data-active', () => {
     renderCard([
       variant({
         id: '1', url: 'product-1-black', color_title: 'Black', is_current: true,
       }),
       variant({ id: '2', url: 'product-1-brown', color_title: 'Brown' }),
     ]);
-    expect(screen.getByRole('link', { name: 'Black' })).toHaveClass('active');
-    expect(screen.getByRole('link', { name: 'Brown' })).not.toHaveClass('active');
+    expect(screen.getByRole('link', { name: 'Black' })).toHaveAttribute('data-active');
+    expect(screen.getByRole('link', { name: 'Brown' })).not.toHaveAttribute('data-active');
   });
 
   it('renders without an active swatch and does not crash when no variant is current', () => {
@@ -114,8 +108,8 @@ describe('ProductDetailedCard color slot wiring', () => {
       variant({ id: '1', url: 'product-1-black', color_title: 'Black' }),
       variant({ id: '2', url: 'product-1-brown', color_title: 'Brown' }),
     ]);
-    expect(screen.getByRole('link', { name: 'Black' })).not.toHaveClass('active');
-    expect(screen.getByRole('link', { name: 'Brown' })).not.toHaveClass('active');
+    expect(screen.getByRole('link', { name: 'Black' })).not.toHaveAttribute('data-active');
+    expect(screen.getByRole('link', { name: 'Brown' })).not.toHaveAttribute('data-active');
   });
 
   it('builds each swatch href via routerPaths, not the bare API slug', () => {
