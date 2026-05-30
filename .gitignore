@@ -42,3 +42,6 @@ next-env.d.ts
 /.playwright-mcp/
 /docs/
 /.mcp.json
+
+state/
+__pycache__/
