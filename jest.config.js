@@ -24,6 +24,7 @@ module.exports = async () => {
       ...nextJestConfig.moduleNameMapper,
       '^swiper/css.*$': '<rootDir>/jest/jestStyleMock.js',
       '\\.svg$': '<rootDir>/jest/jestMockSvg.js',
+      '\\.module\\.(css|scss)$': '<rootDir>/jest/jestCssModuleMock.js',
       '\\.(css|scss)$': '<rootDir>/jest/jestStyleMock.js',
       '^@/(.*)$': '<rootDir>/src/$1',
     },

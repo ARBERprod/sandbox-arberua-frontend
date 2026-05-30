@@ -19,17 +19,17 @@ describe('ColorOption', () => {
     expect(link).toHaveAttribute('title', 'Black');
   });
 
-  it('exposes data-unavailable only when isAvailable === false', () => {
+  it('applies the unavailable class only when isAvailable === false', () => {
     const { rerender } = render(
       <ColorOption color={{ ...baseColor, isAvailable: false }} active={false} />,
     );
-    expect(screen.getByRole('link')).toHaveAttribute('data-unavailable');
+    expect(screen.getByRole('link')).toHaveClass('unavailable');
 
     rerender(<ColorOption color={{ ...baseColor, isAvailable: true }} active={false} />);
-    expect(screen.getByRole('link')).not.toHaveAttribute('data-unavailable');
+    expect(screen.getByRole('link')).not.toHaveClass('unavailable');
 
     rerender(<ColorOption color={baseColor} active={false} />);
-    expect(screen.getByRole('link')).not.toHaveAttribute('data-unavailable');
+    expect(screen.getByRole('link')).not.toHaveClass('unavailable');
   });
 
   it('keeps the swatch clickable (a real link) when unavailable', () => {
