@@ -119,7 +119,9 @@ describe('ProductDetailedCard color slot wiring', () => {
   });
 
   it('builds each swatch href via routerPaths, not the bare API slug', () => {
-    renderCard([variant({ id: '1', url: 'product-1-black', color_title: 'Black', is_current: true })]);
+    renderCard([variant({
+      id: '1', url: 'product-1-black', color_title: 'Black', is_current: true,
+    })]);
     const link = screen.getByRole('link', { name: 'Black' });
     expect(link).toHaveAttribute('href', routerPaths[Routes.PRODUCT]('product-1-black'));
   });
