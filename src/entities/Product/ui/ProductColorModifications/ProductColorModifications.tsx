@@ -25,7 +25,7 @@ export const ProductColorModifications = memo(({
 
   return (
     <>
-      <Typography variant="body-3" color="grey" className="mb-3">
+      <Typography variant="body-2" className="mb-3">
         {t('more_colors')}
       </Typography>
       <Flex gap="8" align="center" className={cn(styles.root, className)}>
