@@ -11,6 +11,8 @@ const mockUseBuyInOneClick = jest.fn(() => ({
   fieldError: '',
   changeHandler: mockChangeHandler,
   phone: '',
+  name: '',
+  nameError: '',
   clickHandler: mockClickHandler,
 }));
 
@@ -52,10 +54,35 @@ describe('BuyInOneClick', () => {
       },
     });
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByPlaceholderText('+380');
 
     await userEvent.type(input, '5');
     expect(mockChangeHandler).toHaveBeenCalled();
+  });
+
+  it('Should render name field', () => {
+    renderComponent(<BuyInOneClick />, {
+      initialState: {
+        cart: CART_STATE,
+      },
+    });
+
+    const nameInput = screen.getByPlaceholderText("Введіть ім'я");
+
+    expect(nameInput).toBeInTheDocument();
+  });
+
+  it('Should call changeHandler when name input changes', async () => {
+    renderComponent(<BuyInOneClick />, {
+      initialState: {
+        cart: CART_STATE,
+      },
+    });
+
+    const nameInput = screen.getByPlaceholderText("Введіть ім'я");
+
+    await userEvent.type(nameInput, 'J');
+    expect(mockChangeHandler).toHaveBeenCalledWith('name', 'J');
   });
 
   it('Should call click handler by click on button', async () => {
@@ -79,6 +106,8 @@ describe('BuyInOneClick', () => {
       clickHandler: jest.fn(),
       isLoading: false,
       phone: '',
+      name: '',
+      nameError: '',
     }));
     renderComponent(<BuyInOneClick />, {
       initialState: {
@@ -97,6 +126,8 @@ describe('BuyInOneClick', () => {
       clickHandler: jest.fn(),
       isLoading: true,
       phone: '',
+      name: '',
+      nameError: '',
     }));
     renderComponent(<BuyInOneClick />, {
       initialState: {
@@ -107,5 +138,26 @@ describe('BuyInOneClick', () => {
     const loader = screen.getByTestId('page-loader');
 
     expect(loader).toBeInTheDocument();
+  });
+
+  it('Should show name error message', () => {
+    const NAME_ERROR_MESSAGE = 'NAME_ERROR_MESSAGE';
+    mockUseBuyInOneClick.mockImplementation(() => ({
+      fieldError: '',
+      changeHandler: jest.fn(),
+      clickHandler: jest.fn(),
+      isLoading: false,
+      phone: '',
+      name: '',
+      nameError: NAME_ERROR_MESSAGE,
+    }));
+    renderComponent(<BuyInOneClick />, {
+      initialState: {
+        cart: CART_STATE,
+      },
+    });
+    const errorBlock = screen.getByText(NAME_ERROR_MESSAGE);
+
+    expect(errorBlock).toBeInTheDocument();
   });
 });

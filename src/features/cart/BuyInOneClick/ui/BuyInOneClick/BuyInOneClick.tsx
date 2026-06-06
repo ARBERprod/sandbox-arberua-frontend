@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { FlexCol } from '@/shared/ui/Flex';
 import { PhoneField } from '@/shared/ui/Form/PhoneField';
+import { TextField } from '@/shared/ui/Form/TextField';
 import { Button } from '@/shared/ui/Button';
 import { useTranslation } from 'next-i18next';
 import { PageLoader } from '@/shared/ui/Loader';
@@ -18,12 +19,15 @@ export const BuyInOneClick = memo(({ className }: BuyInOneClickProps) => {
     fieldError,
     changeHandler,
     phone,
+    name,
+    nameError,
     clickHandler,
   } = useBuyInOneClick();
   return (
     <>
       {isLoading && <PageLoader />}
       <FlexCol data-testid="BuyInOneClick" gap="8" fullWidth className={className}>
+        <TextField name="name" value={name} error={nameError} onChange={changeHandler} placeholder={t('enter-your-name')} />
         <PhoneField error={fieldError} name="phone" onChange={changeHandler} value={phone} />
         <Button size="large" fullWidth onClick={clickHandler}>{t('buy')}</Button>
       </FlexCol>
