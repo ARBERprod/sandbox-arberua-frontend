@@ -6,6 +6,7 @@ import { ToggleWishListButton } from '@/features/wish-list/ToggleWishListButton'
 import { useTranslation } from 'next-i18next';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { AddToCardButton } from '@/features/cart/AddToCart';
+import { BuyInOneClickButton } from '@/features/cart/BuyInOneClick';
 import { ProductTryOnDrawer } from '../ProductTryOnDrawer';
 import styles from './ProductCardActions.module.scss';
 import { useProductSkus } from '@/views/ProductView/lib/ProductSkusContext';
@@ -147,7 +148,9 @@ export const ProductCardActions = memo(({
       {isSale && (
         <>
           <Flex gap="12">
-            {/* <BuyInOneClickButton productIds={[itemId]} /> */}
+            <BuyInOneClickButton productIds={[itemId]}>
+              {t('quick_order')}
+            </BuyInOneClickButton>
             {/* <Button
               fullWidth
               size="large"
