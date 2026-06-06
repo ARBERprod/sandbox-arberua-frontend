@@ -161,6 +161,25 @@ describe('useBuyInOneClick', () => {
     expect(mockCheckout).toBeCalledWith(CHECKOUT_DATA);
   });
 
+  it('Should reset phone and name after successful submit', async () => {
+    mockCheckout.mockImplementation(() => ({
+      unwrap: jest.fn().mockResolvedValue({}),
+    }));
+    const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
+
+    await act(() => {
+      result.current.changeHandler('phone', '1111111111');
+      result.current.changeHandler('name', 'John');
+    });
+
+    await act(async () => {
+      await result.current.clickHandler();
+    });
+
+    expect(result.current.phone).toBe('');
+    expect(result.current.name).toBe('');
+  });
+
   it('Should set name validation error', async () => {
     const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
     const ERROR_MESSAGE = 'NAME_ERROR_MESSAGE';
