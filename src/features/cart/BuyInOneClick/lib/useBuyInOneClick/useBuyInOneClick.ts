@@ -13,8 +13,15 @@ export const useBuyInOneClick = () => {
 
   const [phone, setPhone] = useState('');
   const [fieldError, setFieldError] = useState('');
+  const [name, setName] = useState('');
+  const [nameError, setNameError] = useState('');
 
-  const changeHandler = useCallback((name: string, value: string) => {
+  const changeHandler = useCallback((field: string, value: string) => {
+    if (field === 'name') {
+      setNameError('');
+      setName(value);
+      return;
+    }
     setFieldError('');
     setPhone(value);
   }, []);
@@ -23,10 +30,12 @@ export const useBuyInOneClick = () => {
     try {
       const items = cartItems.map((item) => ({ product_id: item.owner_id, quantity: item.quantity }));
       setIsLoading(true);
-      await checkout({ phone, items }).unwrap();
+      await checkout({ phone, name, items }).unwrap();
       clearCartItems();
       closeCart();
       showSuccessModal();
+      setPhone('');
+      setName('');
       if (typeof window !== 'undefined' && window?.fbq) {
         // window?.fbq('track', 'Purchase', {
         //   value: cartItems.map((item) => item.price.value).reduce((acc, item) => +acc + +item, 0),
@@ -39,19 +48,22 @@ export const useBuyInOneClick = () => {
       }
     } catch (e) {
       if (isValidationError(e)) {
-        setFieldError(e.data.errors.phone?.[0]);
+        setFieldError(e.data.errors.phone?.[0] ?? '');
+        setNameError(e.data.errors.name?.[0] ?? '');
       }
     } finally {
       setIsLoading(false);
     }
     // eslint-disable-next-line
-  }, [checkout, closeCart, phone]);
+  }, [checkout, closeCart, phone, name]);
 
   return {
     isLoading,
     fieldError,
     changeHandler,
     phone,
+    name,
+    nameError,
     clickHandler,
   };
 };
