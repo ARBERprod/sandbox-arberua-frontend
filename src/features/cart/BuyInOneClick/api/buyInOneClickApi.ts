@@ -4,6 +4,7 @@ import { ImageType, Price } from '@/shared/types/common';
 
 export type BuyInOneClickBody = {
   phone: string;
+  name: string;
   items: {product_id: string; quantity: number}[];
 }
 
