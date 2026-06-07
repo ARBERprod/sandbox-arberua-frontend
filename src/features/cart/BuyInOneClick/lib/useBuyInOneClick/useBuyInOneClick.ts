@@ -63,8 +63,7 @@ export const useBuyInOneClick = () => {
     } finally {
       setIsLoading(false);
     }
-    // eslint-disable-next-line
-  }, [checkout, closeCart, phone, name, notify]);
+  }, [checkout, cartItems, clearCartItems, closeCart, showSuccessModal, phone, name, notify]);
 
   return {
     isLoading,
