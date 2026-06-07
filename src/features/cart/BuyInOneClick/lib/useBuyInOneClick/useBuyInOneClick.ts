@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
-import { isValidationError } from '@/shared/types/type-guards';
+import { isBusinessError, isValidationError } from '@/shared/types/type-guards';
+import { useErrorNotification } from '@/shared/ui/Notification/useErrorNotification';
 import { useBuyInOneClickMutation } from '../../api/buyInOneClickApi';
 import { useBuyInOneClickCartActions } from '../../model/buyInOneClickCartSlice';
 import { useSelector } from 'react-redux';
@@ -10,6 +11,7 @@ export const useBuyInOneClick = () => {
   const [isLoading, setIsLoading] = useState(false);
   const cartItems = useSelector(buyInOneClickCartSelectors.getCartItems);
   const [checkout] = useBuyInOneClickMutation();
+  const { notify } = useErrorNotification();
 
   const [phone, setPhone] = useState('');
   const [fieldError, setFieldError] = useState('');
@@ -50,12 +52,17 @@ export const useBuyInOneClick = () => {
       if (isValidationError(e)) {
         setFieldError(e.data.errors.phone?.[0] ?? '');
         setNameError(e.data.errors.name?.[0] ?? '');
+      } else if (isBusinessError(e)) {
+        // BE returns a localized "contact support" message for failed orders
+        notify({ title: e.data.error.message });
+      } else {
+        notify();
       }
     } finally {
       setIsLoading(false);
     }
     // eslint-disable-next-line
-  }, [checkout, closeCart, phone, name]);
+  }, [checkout, closeCart, phone, name, notify]);
 
   return {
     isLoading,

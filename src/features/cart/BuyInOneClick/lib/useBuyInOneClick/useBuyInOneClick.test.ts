@@ -9,8 +9,13 @@ const mockCloseCart = jest.fn();
 const mockClearCartItems = jest.fn();
 const mockShowSuccessModal = jest.fn();
 const mockCheckout = jest.fn(() => ({ unwrap: jest.fn().mockResolvedValue({}) }));
+const mockNotify = jest.fn();
 
 const mockUseBuiInOneClickMutation = jest.fn(() => [mockCheckout]);
+
+jest.mock('@/shared/ui/Notification/useErrorNotification', () => ({
+  useErrorNotification: () => ({ notify: mockNotify }),
+}));
 
 jest.mock('../../api/buyInOneClickApi', () => ({
   useBuyInOneClickMutation: () => mockUseBuiInOneClickMutation(),
@@ -200,5 +205,34 @@ describe('useBuyInOneClick', () => {
     });
 
     expect(result.current.nameError).toBe(ERROR_MESSAGE);
+  });
+
+  it('Should notify with the server message on a business error', async () => {
+    const MESSAGE = 'Order was not accepted. Please contact support.';
+    mockCheckout.mockImplementation(() => ({
+      unwrap: jest.fn().mockRejectedValue({
+        data: { success: false, error: { code: 'ONE_CLICK_ORDER_FAILED', message: MESSAGE } },
+      }),
+    }));
+    const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
+
+    await act(async () => {
+      await result.current.clickHandler();
+    });
+
+    expect(mockNotify).toBeCalledWith({ title: MESSAGE });
+  });
+
+  it('Should notify with the default message on an unknown error', async () => {
+    mockCheckout.mockImplementation(() => ({
+      unwrap: jest.fn().mockRejectedValue({ status: 500, data: {} }),
+    }));
+    const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
+
+    await act(async () => {
+      await result.current.clickHandler();
+    });
+
+    expect(mockNotify).toBeCalled();
   });
 });
