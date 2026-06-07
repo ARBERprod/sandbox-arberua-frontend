@@ -24,8 +24,10 @@ export const useBuyInOneClick = () => {
       setName(value);
       return;
     }
-    setFieldError('');
-    setPhone(value);
+    if (field === 'phone') {
+      setFieldError('');
+      setPhone(value);
+    }
   }, []);
 
   const clickHandler = useCallback(async () => {
@@ -52,7 +54,7 @@ export const useBuyInOneClick = () => {
       if (isValidationError(e)) {
         setFieldError(e.data.errors.phone?.[0] ?? '');
         setNameError(e.data.errors.name?.[0] ?? '');
-      } else if (isBusinessError(e)) {
+      } else if (isBusinessError(e) && e.data.error.message) {
         // BE returns a localized "contact support" message for failed orders
         notify({ title: e.data.error.message });
       } else {

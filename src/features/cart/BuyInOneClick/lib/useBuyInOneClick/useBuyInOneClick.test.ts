@@ -233,6 +233,95 @@ describe('useBuyInOneClick', () => {
       await result.current.clickHandler();
     });
 
-    expect(mockNotify).toBeCalled();
+    expect(mockNotify).toBeCalledWith();
+  });
+
+  it('Should notify with the default message when the business error message is empty', async () => {
+    mockCheckout.mockImplementation(() => ({
+      unwrap: jest.fn().mockRejectedValue({
+        data: { success: false, error: { code: 'ONE_CLICK_ORDER_FAILED', message: '' } },
+      }),
+    }));
+    const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
+
+    await act(async () => {
+      await result.current.clickHandler();
+    });
+
+    expect(mockNotify).toBeCalledWith();
+  });
+
+  it('Should set both phone and name errors from a single validation error', async () => {
+    const PHONE_ERROR = 'PHONE_ERROR';
+    const NAME_ERROR = 'NAME_ERROR';
+    const ERROR: ValidationError = {
+      status: StatusCode.VALIDATION_ERROR,
+      data: {
+        errors: {
+          phone: [PHONE_ERROR],
+          name: [NAME_ERROR],
+        },
+      },
+    };
+    mockCheckout.mockImplementation(() => ({
+      unwrap: jest.fn().mockRejectedValue(ERROR),
+    }));
+    const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
+
+    await act(async () => {
+      await result.current.clickHandler();
+    });
+
+    expect(result.current.fieldError).toBe(PHONE_ERROR);
+    expect(result.current.nameError).toBe(NAME_ERROR);
+  });
+
+  it('Should notify with the default message when the error has no data field', async () => {
+    mockCheckout.mockImplementation(() => ({
+      unwrap: jest.fn().mockRejectedValue(new Error('Network Error')),
+    }));
+    const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
+
+    await act(async () => {
+      await result.current.clickHandler();
+    });
+
+    expect(mockNotify).toBeCalledWith();
+  });
+
+  it('Should send a whitespace name to the BE as-is (no client-side trim)', async () => {
+    const NAME_VALUE = '   ';
+    const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
+    await act(() => {
+      result.current.changeHandler('name', NAME_VALUE);
+    });
+
+    await act(async () => {
+      await result.current.clickHandler();
+    });
+
+    expect(mockCheckout).toBeCalledWith({ phone: '', name: NAME_VALUE, items: [] });
+  });
+
+  it('Should clear nameError when the name field changes', async () => {
+    const ERROR: ValidationError = {
+      status: StatusCode.VALIDATION_ERROR,
+      data: { errors: { name: ['NAME_ERROR'] } },
+    };
+    mockCheckout.mockImplementation(() => ({
+      unwrap: jest.fn().mockRejectedValue(ERROR),
+    }));
+    const { result } = renderHook(() => useBuyInOneClick(), { wrapper });
+
+    await act(async () => {
+      await result.current.clickHandler();
+    });
+    expect(result.current.nameError).toBe('NAME_ERROR');
+
+    act(() => {
+      result.current.changeHandler('name', 'John');
+    });
+
+    expect(result.current.nameError).toBe('');
   });
 });
