@@ -8,6 +8,14 @@
   --max-width: 1100px;
 }
 
+// ChatBullet injects its launcher/invitation with a max z-index (2147483647),
+// which floats them over the cart/checkout drawer. Pin them below the drawer
+// (--z-drawer: 15) so the drawer slides over the chat button when opened.
+.chatbullet_widget-container,
+.chatbullet_invitations {
+  z-index: var(--z-chat-widget) !important;
+}
+
 html,
 body {
   @include font(16px, var(--grey-dark));
