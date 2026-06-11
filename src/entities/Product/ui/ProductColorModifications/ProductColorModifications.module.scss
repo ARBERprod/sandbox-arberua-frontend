@@ -1,13 +1,13 @@
 @import '@/styles/mixins';
 
 .color {
-  @include square-size(32px);
+  @include square-size(22px);
   border-radius: 50%;
   background-color: var(--color);
   transition: box-shadow .3s ease;
 
   &.active {
-    box-shadow: 0 0 0 1px #5c5c5c, 0 0 0 4px var(--white), 0 0 0 5px #5c5c5c;
+    box-shadow: 0 0 0 0.5px #5c5c5c, 0 0 0 2.5px var(--white), 0 0 0 3px #5c5c5c;
   }
 
   // Dimmed but still clickable: the variant page itself shows the out-of-stock state.

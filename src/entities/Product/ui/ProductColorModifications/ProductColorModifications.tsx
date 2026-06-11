@@ -28,7 +28,7 @@ export const ProductColorModifications = memo(({
       <Typography variant="body-2" className="mb-3">
         {t('more_colors')}
       </Typography>
-      <Flex gap="8" align="center" className={cn(styles.root, className)}>
+      <Flex gap="12" align="center" className={cn(styles.root, className)}>
         {colors.map((color) => (
           <ColorOption
             key={color.url}
