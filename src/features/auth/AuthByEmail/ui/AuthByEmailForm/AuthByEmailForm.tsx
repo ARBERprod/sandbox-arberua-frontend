@@ -11,6 +11,7 @@ import { isCredentialsError, isValidationError } from '@/shared/types/type-guard
 import { validationErrorHandler } from '@/shared/lib/utils/validationErrorHandler';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { useTranslation } from 'next-i18next';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 import styles from './AuthByEmailForm.module.scss';
 import { AuthFormData } from '../../model/types/AuthFormData';
 import { initialState, validatorConfig } from '../../config/formConfig';
@@ -37,7 +38,14 @@ export const AuthByEmailForm = memo(({
         password: data.password,
       }))
         .unwrap();
-      await sessionFetch();
+      try {
+        const { data: session } = await sessionFetch().unwrap();
+        if (session.user) {
+          sendCustomerDataEvent(session.user);
+        }
+      } catch {
+        // Session refresh failed — analytics is fire-and-forget; login still proceeds.
+      }
       onSubmit(data);
     } catch (e) {
       if (isCredentialsError(e)) {

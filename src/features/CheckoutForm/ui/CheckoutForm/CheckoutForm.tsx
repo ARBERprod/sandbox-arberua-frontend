@@ -23,6 +23,7 @@ import { useSelector } from 'react-redux';
 import { cartSelectors } from '@/entities/Cart';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { useUserId } from '@/entities/Session';
+import { useCustomerDataTracking } from '../../lib/useCustomerDataTracking';
 
 interface CheckoutFormProps {
   className?: string;
@@ -45,6 +46,9 @@ export const CheckoutForm = memo(({
     getAddressDeliveryMethodId,
   } = useCheckout();
   const clientId = useUserId();
+
+  // Emit eSputnik CustomerData once the authenticated shopper reaches checkout.
+  useCustomerDataTracking();
 
   const {
     submitHandler, field, changeHandler, formState,

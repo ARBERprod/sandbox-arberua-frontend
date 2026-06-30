@@ -8,6 +8,7 @@ import GoogleIcon from '@/shared/assets/icons/google.svg';
 import { useLazySessionFetchQuery } from '@/entities/Session';
 import { tokenService } from '@/shared/lib/services/token.service';
 import { routerPaths } from '@/shared/config/router';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 import styles from './AuthByGoogleButton.module.scss';
 import { googleAuthHelper } from '../../../lib/googleAuthHelper';
 import {
@@ -62,6 +63,7 @@ export const AuthByGoogleButton = memo(({
         try {
           const { data } = await fetchSession().unwrap();
           if (data.user) {
+            sendCustomerDataEvent(data.user);
             push(routerPaths.office);
             onSuccess?.();
           } else {
