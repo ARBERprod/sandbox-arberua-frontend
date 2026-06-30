@@ -11,7 +11,15 @@ import { Flex } from '@/shared/ui/Flex';
 import { useAuth } from '@/entities/Session';
 import { useSelector } from 'react-redux';
 import { useAuthModel } from '@/widgets/Auth';
+import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 import styles from './ToggleWishListButton.module.scss';
+
+// eSputnik AddToWishlist payload — productKey is the parent product id (= feed <g:id>).
+declare module '@/shared/lib/analytics/esputnik' {
+  interface EsEventPayloadMap {
+    AddToWishlist: { productKey: string; price: number };
+  }
+}
 
 interface ToggleWishListButtonProps {
   productId: string | string[];
@@ -32,15 +40,28 @@ export const ToggleWishListButton = memo(({
   const wishListProducts = useSelector(wishListSelector.getProducts);
   const { isAuth } = useAuth();
   const { openLoginModal } = useAuthModel();
-  const clickHandler = () => {
+  const clickHandler = async () => {
     if (!isAuth) {
       openLoginModal();
       return;
     }
     if (Array.isArray(productId)) {
       // Add many product to wish list;
-    } else {
-      toggleProduct({ product_id: productId });
+      return;
+    }
+    // Toggle returns the full list; an add is a not-in-list → in-list transition.
+    const wasInList = wishListProducts.some((product) => product.id === productId);
+    try {
+      const updatedList = await toggleProduct({ product_id: productId }).unwrap();
+      const added = updatedList.find((product) => product.id === productId);
+      if (!wasInList && added) {
+        sendEsEvent('AddToWishlist', {
+          productKey: added.parent_id ?? added.id,
+          price: added.price.value,
+        });
+      }
+    } catch {
+      // Toggle failed; nothing to track (analytics is fire-and-forget).
     }
   };
   const isActive = Boolean(wishListProducts.find((product) => product.id === productId));
