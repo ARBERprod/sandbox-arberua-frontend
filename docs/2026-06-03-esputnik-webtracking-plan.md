@@ -1,7 +1,9 @@
 # eSputnik Web-Tracking — Implementation Plan
 
-> **Status:** На рассмотрении · **Updated:** 2026-06-30
-> **History:** 2026-06-03 На рассмотрении → 2026-06-30 На рассмотрении (ревью + переработка под `/orchestrate-plan`)
+> **Status:** В работе · **Updated:** 2026-06-30
+> **History:** 2026-06-03 На рассмотрении → 2026-06-30 На рассмотрении (ревью + переработка под `/orchestrate-plan`) → 2026-06-30 В работе
+>
+> **Note:** Step 2.3 (CategoryPage) stays deferred pending the backend `google_product_category` field (EXTERNAL_DEPENDENCY); external inputs site-id/tariff/feed-URL remain open.
 
 Browser-side web-tracking (eS.js script + `eS('sendEvent', ...)` events) for on-site
 recommendations and behavioral segments. This is a **new, separate layer** from the
