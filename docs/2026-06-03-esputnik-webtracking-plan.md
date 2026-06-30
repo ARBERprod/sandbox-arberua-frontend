@@ -521,3 +521,13 @@ already exists in `esputnik.ts`. Marked `skip: true`; unblock when BE ships the 
 **Commits:** e6c59b2
 
 **Note (orchestrator):** new eSputnik event types (`AddToWishlist`/`StatusCart`/`PurchasedItems`/`CustomerData`) were added to `EsEventPayloadMap` via TS module augmentation co-located in each step's in-scope file (esputnik.ts was outside S2 scope). Tech debt: consolidate them into `esputnik.ts` directly in a follow-up.
+
+### Review — 2026-06-30 (/review2 branch)
+**Commits:** 6d6c011
+**Findings fixed (3):** `PurchasedItems` idempotency `useRef` latch (was double-firing on effect re-run); `stringifyEsParams` now skips `undefined` (no more `guid: "undefined"`); all 8 event types consolidated into `esputnik.ts` (scattered `declare module` blocks removed — resolves the tech-debt note above).
+**Accepted caveat (NOT a code defect):** eS.js host URL `statics.esputnik.com/scripts/<siteId>.js` is a deploy-time value — verify against the eSputnik account before enabling the flag.
+**Gates:** lint 0, tsc 0 new errors (13 pre-existing in untouched test files), jest 518 passed / 3 pre-existing FiltersManager fails.
+
+## Outcome (orchestrator run 2026-06-30)
+
+10/11 steps shipped on `feature/esputnik-webtracking`; **Step 2.3 (CategoryPage) deferred** (EXTERNAL_DEPENDENCY — backend `google_product_category` field absent from the catalog API response). Entire layer is gated behind `NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED` + analytics consent, so it is **inert in production until that flag is set**. Remaining to fully ship: BE adds `google_product_category` to the catalog response (unblocks 2.3), marketing provides site-id/tariff/feed-URL, eS.js host URL verified.
