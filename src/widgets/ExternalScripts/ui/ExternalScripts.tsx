@@ -1,10 +1,26 @@
 import Script from 'next/script';
 import { useTranslation } from 'next-i18next';
+import { useEffect, useState } from 'react';
+import { cookieModalManager } from '@/features/CookieModal/lib/CookieModalManager';
 
 const GTM_ID = 'GTM-PHHD7CTQ';
 
 export const ExternalScripts = () => {
   const { t } = useTranslation();
+
+  // Resolve the eSputnik site id on the client only: gated on the kill-switch flag,
+  // consent, and a configured site id. Deferring to an effect avoids an SSR/CSR
+  // hydration mismatch (consent lives in a browser cookie).
+  const [esputnikSiteId, setEsputnikSiteId] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const trackingEnabled = process.env.NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED === 'true';
+    const siteId = process.env.NEXT_PUBLIC_ESPUTNIK_SITE_ID;
+
+    if (trackingEnabled && siteId && cookieModalManager.isCookiesAccepted()) {
+      setEsputnikSiteId(siteId);
+    }
+  }, []);
 
   const chatbulletConfig = JSON.stringify({
     btnSize: 'small',
@@ -38,6 +54,14 @@ export const ExternalScripts = () => {
           })(window,document,'script','dataLayer','${GTM_ID}');
         `}
       </Script>
+
+      {esputnikSiteId && (
+        <Script
+          id="esputnik-webtracking"
+          src={`https://statics.esputnik.com/scripts/${esputnikSiteId}.js`}
+          strategy="lazyOnload"
+        />
+      )}
 
       <Script
         id="chatbullet"
