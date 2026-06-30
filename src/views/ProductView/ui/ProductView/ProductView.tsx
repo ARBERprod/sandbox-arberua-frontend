@@ -8,6 +8,7 @@ import styles from './ProductView.module.scss';
 import { ProductDetailedCard } from '../ProductDetailedCard';
 import { ProductSkusProvider } from '../ProductSkusProvider';
 import { pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
+import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 import { useProductSkus } from '../../lib/ProductSkusContext';
 
 interface ProductViewProps {
@@ -27,6 +28,15 @@ export const ProductView = memo(({
   useEffect(() => {
     addProductToHistory({ productId: product.id });
   }, [addProductToHistory, product, product.id]);
+
+  useEffect(() => {
+    // is_sale means "in stock", not "discounted" — DetailedProduct has no separate stock flag.
+    sendEsEvent('ProductPage', {
+      productKey: product.id,
+      price: product.price.value,
+      isInStock: product.is_sale,
+    });
+  }, [product.id, product.price.value, product.is_sale]);
 
   return (
     <div className={cn(styles.root, className)}>
