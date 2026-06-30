@@ -19,6 +19,7 @@ declare global {
     webkitSpeechRecognition: SpeechRecognition;
     dataLayer: unknown[];
     fbq?: (event: string, value: string, options?: Record<string, any>, deduplication?: { eventID: string }) => void;
+    eS?: (...args: unknown[]) => void;
   }
 }
 
