@@ -7,6 +7,7 @@ import { $api } from '@/shared/api/api';
 import { rtkApi } from '@/shared/api/rtkApi';
 import { cartReducer } from '@/entities/Cart';
 import { promocodeInvalidationListener } from '@/entities/Cart/model/middleware/promocodeInvalidationListener';
+import { statusCartListener } from '@/entities/Cart/model/middleware/statusCartListener';
 import { siteSettingsReducer } from '@/features/SiteSettings';
 import { searchReducer } from '@/features/Search';
 import { sessionReducer } from '@/entities/Session';
@@ -52,6 +53,7 @@ export const makeStore = (
       },
     })
       .prepend(promocodeInvalidationListener.middleware)
+      .prepend(statusCartListener.middleware)
       .concat(rtkApi.middleware),
   });
 

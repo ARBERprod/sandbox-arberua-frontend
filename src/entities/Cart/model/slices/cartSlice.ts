@@ -102,7 +102,7 @@ export const cartSlice = buildSlice({
       state.isError = false;
       state.cartData = action.payload;
     });
-    builder.addMatcher(cartApi.endpoints.deleteProduct.matchFulfilled, (state) => {
+    builder.addMatcher(cartApi.endpoints.deleteProduct.matchPending, (state) => {
       state.isFetching = true;
       state.isError = false;
     });
@@ -115,7 +115,7 @@ export const cartSlice = buildSlice({
       state.isError = false;
       state.cartData = action.payload;
     });
-    builder.addMatcher(cartApi.endpoints.updateProduct.matchFulfilled, (state) => {
+    builder.addMatcher(cartApi.endpoints.updateProduct.matchPending, (state) => {
       state.isFetching = true;
       state.isError = false;
     });
