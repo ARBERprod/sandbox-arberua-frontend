@@ -18,6 +18,20 @@ import { useAuth, useUserId } from '@/entities/Session';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 import { User } from '@/entities/User';
 import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
+import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
+import { readPurchaseGuid, clearPurchaseGuid } from '@/shared/lib/analytics/esputnikCartGuid';
+
+// eSputnik PurchasedItems payload — productKey is the parent product id (= feed <g:id>);
+// guid is the order-submit snapshot, not a live cart GUID (see GUID protocol).
+declare module '@/shared/lib/analytics/esputnik' {
+  interface EsEventPayloadMap {
+    PurchasedItems: {
+      items: { productKey: string; price: number; quantity: number }[];
+      OrderNumber: number;
+      guid?: string;
+    };
+  }
+}
 
 interface CheckoutSuccessViewProps {
   className?: string;
@@ -144,6 +158,18 @@ export const CheckoutSuccessView = memo(
         };
         // window?.fbq('track', 'Purchase', paramsFbq, { eventID: order.id });
       }
+
+      // eSputnik PurchasedItems bound to the order-submit GUID snapshot, then released.
+      sendEsEvent('PurchasedItems', {
+        items: order.products.map((item) => ({
+          productKey: item.parent_id || item.id,
+          price: item.price.value,
+          quantity: item.quantity,
+        })),
+        OrderNumber: order.order_number,
+        guid: readPurchaseGuid(),
+      });
+      clearPurchaseGuid();
     }, [order, clientId, userData, eventId]);
 
     const goToHome = () => {

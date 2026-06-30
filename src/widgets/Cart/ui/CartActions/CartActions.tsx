@@ -14,6 +14,7 @@ import styles from './CartActions.module.scss';
 import { displayPrice } from '@/shared/lib/utils/displayPrice';
 import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
+import { snapshotPurchaseGuid } from '@/shared/lib/analytics/esputnikCartGuid';
 import { useAuth, useUserId } from '@/entities/Session';
 import { useInitiateCheckoutMutation } from '@/entities/Events';
 import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
@@ -107,6 +108,10 @@ export const CartActions = memo(({ className }: CartActionsProps) => {
         eventId,
       });
     }
+
+    // Capture the live cart GUID before the post-order cart-clear can rotate it, so
+    // the success-page PurchasedItems binds to the pre-clear basket (GUID protocol).
+    snapshotPurchaseGuid();
 
     await push(routerPaths.checkout);
     closeCart();
