@@ -470,7 +470,7 @@ Resolved in this revision: `productKey`/`categoryKey` values and consent gating.
 ## Session Map
 
 - [x] S1 (~300K) Steps 1.1, 1.2, 1.3, 2.1, 2.2 — done 2026-06-30 (2.3 deferred → EXTERNAL_DEPENDENCY)
-- [ ] S2 (~310K) Steps 2.4, 2.5, 2.6, 2.7, 4.1 — **current**
+- [x] S2 (~310K) Steps 2.4, 2.5, 2.6, 2.7, 4.1 — done 2026-06-30
 
 ## Progress Log
 
@@ -499,3 +499,25 @@ Resolved in this revision: `productKey`/`categoryKey` values and consent gating.
 catalog API response; absent from `CatalogData`/`Category`/`ResponseMeta` (zero repo
 matches). Breadcrumb reconstruction forbidden by plan. Typed `CategoryPage` payload
 already exists in `esputnik.ts`. Marked `skip: true`; unblock when BE ships the field.
+
+### S2.step-2.4 — 2026-06-30
+**Completed steps:** 2.4
+**Commits:** 62e58c3
+
+### S2.step-2.5 — 2026-06-30
+**Completed steps:** 2.5
+**Commits:** e91b6ca
+
+### S2.step-2.6 — 2026-06-30
+**Completed steps:** 2.6
+**Commits:** 1062257
+
+### S2.step-2.7 — 2026-06-30
+**Completed steps:** 2.7
+**Commits:** e87b269
+
+### S2.step-4.1 — 2026-06-30
+**Completed steps:** 4.1
+**Commits:** e6c59b2
+
+**Note (orchestrator):** new eSputnik event types (`AddToWishlist`/`StatusCart`/`PurchasedItems`/`CustomerData`) were added to `EsEventPayloadMap` via TS module augmentation co-located in each step's in-scope file (esputnik.ts was outside S2 scope). Tech debt: consolidate them into `esputnik.ts` directly in a follow-up.
