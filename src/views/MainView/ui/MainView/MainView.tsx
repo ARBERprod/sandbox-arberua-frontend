@@ -1,7 +1,8 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import cn from 'classnames';
 import { PageLoader } from '@/shared/ui/Loader';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
+import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 import { SalesSection } from '../sections/SalesSection';
 import { NewsSection } from '../sections/NewsSection';
 import { MainBannerSection } from '../sections/MainBannerSection';
@@ -30,6 +31,11 @@ export const MainView = memo(({ className }: MainViewProps) => {
     popular,
     instagrams,
   } = useMainPageData();
+
+  useEffect(() => {
+    sendEsEvent('MainPage');
+  }, []);
+
   if (isLoading) return <PageLoader />;
   if (errors.banners) return <ErrorMessage error="Error" />;
   return (

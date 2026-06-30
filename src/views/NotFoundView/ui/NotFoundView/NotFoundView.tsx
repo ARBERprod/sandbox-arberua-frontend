@@ -1,6 +1,7 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import cn from 'classnames';
 import NotFoundImage from '@/shared/assets/images/not-found.png';
+import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 import { AppImage } from '@/shared/ui/AppImage';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
@@ -20,6 +21,10 @@ export const NotFoundView = memo(({ className }: NotFoundViewProps) => {
     push(routerPaths.main);
   };
   const { t } = useTranslation();
+
+  useEffect(() => {
+    sendEsEvent('NotFound');
+  }, []);
   return (
     <div className={cn(styles.root, className)}>
       <Container className={styles.container}>
