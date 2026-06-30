@@ -21,6 +21,18 @@ describe('stringifyEsParams', () => {
       items: [{ productKey: '7', price: '500', quantity: '3' }],
     });
   });
+
+  it('omits a top-level undefined optional field instead of sending "undefined"', () => {
+    const result = stringifyEsParams({ productKey: '7', guid: undefined });
+    expect(result).toEqual({ productKey: '7' });
+    expect(result).not.toHaveProperty('guid');
+  });
+
+  it('omits undefined fields inside item arrays', () => {
+    expect(stringifyEsParams({ items: [{ productKey: '7', price: 500, quantity: undefined }] })).toEqual({
+      items: [{ productKey: '7', price: '500' }],
+    });
+  });
 });
 
 describe('sendEsEvent guard matrix', () => {

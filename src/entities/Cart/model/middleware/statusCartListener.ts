@@ -4,16 +4,6 @@ import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 import { nextCartGuid } from '@/shared/lib/analytics/esputnikCartGuid';
 import { cartApi } from '../../api/cartApi';
 
-// eSputnik StatusCart payload — productKey is the parent product id (= feed <g:id>).
-declare module '@/shared/lib/analytics/esputnik' {
-  interface EsEventPayloadMap {
-    StatusCart: {
-      items: { productKey: string; price: number; quantity: number }[];
-      guid?: string;
-    };
-  }
-}
-
 export const statusCartListener = createListenerMiddleware();
 
 type AppStartListening = TypedStartListening<StoreSchema>;

@@ -1,4 +1,6 @@
-import { memo, useEffect, useState } from 'react';
+import {
+  memo, useEffect, useRef, useState,
+} from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -21,18 +23,6 @@ import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/li
 import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 import { readPurchaseGuid, clearPurchaseGuid } from '@/shared/lib/analytics/esputnikCartGuid';
 
-// eSputnik PurchasedItems payload — productKey is the parent product id (= feed <g:id>);
-// guid is the order-submit snapshot, not a live cart GUID (see GUID protocol).
-declare module '@/shared/lib/analytics/esputnik' {
-  interface EsEventPayloadMap {
-    PurchasedItems: {
-      items: { productKey: string; price: number; quantity: number }[];
-      OrderNumber: number;
-      guid?: string;
-    };
-  }
-}
-
 interface CheckoutSuccessViewProps {
   className?: string;
   order: OrderDto;
@@ -49,6 +39,10 @@ export const CheckoutSuccessView = memo(
 
     const { userData } = useAuth();
     const [eventId] = useState(() => getRandomEventId());
+    // Latch: PurchasedItems must fire at most once per mount. clientId/userData can
+    // resolve after mount and re-run the effect, which would re-send with a stale
+    // (already-cleared) GUID and double-count the order.
+    const purchaseTracked = useRef(false);
 
     useEffect(() => {
       const fallbackUserData: User = {
@@ -160,16 +154,21 @@ export const CheckoutSuccessView = memo(
       }
 
       // eSputnik PurchasedItems bound to the order-submit GUID snapshot, then released.
-      sendEsEvent('PurchasedItems', {
-        items: order.products.map((item) => ({
-          productKey: item.parent_id || item.id,
-          price: item.price.value,
-          quantity: item.quantity,
-        })),
-        OrderNumber: order.order_number,
-        guid: readPurchaseGuid(),
-      });
-      clearPurchaseGuid();
+      // Latched so a re-run (clientId/userData resolving late) cannot re-emit or send a
+      // stale GUID after clearPurchaseGuid(). GA events above intentionally stay ungated.
+      if (!purchaseTracked.current) {
+        purchaseTracked.current = true;
+        sendEsEvent('PurchasedItems', {
+          items: order.products.map((item) => ({
+            productKey: item.parent_id || item.id,
+            price: item.price.value,
+            quantity: item.quantity,
+          })),
+          OrderNumber: order.order_number,
+          guid: readPurchaseGuid(),
+        });
+        clearPurchaseGuid();
+      }
     }, [order, clientId, userData, eventId]);
 
     const goToHome = () => {

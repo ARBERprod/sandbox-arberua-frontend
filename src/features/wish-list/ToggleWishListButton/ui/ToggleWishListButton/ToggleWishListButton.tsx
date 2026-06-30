@@ -14,13 +14,6 @@ import { useAuthModel } from '@/widgets/Auth';
 import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 import styles from './ToggleWishListButton.module.scss';
 
-// eSputnik AddToWishlist payload — productKey is the parent product id (= feed <g:id>).
-declare module '@/shared/lib/analytics/esputnik' {
-  interface EsEventPayloadMap {
-    AddToWishlist: { productKey: string; price: number };
-  }
-}
-
 interface ToggleWishListButtonProps {
   productId: string | string[];
   withCount?: boolean;
