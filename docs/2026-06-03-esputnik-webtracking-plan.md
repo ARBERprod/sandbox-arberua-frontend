@@ -291,7 +291,7 @@ skip: false
 `useEffect` beside the existing `addProductToHistory` effect (`ProductView.tsx:27-29`).
 Payload: `id`→productKey, `price.value`, `is_sale`→isInStock.
 
-### Step 2.3: CategoryPage event (CatalogView) — blocked on categoryKey contract
+### Step 2.3: CategoryPage event (CatalogView) — DEFERRED (EXTERNAL_DEPENDENCY)
 <!-- plan-meta:
 allowed_paths:
   - "src/views/CatalogView/**"
@@ -300,8 +300,16 @@ gate_commands:
   type: "npm run lint:types"
   test_quick: "npx jest src/views/CatalogView --watchAll=false"
   test_full: "npx jest --watchAll=false"
-skip: false
+skip: true
 -->
+> **Deferred 2026-06-30 (orchestrator run):** the backend `google_product_category`
+> field is **absent** from the catalog API response — verified missing on `CatalogData`
+> (`src/views/CatalogView/api/types.ts`), `Category`
+> (`src/entities/Category/model/types.ts`), and `ResponseMeta`, with zero repo-wide
+> matches. Breadcrumb reconstruction is forbidden (see contract). The typed `CategoryPage`
+> payload already exists in `esputnik.ts`, ready to wire. **Unblock:** backend exposes
+> `google_product_category` on the category API response, then flip `skip: false` and
+> re-run `/orchestrate-plan`.
 `useEffect` beside the `view_item_list` effect (`CatalogView.tsx:84-146`). `categoryKey`
 = the backend `google_product_category` field on the catalog response (see contract). Do
 **not** rebuild from breadcrumbs. Blocked until BE exposes the field.
@@ -459,5 +467,33 @@ Resolved in this revision: `productKey`/`categoryKey` values and consent gating.
 
 ## Session Map
 
-- [ ] S1 (~300K) Steps 1.1, 1.2, 1.3, 2.1, 2.2, 2.3 — **current**
-- [ ] S2 (~310K) Steps 2.4, 2.5, 2.6, 2.7, 4.1
+- [x] S1 (~300K) Steps 1.1, 1.2, 1.3, 2.1, 2.2 — done 2026-06-30 (2.3 deferred → EXTERNAL_DEPENDENCY)
+- [ ] S2 (~310K) Steps 2.4, 2.5, 2.6, 2.7, 4.1 — **current**
+
+## Progress Log
+
+### S1.step-1.1 — 2026-06-30
+**Completed steps:** 1.1
+**Commits:** 8abedbd
+
+### S1.step-1.2 — 2026-06-30
+**Completed steps:** 1.2
+**Commits:** 67b157e
+
+### S1.step-1.3 — 2026-06-30
+**Completed steps:** 1.3
+**Commits:** 20a8973
+
+### S1.step-2.1 — 2026-06-30
+**Completed steps:** 2.1
+**Commits:** 0189f7c
+
+### S1.step-2.2 — 2026-06-30
+**Completed steps:** 2.2
+**Commits:** 18cd2e2
+
+### S1.step-2.3 — DEFERRED 2026-06-30 (EXTERNAL_DEPENDENCY)
+**Blocker:** `categoryKey` requires the backend `google_product_category` field on the
+catalog API response; absent from `CatalogData`/`Category`/`ResponseMeta` (zero repo
+matches). Breadcrumb reconstruction forbidden by plan. Typed `CategoryPage` payload
+already exists in `esputnik.ts`. Marked `skip: true`; unblock when BE ships the field.
