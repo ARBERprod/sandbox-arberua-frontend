@@ -58,9 +58,23 @@ export const ExternalScripts = () => {
       {esputnikSiteId && (
         <Script
           id="esputnik-webtracking"
-          src={`https://statics.esputnik.com/scripts/${esputnikSiteId}.js`}
-          strategy="lazyOnload"
-        />
+          strategy="afterInteractive"
+        >
+          {`
+            !function (t, e, c, n) {
+              var s = e.createElement(c);
+              s.async = 1;
+              s.src = 'https://statics.esputnik.com/scripts/' + n + '.js';
+              var r = e.scripts[0];
+              r.parentNode.insertBefore(s, r);
+              var f = function () { f.c(arguments); };
+              f.q = [];
+              f.c = function () { f.q.push(arguments); };
+              t['eS'] = t['eS'] || f;
+            }(window, document, 'script', '${esputnikSiteId}');
+            eS('init');
+          `}
+        </Script>
       )}
 
       <Script

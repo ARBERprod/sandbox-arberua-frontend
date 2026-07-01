@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
 import { cookieModalManager } from '@/features/CookieModal/lib/CookieModalManager';
 import { ExternalScripts } from './ExternalScripts';
 
@@ -12,8 +13,8 @@ jest.mock('@/features/CookieModal/lib/CookieModalManager', () => ({
 
 jest.mock('next/script', () => ({
   __esModule: true,
-  default: ({ id, src }: { id?: string; src?: string }) => (
-    <script data-testid={id} data-src={src} />
+  default: ({ id, src, children }: { id?: string; src?: string; children?: ReactNode }) => (
+    <script data-testid={id} data-src={src}>{children}</script>
   ),
 }));
 
@@ -35,12 +36,14 @@ describe('ExternalScripts — eSputnik injection', () => {
     process.env.NEXT_PUBLIC_ESPUTNIK_SITE_ID = ORIGINAL_SITE;
   });
 
-  it('injects the eS.js script with the env site id when consent + flag are on', () => {
+  it('injects the official eS.js bootstrap (site id + init) when consent + flag are on', () => {
     render(<ExternalScripts />);
 
     const script = screen.getByTestId('esputnik-webtracking');
     expect(script).toBeInTheDocument();
-    expect(script.getAttribute('data-src')).toContain(SITE_ID);
+    expect(script.textContent).toContain(SITE_ID);
+    expect(script.textContent).toContain('statics.esputnik.com/scripts/');
+    expect(script.textContent).toContain("eS('init')");
   });
 
   it('does not inject eS.js when the kill-switch flag is off', () => {
