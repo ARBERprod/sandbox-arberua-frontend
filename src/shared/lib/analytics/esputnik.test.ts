@@ -1,5 +1,5 @@
 import { cookieModalManager } from '@/features/CookieModal/lib/CookieModalManager';
-import { sendEsEvent, stringifyEsParams } from './esputnik';
+import { sendEsEvent, buildEsWirePayload } from './esputnik';
 
 jest.mock('@/features/CookieModal/lib/CookieModalManager', () => ({
   cookieModalManager: { isCookiesAccepted: jest.fn(() => true) },
@@ -7,31 +7,104 @@ jest.mock('@/features/CookieModal/lib/CookieModalManager', () => ({
 
 const mockedConsent = cookieModalManager.isCookiesAccepted as jest.Mock;
 
-describe('stringifyEsParams', () => {
-  it('stringifies price, quantity and isInStock', () => {
-    expect(stringifyEsParams({ price: 1990, quantity: 2, isInStock: true })).toEqual({
-      price: '1990',
-      quantity: '2',
-      isInStock: 'true',
+describe('buildEsWirePayload — documented eSputnik wire schema', () => {
+  it('nests ProductPage under its event key; price string, isInStock as 1', () => {
+    expect(buildEsWirePayload('ProductPage', { productKey: '42', price: 1990, isInStock: true })).toEqual({
+      ProductPage: { productKey: '42', price: '1990', isInStock: 1 },
     });
   });
 
-  it('stringifies values inside item arrays (cart/order lines)', () => {
-    expect(stringifyEsParams({ items: [{ productKey: '7', price: 500, quantity: 3 }] })).toEqual({
-      items: [{ productKey: '7', price: '500', quantity: '3' }],
+  it('maps isInStock false to 0', () => {
+    expect(buildEsWirePayload('ProductPage', { productKey: '42', price: 0, isInStock: false })).toEqual({
+      ProductPage: { productKey: '42', price: '0', isInStock: 0 },
     });
   });
 
-  it('omits a top-level undefined optional field instead of sending "undefined"', () => {
-    const result = stringifyEsParams({ productKey: '7', guid: undefined });
-    expect(result).toEqual({ productKey: '7' });
-    expect(result).not.toHaveProperty('guid');
+  it('nests CategoryPage under its event key', () => {
+    expect(buildEsWirePayload('CategoryPage', { categoryKey: 'men' })).toEqual({
+      CategoryPage: { categoryKey: 'men' },
+    });
   });
 
-  it('omits undefined fields inside item arrays', () => {
-    expect(stringifyEsParams({ items: [{ productKey: '7', price: 500, quantity: undefined }] })).toEqual({
-      items: [{ productKey: '7', price: '500' }],
+  it('nests AddToWishlist under its event key; price string', () => {
+    expect(buildEsWirePayload('AddToWishlist', { productKey: '7', price: 500 })).toEqual({
+      AddToWishlist: { productKey: '7', price: '500' },
     });
+  });
+
+  it('nests StatusCart lines with currency + GUID sibling', () => {
+    expect(
+      buildEsWirePayload('StatusCart', {
+        items: [{ productKey: '7', price: 500, quantity: 2 }],
+        guid: 'g-1',
+      }),
+    ).toEqual({
+      StatusCart: [{
+        productKey: '7', price: '500', quantity: '2', currency: 'UAH',
+      }],
+      GUID: 'g-1',
+    });
+  });
+
+  it('omits GUID from StatusCart when the guid is absent', () => {
+    const result = buildEsWirePayload('StatusCart', { items: [{ productKey: '7', price: 500, quantity: 1 }] });
+    expect(result).not.toHaveProperty('GUID');
+    expect(result).toEqual({
+      StatusCart: [{
+        productKey: '7', price: '500', quantity: '1', currency: 'UAH',
+      }],
+    });
+  });
+
+  it('nests PurchasedItems with string OrderNumber, currency and GUID sibling', () => {
+    expect(
+      buildEsWirePayload('PurchasedItems', {
+        items: [{ productKey: '7', price: 500, quantity: 3 }],
+        OrderNumber: 1001,
+        guid: 'g-2',
+      }),
+    ).toEqual({
+      OrderNumber: '1001',
+      PurchasedItems: [{
+        productKey: '7', price: '500', quantity: '3', currency: 'UAH',
+      }],
+      GUID: 'g-2',
+    });
+  });
+
+  it('maps CustomerData fields to eSputnik names; sex → user_tags_gender', () => {
+    expect(
+      buildEsWirePayload('CustomerData', {
+        externalCustomerId: 'u1',
+        email: 'a@b.c',
+        first_name: 'Jo',
+        phone: '380',
+        sex: 'male',
+      }),
+    ).toEqual({
+      CustomerData: {
+        externalCustomerId: 'u1',
+        user_email: 'a@b.c',
+        user_name: 'Jo',
+        user_phone: '380',
+        user_tags_gender: 'male',
+      },
+    });
+  });
+
+  it('omits user_tags_gender when sex is unknown', () => {
+    const result = buildEsWirePayload('CustomerData', {
+      externalCustomerId: 'u1',
+      email: 'a@b.c',
+      first_name: 'Jo',
+      phone: '380',
+    }) as { CustomerData: Record<string, unknown> };
+    expect(result.CustomerData).not.toHaveProperty('user_tags_gender');
+  });
+
+  it('returns undefined for parameterless events (MainPage/NotFound)', () => {
+    expect(buildEsWirePayload('MainPage', undefined)).toBeUndefined();
+    expect(buildEsWirePayload('NotFound', undefined)).toBeUndefined();
   });
 });
 
@@ -95,12 +168,10 @@ describe('sendEsEvent guard matrix', () => {
     expect(esMock).toHaveBeenCalledWith('sendEvent', 'MainPage');
   });
 
-  it('stringifies number/boolean params for a payload event', () => {
+  it('sends the documented nested wire payload for a payload event', () => {
     sendEsEvent('ProductPage', { productKey: '42', price: 1990, isInStock: true });
     expect(esMock).toHaveBeenCalledWith('sendEvent', 'ProductPage', {
-      productKey: '42',
-      price: '1990',
-      isInStock: 'true',
+      ProductPage: { productKey: '42', price: '1990', isInStock: 1 },
     });
   });
 
