@@ -565,3 +565,28 @@ Flag flipped on prod (`ENABLED=true`, siteId `6CA60B5D…582D`). Live checks in 
 **Verified against the live eS.js:** a `ProductPage` seeded into the correctly-shaped early stub *before* eS.js loaded was drained and POSTed to the server (200); the isolated stub produces `[[['init']], [['sendEvent',…]]]` with `entry[0][0] === 'init'`. Unit tests cover the buffering + nesting; gates green (lint 0, tsc 0 new, jest 519 passed / 3 pre-existing FiltersManager fails).
 
 Regression check added to the [checklist](#checklist--verification): landing-page `ProductPage`/`MainPage` must appear in Network on a **hard reload**, not only after SPA nav. **Ships on the next prod rebuild** (the running prod bundle still has the old code — the flag flip alone does not include this fix).
+
+### Post-deploy re-verification — 2026-07-02 (after `63f7c18` deployed)
+
+Prod deployed from `main` (`2c6f81c..63f7c18` fast-forward + rebuild). Re-tested on `arber.ua`: a **hard/direct load of `/product/*` now POSTs `ProductPage`** (`productKey`/`price`/`isInStock`) to the webevent endpoint → `200`. The landing-race fix is **live and working**. (`buildId` `yg4wZZ…` is pinned in config so it does NOT change between builds — verify deploys by behavior, not buildId.)
+
+### Two remaining issues found in the same pass (NOT the landing race)
+
+**1. `MainPage` and `NotFound` never reach eSputnik — eS.js drops them client-side.** On a home hard-load only the built-in `PageView` POSTs; no `MainPage`. Reproduced by hand from the console: `eS('sendEvent','MainPage')` (and `NotFound`) produce **no** network request — with no params, with `{}`, and with a non-empty `{visit:'1'}` — while `eS('sendEvent','ProductPage',{…})` from the same page POSTs `200`. So it is **not** a params problem.
+Official eSputnik docs (EN + UA) confirm the parameterless call `eS('sendEvent','MainPage')` / `eS('sendEvent','NotFound')` is the **correct** format and that these events exist **only to power on-site recommendations**, with the note *"select only those events included in your tariff plan."* → **Most likely the account's tariff/config does not include `MainPage`/`NotFound`, so eS.js silently drops them.** Not a frontend code bug. **Action (marketing/account):** confirm `MainPage`/`NotFound` are enabled in the eSputnik account (tariff + Triggers → Event Types); until then these two events are un-trackable regardless of frontend.
+
+**2. Payload structure diverges from the documented schema — VERIFY ingestion.** Docs pass event data **nested under the event-name key**; our `stringifyEsParams` sends it **flat**:
+
+| Event | Docs (`docs.esputnik.com`) | We send |
+|-------|----------------------------|---------|
+| `ProductPage` | `{ ProductPage: { productKey, price, isInStock: 1 } }` | `{ productKey, price, isInStock: "true" }` |
+| `StatusCart` | `{ StatusCart: [ {…} ], GUID }` | `{ items: [ {…} ], guid }` |
+| `CustomerData` | `{ CustomerData: { externalCustomerId, user_email, user_phone } }` | `{ externalCustomerId, email, first_name, phone }` |
+
+Transport returns `200` for the flat form, but 200 only means "accepted", not "ingested". eSputnik likely reads `body[eventName]`, so the flat payload (and the `items`/`guid` vs `StatusCart`/`GUID`, `email`/`phone` vs `user_email`/`user_phone` key mismatches) may not map to anything. **This could explain "no events" in the dashboard even for events that POST `200`.**
+
+**Fix — DONE 2026-07-02** (branch `fix/esputnik-payload-schema`): `sendEsEvent` now maps each event to the documented wire shape via `buildEsWirePayload` (`shared/lib/analytics/esputnik.ts`, replaces `stringifyEsParams`). Data is nested under the event-name key; `price`/`quantity` stringified, `isInStock` as `0/1`, `currency: 'UAH'` on cart/order lines, `GUID`/`OrderNumber` as siblings, and `CustomerData` fields renamed to eSputnik names (`email→user_email`, `phone→user_phone`, `first_name→user_name`, `sex→user_tags_gender`). FE-native input types (`EsEventPayloadMap`) and call sites are unchanged. Unit tests cover every event's wire shape; gates green (lint 0, tsc 0 new, jest 525 passed / 3 pre-existing FiltersManager fails). **Still needs dashboard confirmation** that events now ingest, and ships on the next prod rebuild.
+
+> `PurchasedItems` keeps a `GUID` sibling (the doc example omits it) so the StatusCart-GUID → purchase attribution from the [GUID protocol](#guid-protocol) survives; eSputnik ignores it if unused.
+
+Source docs: [eS.js events (EN)](https://docs.esputnik.com/docs/setting-up-web-tracking-by-sending-events-via-javascript-requests) · [eS.js events (UA)](https://docs-ua.esputnik.com/docs/nalashtuvannya-web-tracking-metodom-vidpravlennya-podij-cherez-viklik-funkcij-esjs).

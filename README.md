@@ -22,6 +22,21 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## eSputnik Web-Tracking
+
+Browser web-tracking (eS.js `eS('sendEvent', …)`) lives in `src/shared/lib/analytics/esputnik.ts` and is injected by `src/widgets/ExternalScripts`. Gated behind `NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED` + analytics consent. Implementation plan: `docs/2026-06-03-esputnik-webtracking-plan.md`.
+
+Official eSputnik documentation:
+
+- [eS.js event sending — web tracking (EN)](https://docs.esputnik.com/docs/setting-up-web-tracking-by-sending-events-via-javascript-requests)
+- [eS.js event sending — web tracking (UA)](https://docs-ua.esputnik.com/docs/nalashtuvannya-web-tracking-metodom-vidpravlennya-podij-cherez-viklik-funkcij-esjs)
+- [Passing recommendations via the JavaScript API (`getRecommendations`)](https://docs.esputnik.com/docs/passing-recommendations-using-the-javascript-api)
+- [Events and behaviour tracking](https://docs.esputnik.com/docs/events-and-behavior-tracking)
+- [Script install / web-tracking snippet (UA)](https://docs-ua.esputnik.com/docs/poluchenie-i-ustanovka-skripta-veb-trekinga-ua)
+- [Product feed import by URL (UA)](https://docs-ua.esputnik.com/docs/import-tovarnogo-fidu-do-akauntu)
+
+> Note: event data must be nested under the event-name key, e.g. `eS('sendEvent', 'ProductPage', { ProductPage: { productKey, price, isInStock } })` — see the EN/UA event docs above.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
