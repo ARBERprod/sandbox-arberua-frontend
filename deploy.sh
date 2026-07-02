@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "🚚 Dploying application"
+echo "🚚 Deploying application"
 
 echo "⬇️ PM2 down"
 
@@ -13,6 +13,14 @@ git pull
 echo "📦 Installing dependencies"
 
 npm ci --legacy-peer-deps
+
+echo "🧹 Clearing Next.js build cache"
+
+# Wipe the compiled output and webpack persistent cache. git pull can leave file
+# mtimes such that an incremental build reuses stale chunks (a changed source file
+# is not recompiled), so a deploy ends up serving old code under a new build id.
+# A clean build guarantees every changed chunk is rebuilt.
+rm -rf .next
 
 echo "🏗️ Compiling assets"
 
