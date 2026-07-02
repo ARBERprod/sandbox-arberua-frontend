@@ -1,9 +1,13 @@
 import { User } from '@/entities/User';
 import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 
-// Fire CustomerData for a real authenticated user. `sex` is omitted when unknown so
-// eSputnik never receives the string "null".
-export const sendCustomerDataEvent = (user: User): void => {
+// Fire CustomerData for a real authenticated user; returns whether it sent. Skips (returns
+// false, sends nothing) when the user lacks contact identifiers — userData can hydrate
+// partially first, and an identifier-less CustomerData can't attach to an eSputnik contact.
+// `sex` is omitted when unknown so eSputnik never receives the string "null".
+export const sendCustomerDataEvent = (user: User): boolean => {
+  if (!user?.user_id || !user?.email) return false;
+
   sendEsEvent('CustomerData', {
     externalCustomerId: user.user_id,
     email: user.email,
@@ -11,4 +15,5 @@ export const sendCustomerDataEvent = (user: User): void => {
     phone: user.phone,
     ...(user.sex ? { sex: user.sex } : {}),
   });
+  return true;
 };

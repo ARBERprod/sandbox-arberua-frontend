@@ -20,8 +20,8 @@ const baseUser: User = {
 describe('sendCustomerDataEvent', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('maps the user to the CustomerData payload', () => {
-    sendCustomerDataEvent(baseUser);
+  it('maps the user to the CustomerData payload and returns true', () => {
+    expect(sendCustomerDataEvent(baseUser)).toBe(true);
 
     expect(sendEsEvent).toHaveBeenCalledWith('CustomerData', {
       externalCustomerId: 'user-7',
@@ -41,5 +41,15 @@ describe('sendCustomerDataEvent', () => {
       first_name: 'Ivan',
       phone: '380501112233',
     });
+  });
+
+  it('returns false and sends nothing without a user_id (partial hydration snapshot)', () => {
+    expect(sendCustomerDataEvent({ ...baseUser, user_id: '' })).toBe(false);
+    expect(sendEsEvent).not.toHaveBeenCalled();
+  });
+
+  it('returns false and sends nothing without an email', () => {
+    expect(sendCustomerDataEvent({ ...baseUser, email: '' })).toBe(false);
+    expect(sendEsEvent).not.toHaveBeenCalled();
   });
 });

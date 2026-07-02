@@ -1,24 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/entities/Session';
-import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 
-// Emit CustomerData once an authenticated shopper reaches checkout. Fires only for a
-// real user (guests are skipped) and at most once per mount. `sex` is omitted when
-// unknown so eSputnik never receives the string "null".
+// Emit CustomerData once an authenticated shopper reaches checkout. Latches only after a
+// COMPLETE send: userData hydrates partially first (identifiers arrive later), so latching on
+// the first truthy snapshot would send an identifier-less event and never retry. Guests skipped.
 export const useCustomerDataTracking = (): void => {
   const { userData } = useAuth();
   const tracked = useRef(false);
 
   useEffect(() => {
-    if (!userData || tracked.current) return;
-    tracked.current = true;
-
-    sendEsEvent('CustomerData', {
-      externalCustomerId: userData.user_id,
-      email: userData.email,
-      first_name: userData.first_name,
-      phone: userData.phone,
-      ...(userData.sex ? { sex: userData.sex } : {}),
-    });
+    if (tracked.current || !userData) return;
+    if (sendCustomerDataEvent(userData)) {
+      tracked.current = true;
+    }
   }, [userData]);
 };
