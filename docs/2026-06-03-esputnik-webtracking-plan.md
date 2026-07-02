@@ -3,7 +3,7 @@
 > **Status:** В работе · **Updated:** 2026-06-30
 > **History:** 2026-06-03 На рассмотрении → 2026-06-30 На рассмотрении (ревью + переработка под `/orchestrate-plan`) → 2026-06-30 В работе
 >
-> **Note:** Step 2.3 (CategoryPage) stays deferred pending the backend `google_product_category` field (EXTERNAL_DEPENDENCY); external inputs site-id/tariff/feed-URL remain open.
+> **Note:** Step 2.3 (CategoryPage) stays deferred pending the backend `google_product_category` field (EXTERNAL_DEPENDENCY). Marketing input #1 **resolved 2026-07-02**: site id `6CA60B5D6FFA4F1ABA0423942045582D` (eS.js at `https://statics.esputnik.com/scripts/6CA60B5D6FFA4F1ABA0423942045582D.js`), set in the prod build env with `NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED=true` — web-tracking is now **live on arber.ua**. Still open: tariff (#2), feed URL (#3).
 
 Browser-side web-tracking (eS.js script + `eS('sendEvent', ...)` events) for on-site
 recommendations and behavioral segments. This is a **new, separate layer** from the
@@ -93,11 +93,12 @@ The frontend must **not** rebuild the path from breadcrumbs. This is a backend
 dependency on the same feed ticket — add it there. If BE cannot expose it in time,
 Step 2.3 is **blocked**, not "best-effort matched".
 
-### Marketing / account inputs (still open)
+### Marketing / account inputs
 
-1. eSputnik site / tracking-script id (from the account) — needed to inject eS.js.
-2. Tariff confirmed **Pro** (all 8 events + `g:sale_price`/`g:new` in feed)?
-3. Public feed URL to register in eSputnik + refresh schedule (daily/weekly).
+1. ~~eSputnik site / tracking-script id~~ — **RESOLVED 2026-07-02**:
+   `6CA60B5D6FFA4F1ABA0423942045582D`, live in the prod build env.
+2. Tariff confirmed **Pro** (all 8 events + `g:sale_price`/`g:new` in feed)? — still open.
+3. Public feed URL to register in eSputnik + refresh schedule (daily/weekly) — still open.
 
 ### Consent — RESOLVED
 
@@ -447,7 +448,7 @@ impact. All events are fire-and-forget and must never throw into the render path
 External inputs only — see [External prerequisites](#external-prerequisites--blockers).
 Resolved in this revision: `productKey`/`categoryKey` values and consent gating.
 
-1. eSputnik site / tracking-script id (input #1).
+1. ~~eSputnik site / tracking-script id (input #1)~~ — resolved 2026-07-02.
 2. Tariff confirmed **Pro** (input #2).
 3. Public feed URL + refresh schedule (input #3).
 
@@ -525,7 +526,7 @@ already exists in `esputnik.ts`. Marked `skip: true`; unblock when BE ships the 
 ### Review — 2026-06-30 (/review2 branch)
 **Commits:** 6d6c011
 **Findings fixed (3):** `PurchasedItems` idempotency `useRef` latch (was double-firing on effect re-run); `stringifyEsParams` now skips `undefined` (no more `guid: "undefined"`); all 8 event types consolidated into `esputnik.ts` (scattered `declare module` blocks removed — resolves the tech-debt note above).
-**Post-review correction (`dd0bef9`):** the eS.js URL `statics.esputnik.com/scripts/<siteId>.js` was **confirmed correct** against the account's real snippet, AND Step 1.3's injection was fixed to the official bootstrap — it now sets up the `window.eS` command-queue stub and calls `eS('init')` (the earlier `<Script src>`-only form would have loaded the script but never initialized tracking). siteId is the 4th snippet arg (e.g. `4B037AA4F4B248C297FD03FC25619BFB`), set via `NEXT_PUBLIC_ESPUTNIK_SITE_ID`. Env keys documented in `.env.example` (`680fe5d`), off by default.
+**Post-review correction (`dd0bef9`):** the eS.js URL `statics.esputnik.com/scripts/<siteId>.js` was **confirmed correct** against the account's real snippet, AND Step 1.3's injection was fixed to the official bootstrap — it now sets up the `window.eS` command-queue stub and calls `eS('init')` (the earlier `<Script src>`-only form would have loaded the script but never initialized tracking). siteId is the 4th snippet arg (e.g. `6CA60B5`), set via `NEXT_PUBLIC_ESPUTNIK_SITE_ID`. Env keys documented in `.env.example` (`680fe5d`), off by default.
 **Gates:** lint 0, tsc 0 new errors (13 pre-existing in untouched test files), jest 518 passed / 3 pre-existing FiltersManager fails.
 
 ## Outcome (orchestrator run 2026-06-30)
