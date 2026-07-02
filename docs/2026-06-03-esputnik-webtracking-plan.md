@@ -4,7 +4,7 @@
 > **History:** 2026-06-03 На рассмотрении → 2026-06-30 На рассмотрении (ревью + переработка под `/orchestrate-plan`) → 2026-06-30 В работе
 >
 > **Note:** Step 2.3 (CategoryPage) stays deferred pending the backend `google_product_category` field (EXTERNAL_DEPENDENCY). Marketing input #1 **resolved 2026-07-02**: site id `6CA60B5D6FFA4F1ABA0423942045582D` (eS.js at `https://statics.esputnik.com/scripts/6CA60B5D6FFA4F1ABA0423942045582D.js`), set in the prod build env with `NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED=true` — web-tracking is now **live on arber.ua**. Still open: tariff (#2), feed URL (#3).
-> ⚠️ **Verified on prod 2026-07-02 — one bug found:** eS.js loads, and interaction/SPA-nav events (`StatusCart`, SPA `ProductPage`, `AddToWishlist`) reach the server correctly. **But mount events on the initial/hard page load (`MainPage`, `ProductPage`, `NotFound`) are silently dropped** — the `window.eS` stub is created too late (bootstrap `<Script>` runs after the React mount effects), so `sendEsEvent`'s `window.eS` guard no-ops. See «[Production verification](#production-verification--2026-07-02)».
+> ⚠️ **Verified on prod 2026-07-02 — one bug found & fixed:** eS.js loads and interaction/SPA-nav events (`StatusCart`, SPA `ProductPage`, `AddToWishlist`) reach the server. Mount events on the **initial/hard page load** (`MainPage`, `ProductPage`, `NotFound`) were silently dropped (`window.eS` stub created too late → `sendEsEvent` no-op'd). **Fixed** on branch `fix/esputnik-landing-event-race` (`sendEsEvent` now installs the buffering stub itself); **ships on the next prod rebuild** — the running prod bundle still has the old code. See «[Production verification](#production-verification--2026-07-02)».
 
 Browser-side web-tracking (eS.js script + `eS('sendEvent', ...)` events) for on-site
 recommendations and behavioral segments. This is a **new, separate layer** from the
@@ -468,6 +468,9 @@ Resolved in this revision: `productKey`/`categoryKey` values and consent gating.
   `product.id`; cart/order events send `parent_id`, not the variant `id`)
 - [ ] `categoryKey` == feed `<g:google_product_category>` (from the backend field, not
   FE-reconstructed)
+- [ ] **Landing-page events**: `MainPage`/`ProductPage` appear in Network on a **hard
+  reload** (not only after SPA nav) — guards against the eS.js-timing race
+  (`ensureEsQueue`, fixed 2026-07-02)
 
 ## Session Map
 
@@ -555,4 +558,10 @@ Flag flipped on prod (`ENABLED=true`, siteId `6CA60B5D…582D`). Live checks in 
 
 **Impact:** for an e-commerce site most `ProductPage`/`MainPage` views are direct landings (SEO, ads, social), so the majority of these two events are lost. Interaction events (`StatusCart`, `AddToWishlist`) and `PurchasedItems` are unaffected (the click/success always occurs after eS.js is up), and SPA navigations are unaffected.
 
-**Fix (proposed):** create the `window.eS` command-queue stub as early as possible and unconditionally (it is inert — no network, no cookie, no PII until the real eS.js loads), and keep the eS.js *loader* consent-gated. Then a mount-time `sendEsEvent` buffers into the stub queue and the consent-gated loader drains it. Options: a `beforeInteractive` stub in `_document`, or install the stub at `esputnik.ts` module load. Add a regression check to the [checklist](#checklist--verification): landing-page `ProductPage`/`MainPage` must appear in Network on a hard reload, not only after SPA nav.
+**Fix — DONE 2026-07-02** (branch `fix/esputnik-landing-event-race`): `sendEsEvent` now installs the command-queue stub itself (`ensureEsQueue()`, `shared/lib/analytics/esputnik.ts`) instead of no-op'ing when `window.eS` is absent — so a mount-time event buffers (with `init` enqueued first) until the consent-gated loader drains it. `ExternalScripts` calls `ensureEsQueue()` in its consent gate and now loads eS.js via a plain `<Script src>` (stub + `eS('init')` moved into `ensureEsQueue`, no longer duplicated inline). Both call sites stay flag+consent gated, so the stub is only ever created post-consent (never before → no pre-consent tracking).
+
+> **Critical detail (from reading the live eS.js):** eS.js drains its queue by locating init via `entry[0][0] === 'init'` and replaying `entry[0]`, so each queue entry MUST be nested `[callArgs]` — exactly what the official stub's double-`arguments` forwarding produces. A flat `[callArgs]` entry silently breaks init detection and nothing sends. `ensureEsQueue` mirrors that nesting.
+
+**Verified against the live eS.js:** a `ProductPage` seeded into the correctly-shaped early stub *before* eS.js loaded was drained and POSTed to the server (200); the isolated stub produces `[[['init']], [['sendEvent',…]]]` with `entry[0][0] === 'init'`. Unit tests cover the buffering + nesting; gates green (lint 0, tsc 0 new, jest 519 passed / 3 pre-existing FiltersManager fails).
+
+Regression check added to the [checklist](#checklist--verification): landing-page `ProductPage`/`MainPage` must appear in Network on a **hard reload**, not only after SPA nav. **Ships on the next prod rebuild** (the running prod bundle still has the old code — the flag flip alone does not include this fix).

@@ -34,16 +34,20 @@ describe('ExternalScripts — eSputnik injection', () => {
   afterEach(() => {
     process.env.NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED = ORIGINAL_FLAG;
     process.env.NEXT_PUBLIC_ESPUTNIK_SITE_ID = ORIGINAL_SITE;
+    delete (window as any).eS;
   });
 
-  it('injects the official eS.js bootstrap (site id + init) when consent + flag are on', () => {
+  it('loads eS.js for the site id and sets up the eS queue (init) when consent + flag are on', () => {
     render(<ExternalScripts />);
 
     const script = screen.getByTestId('esputnik-webtracking');
     expect(script).toBeInTheDocument();
-    expect(script.textContent).toContain(SITE_ID);
-    expect(script.textContent).toContain('statics.esputnik.com/scripts/');
-    expect(script.textContent).toContain("eS('init')");
+    expect(script).toHaveAttribute('data-src', `https://statics.esputnik.com/scripts/${SITE_ID}.js`);
+
+    // ensureEsQueue ran before the loader, so the buffer exists with init first.
+    const es = (window as any).eS;
+    expect(typeof es).toBe('function');
+    expect(es.q).toEqual([[['init']]]);
   });
 
   it('does not inject eS.js when the kill-switch flag is off', () => {

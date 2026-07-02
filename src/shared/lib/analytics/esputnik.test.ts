@@ -60,10 +60,22 @@ describe('sendEsEvent guard matrix', () => {
     (global as any).window = originalWindow;
   });
 
-  it('no-ops when window.eS is absent', () => {
+  it('installs the eS command queue and buffers the event when window.eS is absent', () => {
+    // eS.js loads after mount effects; the stub buffers events (init first) until it drains.
+    // Entries are nested `[callArgs]` — eS.js detects init via entry[0][0] and replays entry[0].
     delete (window as any).eS;
     sendEsEvent('MainPage');
-    expect(esMock).not.toHaveBeenCalled();
+    const es = (window as any).eS;
+    expect(typeof es).toBe('function');
+    expect(es.q).toEqual([[['init']], [['sendEvent', 'MainPage']]]);
+    expect(es.q.find((e: unknown[][]) => e[0][0] === 'init')).toBeDefined();
+  });
+
+  it('does not re-queue init when window.eS already exists (reuses the real eS.js)', () => {
+    sendEsEvent('MainPage');
+    expect(esMock).toHaveBeenCalledTimes(1);
+    expect(esMock).toHaveBeenCalledWith('sendEvent', 'MainPage');
+    expect(esMock).not.toHaveBeenCalledWith('init');
   });
 
   it('no-ops when consent is denied', () => {

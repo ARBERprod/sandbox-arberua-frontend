@@ -2,6 +2,7 @@ import Script from 'next/script';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { cookieModalManager } from '@/features/CookieModal/lib/CookieModalManager';
+import { ensureEsQueue } from '@/shared/lib/analytics/esputnik';
 
 const GTM_ID = 'GTM-PHHD7CTQ';
 
@@ -18,6 +19,8 @@ export const ExternalScripts = () => {
     const siteId = process.env.NEXT_PUBLIC_ESPUTNIK_SITE_ID;
 
     if (trackingEnabled && siteId && cookieModalManager.isCookiesAccepted()) {
+      // Set up window.eS (queue + init) before eS.js loads so it drains any buffered events.
+      ensureEsQueue();
       setEsputnikSiteId(siteId);
     }
   }, []);
@@ -55,26 +58,13 @@ export const ExternalScripts = () => {
         `}
       </Script>
 
+      {/* Loader only — window.eS queue + eS('init') are set up by ensureEsQueue() above. */}
       {esputnikSiteId && (
         <Script
           id="esputnik-webtracking"
+          src={`https://statics.esputnik.com/scripts/${esputnikSiteId}.js`}
           strategy="afterInteractive"
-        >
-          {`
-            !function (t, e, c, n) {
-              var s = e.createElement(c);
-              s.async = 1;
-              s.src = 'https://statics.esputnik.com/scripts/' + n + '.js';
-              var r = e.scripts[0];
-              r.parentNode.insertBefore(s, r);
-              var f = function () { f.c(arguments); };
-              f.q = [];
-              f.c = function () { f.q.push(arguments); };
-              t['eS'] = t['eS'] || f;
-            }(window, document, 'script', '${esputnikSiteId}');
-            eS('init');
-          `}
-        </Script>
+        />
       )}
 
       <Script

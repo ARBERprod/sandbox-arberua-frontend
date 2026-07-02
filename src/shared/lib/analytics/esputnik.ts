@@ -68,22 +68,48 @@ export const stringifyEsParams = (params: EsRawParams): Record<string, unknown> 
   return result;
 };
 
-// Fire-and-forget eSputnik web-tracking event. Guards in order: SSR → eS presence →
-// consent → kill-switch flag. Never throws into the render path.
+// eS.js command-queue stub. MUST match the official snippet's queue shape: the outer call
+// forwards its args to `.c`, and `.c` pushes ITS OWN args, so each entry is `[callArgs]`
+// (nested one level). eS.js drains by locating init via `entry[0][0] === 'init'` and replaying
+// `entry[0]` — a flat `[callArgs]` breaks detection and nothing sends.
+type EsQueueStub = ((...args: unknown[]) => void) & { q: unknown[]; c: (...args: unknown[]) => void };
+
+// The eS.js loader (ExternalScripts) is consent-gated and mounts *after* React mount effects,
+// so a landing page's mount event would fire while window.eS is undefined and be dropped.
+// Install the queue stub on demand so those events buffer until eS.js drains them; `init` is
+// enqueued first so eS.js initializes before it replays any sendEvent. Idempotent; caller gates
+// on consent + flag (never enqueue before consent).
+export function ensureEsQueue(): void {
+  if (typeof window === 'undefined') return;
+  if (typeof window.eS === 'function') return;
+
+  const stub = ((...args: unknown[]) => { stub.c(args); }) as EsQueueStub;
+  stub.q = [];
+  stub.c = (...args: unknown[]) => { stub.q.push(args); };
+  window.eS = stub;
+  window.eS('init');
+}
+
+// Fire-and-forget eSputnik web-tracking event. Guards in order: SSR → kill-switch flag →
+// consent; then ensureEsQueue() guarantees window.eS (buffered until eS.js loads). Never
+// throws into the render path.
 export function sendEsEvent<E extends EsEventName>(name: E, ...args: EsEventArgs<E>): void {
   try {
     if (typeof window === 'undefined') return;
-    if (typeof window.eS !== 'function') return;
-    if (!cookieModalManager.isCookiesAccepted()) return;
     if (process.env.NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED !== 'true') return;
+    if (!cookieModalManager.isCookiesAccepted()) return;
+
+    ensureEsQueue();
+    const { eS } = window;
+    if (typeof eS !== 'function') return;
 
     const payload = args[0] as EsRawParams | undefined;
     if (payload === undefined) {
-      window.eS('sendEvent', name);
+      eS('sendEvent', name);
       return;
     }
 
-    window.eS('sendEvent', name, stringifyEsParams(payload));
+    eS('sendEvent', name, stringifyEsParams(payload));
   } catch {
     // analytics is fire-and-forget; never throw into the render path
   }
