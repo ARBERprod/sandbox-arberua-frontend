@@ -4,6 +4,7 @@
 > **History:** 2026-06-03 На рассмотрении → 2026-06-30 На рассмотрении (ревью + переработка под `/orchestrate-plan`) → 2026-06-30 В работе
 >
 > **Note:** Step 2.3 (CategoryPage) stays deferred pending the backend `google_product_category` field (EXTERNAL_DEPENDENCY). Marketing input #1 **resolved 2026-07-02**: site id `6CA60B5D6FFA4F1ABA0423942045582D` (eS.js at `https://statics.esputnik.com/scripts/6CA60B5D6FFA4F1ABA0423942045582D.js`), set in the prod build env with `NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED=true` — web-tracking is now **live on arber.ua**. Still open: tariff (#2), feed URL (#3).
+> ⚠️ **Verified on prod 2026-07-02 — one bug found:** eS.js loads, and interaction/SPA-nav events (`StatusCart`, SPA `ProductPage`, `AddToWishlist`) reach the server correctly. **But mount events on the initial/hard page load (`MainPage`, `ProductPage`, `NotFound`) are silently dropped** — the `window.eS` stub is created too late (bootstrap `<Script>` runs after the React mount effects), so `sendEsEvent`'s `window.eS` guard no-ops. See «[Production verification](#production-verification--2026-07-02)».
 
 Browser-side web-tracking (eS.js script + `eS('sendEvent', ...)` events) for on-site
 recommendations and behavioral segments. This is a **new, separate layer** from the
@@ -532,3 +533,26 @@ already exists in `esputnik.ts`. Marked `skip: true`; unblock when BE ships the 
 ## Outcome (orchestrator run 2026-06-30)
 
 10/11 steps shipped on `feature/esputnik-webtracking`; **Step 2.3 (CategoryPage) deferred** (EXTERNAL_DEPENDENCY — backend `google_product_category` field absent from the catalog API response). Entire layer is gated behind `NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED` + analytics consent, so it is **inert in production until that flag is set**. Remaining to fully ship: BE adds `google_product_category` to the catalog response (unblocks 2.3); confirm tariff Pro + feed URL; then set `NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED=true` + `NEXT_PUBLIC_ESPUTNIK_SITE_ID` in the prod build env and rebuild. eS.js URL and siteId confirmed against the account snippet.
+
+## Production verification — 2026-07-02
+
+Flag flipped on prod (`ENABLED=true`, siteId `6CA60B5D…582D`). Live checks in the browser against `arber.ua` (org `56588`, tracking cookie `sc`, all events POST to `https://esputnik.com/site-events/api/v1/webevent` → `200`):
+
+| Trigger | Event | Result |
+|---------|-------|--------|
+| eS.js load | built-in `PageView` | ✅ sent every page |
+| Add-to-cart (click) | `StatusCart` | ✅ `items[{productKey=parent_id, price, quantity}]` + fresh `guid` (UUID v4), all strings |
+| SPA nav to product | `ProductPage` | ✅ `productKey`/`price`/`isInStock` correct, all strings |
+| Manual `eS('sendEvent','ProductPage',…)` | `ProductPage` | ✅ 200 — server accepts custom events |
+| **Initial/hard load of `/`** | `MainPage` | ❌ **not sent** |
+| **Initial/hard load of `/product/*`** | `ProductPage` | ❌ **not sent** |
+
+### Bug: mount events lost on the landing page
+
+**Symptom:** on a hard load / reload / external-referral landing, only the built-in `PageView` reaches the server; the React-mount `sendEsEvent` calls (`MainPage`, `ProductPage`, `NotFound`) are dropped. Confirmed with a network interceptor installed pre-navigation: over 19 s only `PageView` fired; the identical `ProductPage` event fired fine on a later SPA navigation and on a manual `eS()` call.
+
+**Root cause:** the eSputnik bootstrap lives in `ExternalScripts` as a `<Script>` rendered only after a consent-resolving `useEffect` sets state, i.e. it executes *after* the page's React mount effects. So when `MainView`/`ProductView` call `sendEsEvent` on mount, `window.eS` is still `undefined` and the `typeof window.eS !== 'function'` guard in `sendEsEvent` (`shared/lib/analytics/esputnik.ts`) silently no-ops. The official snippet's command-queue stub — whose whole purpose is to buffer calls until eS.js loads — is created too late to buffer them.
+
+**Impact:** for an e-commerce site most `ProductPage`/`MainPage` views are direct landings (SEO, ads, social), so the majority of these two events are lost. Interaction events (`StatusCart`, `AddToWishlist`) and `PurchasedItems` are unaffected (the click/success always occurs after eS.js is up), and SPA navigations are unaffected.
+
+**Fix (proposed):** create the `window.eS` command-queue stub as early as possible and unconditionally (it is inert — no network, no cookie, no PII until the real eS.js loads), and keep the eS.js *loader* consent-gated. Then a mount-time `sendEsEvent` buffers into the stub queue and the consent-gated loader drains it. Options: a `beforeInteractive` stub in `_document`, or install the stub at `esputnik.ts` module load. Add a regression check to the [checklist](#checklist--verification): landing-page `ProductPage`/`MainPage` must appear in Network on a hard reload, not only after SPA nav.
