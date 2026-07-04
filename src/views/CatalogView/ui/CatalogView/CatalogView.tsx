@@ -23,6 +23,7 @@ import styles from './CatalogView.module.scss';
 import { FilterUtils } from '@/entities/Filter';
 import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
+import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 import { useUserId } from '@/entities/Session';
 import { useGetPromotionsQuery, PromotionsGrid } from '@/entities/Promotion';
 import { useGetPostsQuery, PostsGrid } from '@/entities/Blog';
@@ -144,6 +145,14 @@ export const CatalogView = memo(({ className }: CatalogViewProps) => {
       });
     }
   }, [data, clientId]);
+
+  // eSputnik CategoryPage: fire once per category. Keyed on the primitive key (not `data`) so it
+  // is NOT re-sent on pagination/filter/sort refetches. No-op until the backend ships the field.
+  const categoryKey = data?.data?.category?.esputnik_category_key;
+  useEffect(() => {
+    if (!categoryKey) return;
+    sendEsEvent('CategoryPage', { categoryKey });
+  }, [categoryKey]);
 
   if (isLoading) return <PageLoader />;
   if (isError || !data) return <ErrorMessage error="Error" />;
