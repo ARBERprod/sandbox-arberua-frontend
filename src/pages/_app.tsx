@@ -28,6 +28,7 @@ import Head from 'next/head';
 import { Language } from '@/shared/config/lang';
 import { useEffect } from 'react';
 import { $api } from '@/shared/api/api';
+import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
 
 const inter = localFont({
   src: [
@@ -64,6 +65,9 @@ function App({
       //   window?.fbq('track', 'PageView');
       // }
       $api.post(`${process.env.NEXT_PUBLIC_API_URL_V2}/events/pageView`);
+      // eSputnik SPA page view (auto-pageview only fires on hard reload; routeChangeComplete does
+      // not run on first mount, so no double-count). Separate system from the backend POST above.
+      sendEsEvent('PageView');
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);

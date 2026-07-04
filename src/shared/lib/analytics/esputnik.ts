@@ -6,6 +6,9 @@ import { cookieModalManager } from '@/features/CookieModal/lib/CookieModalManage
 export interface EsEventPayloadMap {
   MainPage: undefined;
   NotFound: undefined;
+  // SPA page view. Parameterless at the call site (`sendEsEvent('PageView')`); the wire wraps it
+  // as `{ PageView: {} }`. eS.js auto-pageview only covers hard reloads, so this fills SPA nav.
+  PageView: undefined;
   ProductPage: { productKey: string; price: number; isInStock: boolean };
   CategoryPage: { categoryKey: string };
   AddToWishlist: { productKey: string; price: number };
@@ -58,6 +61,9 @@ const toWireLine = (item: EsCartLine) => ({
 // Schema: https://docs.esputnik.com/docs/setting-up-web-tracking-by-sending-events-via-javascript-requests
 export function buildEsWirePayload(name: EsEventName, payload: unknown): EsWirePayload | undefined {
   switch (name) {
+  case 'PageView':
+    // Parameterless event, but eSputnik still expects the wrapped empty object (wire ≠ undefined).
+    return { PageView: {} };
   case 'ProductPage': {
     const p = payload as EsEventPayloadMap['ProductPage'];
     return { ProductPage: { productKey: p.productKey, price: String(p.price), isInStock: p.isInStock ? 1 : 0 } };

@@ -134,6 +134,10 @@ describe('buildEsWirePayload — documented eSputnik wire schema', () => {
     expect(buildEsWirePayload('MainPage', undefined)).toBeUndefined();
     expect(buildEsWirePayload('NotFound', undefined)).toBeUndefined();
   });
+
+  it('wraps PageView as an empty object under its event key (SPA page view)', () => {
+    expect(buildEsWirePayload('PageView', undefined)).toEqual({ PageView: {} });
+  });
 });
 
 describe('sendEsEvent guard matrix', () => {
@@ -201,6 +205,11 @@ describe('sendEsEvent guard matrix', () => {
     expect(esMock).toHaveBeenCalledWith('sendEvent', 'ProductPage', {
       ProductPage: { productKey: '42', price: '1990', isInStock: 1 },
     });
+  });
+
+  it('sends PageView (no argument) as the documented wrapped empty object', () => {
+    sendEsEvent('PageView');
+    expect(esMock).toHaveBeenCalledWith('sendEvent', 'PageView', { PageView: {} });
   });
 
   it('never throws into the UI when eS itself throws', () => {
