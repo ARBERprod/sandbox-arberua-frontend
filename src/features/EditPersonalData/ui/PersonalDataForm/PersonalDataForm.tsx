@@ -10,6 +10,7 @@ import { isValidationError } from '@/shared/types/type-guards';
 import { validationErrorHandler } from '@/shared/lib/utils/validationErrorHandler';
 import { useForm } from '@/shared/lib/hooks/useForm';
 import { useAuth } from '@/entities/Session';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 import { useTranslation } from 'next-i18next';
 import { useUpdatePersonalDataMutation } from '../../api/editPersonalDataApi';
 import { UserPersonalFormData } from '../../model/types/types';
@@ -34,6 +35,10 @@ export const PersonalDataForm = memo(({ className }:PersonalDataFormProps) => {
     try {
       const personalDataDto = personalDataFormHelper.prepareFormStateToSending(formData);
       await updatePersonalData(personalDataDto).unwrap();
+      // SESSION_TAG refetch is async, so userData is still stale here — build the snapshot from the
+      // submitted form over the current identifiers. Backend owns the real update; this event only
+      // links the web session to the contact.
+      if (userData) sendCustomerDataEvent({ ...userData, ...personalDataDto });
       closeModal();
       setActiveEditPersonalDataFormView(null);
     } catch (e) {
@@ -41,7 +46,7 @@ export const PersonalDataForm = memo(({ className }:PersonalDataFormProps) => {
         validationErrorHandler(e);
       }
     }
-  }, [closeModal, setActiveEditPersonalDataFormView, updatePersonalData]);
+  }, [closeModal, setActiveEditPersonalDataFormView, updatePersonalData, userData]);
 
   const { field, submitHandler } = useForm({
     initialState: personalDataFormHelper.getInitialFormState(userData),

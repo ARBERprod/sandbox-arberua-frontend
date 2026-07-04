@@ -8,6 +8,7 @@ import { isValidationError } from '@/shared/types/type-guards';
 import { validationErrorHandler } from '@/shared/lib/utils/validationErrorHandler';
 import { Loader } from '@/shared/ui/Loader';
 import { useTranslation } from 'next-i18next';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 import { useEditPersonalDataActions } from '../../model/slices/editPersonalDataSlice';
 import { useUpdateEmailMutation } from '../../api/editPersonalDataApi';
 import styles from './EmailForm.module.scss';
@@ -25,6 +26,8 @@ export const EmailForm = memo(({ className }: EmailFormProps) => {
     try {
       await updateEmail(data)
         .unwrap();
+      // Session refetch is async; send the new email over current identifiers (see PersonalDataForm).
+      if (userData) sendCustomerDataEvent({ ...userData, email: data.email });
       closeModal();
     } catch (e) {
       if (isValidationError(e)) {

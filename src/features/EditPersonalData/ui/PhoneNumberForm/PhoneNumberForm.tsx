@@ -8,6 +8,7 @@ import { isValidationError } from '@/shared/types/type-guards';
 import { validationErrorHandler } from '@/shared/lib/utils/validationErrorHandler';
 import { useTranslation } from 'next-i18next';
 import { Loader } from '@/shared/ui/Loader';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 import { useUpdatePhoneMutation } from '../../api/editPersonalDataApi';
 import { useEditPersonalDataActions } from '../../model/slices/editPersonalDataSlice';
 import styles from './PhoneNumberForm.module.scss';
@@ -24,6 +25,8 @@ export const PhoneNumberForm = memo(({ className }:PhoneNumberFormProps) => {
   const onSubmit = async (data: {phone: string}) => {
     try {
       await updatePhone(data).unwrap();
+      // Session refetch is async; send the new phone over current identifiers (see PersonalDataForm).
+      if (userData) sendCustomerDataEvent({ ...userData, phone: data.phone });
       closeModal();
     } catch (e) {
       if (isValidationError(e)) {
