@@ -102,6 +102,34 @@ describe('buildEsWirePayload — documented eSputnik wire schema', () => {
     expect(result.CustomerData).not.toHaveProperty('user_tags_gender');
   });
 
+  it('omits empty externalCustomerId/user_email and maps city → user_city (guest snapshot)', () => {
+    expect(
+      buildEsWirePayload('CustomerData', {
+        first_name: 'Jo',
+        phone: '380',
+        city: 'Kyiv',
+      }),
+    ).toEqual({
+      CustomerData: {
+        user_name: 'Jo',
+        user_phone: '380',
+        user_city: 'Kyiv',
+      },
+    });
+  });
+
+  it('drops externalCustomerId and user_email when passed as empty strings', () => {
+    const result = buildEsWirePayload('CustomerData', {
+      externalCustomerId: '',
+      email: '',
+      first_name: 'Jo',
+      phone: '380',
+    }) as { CustomerData: Record<string, unknown> };
+    expect(result.CustomerData).not.toHaveProperty('externalCustomerId');
+    expect(result.CustomerData).not.toHaveProperty('user_email');
+    expect(result.CustomerData).not.toHaveProperty('user_city');
+  });
+
   it('returns undefined for parameterless events (MainPage/NotFound)', () => {
     expect(buildEsWirePayload('MainPage', undefined)).toBeUndefined();
     expect(buildEsWirePayload('NotFound', undefined)).toBeUndefined();

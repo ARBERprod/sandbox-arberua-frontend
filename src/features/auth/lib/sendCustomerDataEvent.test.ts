@@ -32,6 +32,32 @@ describe('sendCustomerDataEvent', () => {
     });
   });
 
+  it('includes city from the first address when present', () => {
+    sendCustomerDataEvent({
+      ...baseUser,
+      addresses: [{
+        id: 'a1',
+        index: '',
+        house: '',
+        flat: '',
+        street: '',
+        country: { id: 'c1', title: 'Ukraine' },
+        city: {
+          id: 'ct1', title: 'Lviv', latitude: '', longitude: '',
+        },
+      }],
+    });
+
+    expect(sendEsEvent).toHaveBeenCalledWith('CustomerData', {
+      externalCustomerId: 'user-7',
+      email: 'ivan@example.com',
+      first_name: 'Ivan',
+      phone: '380501112233',
+      city: 'Lviv',
+      sex: 'male',
+    });
+  });
+
   it('omits sex when it is null', () => {
     sendCustomerDataEvent({ ...baseUser, sex: null });
 

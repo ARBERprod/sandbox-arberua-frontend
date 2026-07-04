@@ -19,13 +19,16 @@ export interface EsEventPayloadMap {
     OrderNumber: number;
     guid?: string;
   };
-  // Identifies the authenticated shopper; does NOT create/update a contact
-  // (the backend owns that via UpdateEsputnikContactJob). sex omitted when unknown.
+  // Links a web session to a contact; does NOT create/update it (the backend owns that via
+  // UpdateEsputnikContactJob). eSputnik matches by externalCustomerId, falling back to
+  // email/phone — so a guest (no user_id) omits externalCustomerId and matches by email/phone.
+  // Empty identifiers/city/sex are dropped by the wire layer.
   CustomerData: {
-    externalCustomerId: string;
-    email: string;
+    externalCustomerId?: string; // absent for guests
+    email?: string; // a guest may not provide one
     first_name: string;
     phone: string;
+    city?: string; // → user_city
     sex?: string;
   };
 }
@@ -88,10 +91,11 @@ export function buildEsWirePayload(name: EsEventName, payload: unknown): EsWireP
     const p = payload as EsEventPayloadMap['CustomerData'];
     return {
       CustomerData: {
-        externalCustomerId: p.externalCustomerId,
-        user_email: p.email,
+        ...(p.externalCustomerId ? { externalCustomerId: p.externalCustomerId } : {}),
+        ...(p.email ? { user_email: p.email } : {}),
         user_name: p.first_name,
         user_phone: p.phone,
+        ...(p.city ? { user_city: p.city } : {}),
         ...(p.sex !== undefined ? { user_tags_gender: p.sex } : {}),
       },
     };

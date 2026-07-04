@@ -2,12 +2,21 @@ import { useState } from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import { renderComponent } from '@/shared/lib/test/renderComponent';
 import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
+import { sendGuestCustomerDataEvent } from '@/features/auth/lib/sendGuestCustomerDataEvent';
 import { pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
 import { readPurchaseGuid, clearPurchaseGuid } from '@/shared/lib/analytics/esputnikCartGuid';
 import { OrderDto } from '@/entities/Order';
+import { User } from '@/entities/User';
 import { CheckoutSuccessView } from './CheckoutSuccessView';
 
 jest.mock('@/shared/lib/analytics/esputnik', () => ({ sendEsEvent: jest.fn() }));
+jest.mock('@/features/auth/lib/sendGuestCustomerDataEvent', () => ({ sendGuestCustomerDataEvent: jest.fn() }));
+
+const mockUseAuth = jest.fn<{ userData: User | null }, []>(() => ({ userData: null }));
+jest.mock('@/entities/Session', () => ({
+  ...jest.requireActual('@/entities/Session'),
+  useAuth: () => mockUseAuth(),
+}));
 jest.mock('@/shared/lib/analytics/esputnikCartGuid', () => ({
   readPurchaseGuid: jest.fn(() => 'snapshot-guid'),
   clearPurchaseGuid: jest.fn(),
@@ -55,8 +64,24 @@ const RerunHarness = () => {
   );
 };
 
+const AUTH_USER: User = {
+  addresses: [],
+  first_name: 'Auth',
+  last_name: 'User',
+  middle_name: null,
+  email: 'auth@example.com',
+  phone: '380000000000',
+  bonus_balance: 0,
+  sex: null,
+  birthday: null,
+  user_id: 'auth-1',
+};
+
 describe('CheckoutSuccessView — PurchasedItems event', () => {
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockUseAuth.mockReturnValue({ userData: null });
+  });
 
   it('emits PurchasedItems with the snapshot GUID, then clears it', () => {
     renderComponent(<CheckoutSuccessView order={order} />);
@@ -82,5 +107,27 @@ describe('CheckoutSuccessView — PurchasedItems event', () => {
     expect(clearPurchaseGuid).toHaveBeenCalledTimes(1);
     // GA stays ungated: the effect itself genuinely re-ran on the new dependency.
     expect((pushDataLayerEvent as jest.Mock).mock.calls.length).toBeGreaterThan(1);
+  });
+
+  it('sends guest CustomerData once from the order contact under the same latch', () => {
+    renderComponent(<RerunHarness />);
+
+    fireEvent.click(screen.getByText('rerun'));
+
+    expect(sendGuestCustomerDataEvent).toHaveBeenCalledTimes(1);
+    expect(sendGuestCustomerDataEvent).toHaveBeenCalledWith({
+      email: 'a@b.c',
+      phone: '380',
+      first_name: 'A',
+      city: 'Kyiv',
+    });
+  });
+
+  it('does not send guest CustomerData for an authenticated shopper', () => {
+    mockUseAuth.mockReturnValue({ userData: AUTH_USER });
+
+    renderComponent(<CheckoutSuccessView order={order} />);
+
+    expect(sendGuestCustomerDataEvent).not.toHaveBeenCalled();
   });
 });

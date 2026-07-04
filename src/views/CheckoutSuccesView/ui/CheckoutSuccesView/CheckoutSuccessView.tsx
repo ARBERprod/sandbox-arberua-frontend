@@ -21,6 +21,7 @@ import { getRandomEventId } from '@/shared/lib/utils/getRandomEventId';
 import { User } from '@/entities/User';
 import { measurementsPost, pushDataLayerEvent, pushGAdsEvent } from '@/shared/lib/analytics/dataLayer';
 import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
+import { sendGuestCustomerDataEvent } from '@/features/auth/lib/sendGuestCustomerDataEvent';
 import { readPurchaseGuid, clearPurchaseGuid } from '@/shared/lib/analytics/esputnikCartGuid';
 
 interface CheckoutSuccessViewProps {
@@ -168,6 +169,17 @@ export const CheckoutSuccessView = memo(
           guid: readPurchaseGuid(),
         });
         clearPurchaseGuid();
+
+        // Guest checkout: link the eSputnik contact (backend upserts it by email on OrderCreated)
+        // to this web session. Authenticated shoppers already get CustomerData on checkout mount.
+        if (!userData) {
+          sendGuestCustomerDataEvent({
+            email: order.customer.email,
+            phone: order.customer.phone,
+            first_name: order.customer.first_name,
+            city: order.city?.title,
+          });
+        }
       }
     }, [order, clientId, userData, eventId]);
 
