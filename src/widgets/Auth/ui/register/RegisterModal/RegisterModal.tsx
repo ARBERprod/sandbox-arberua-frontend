@@ -9,6 +9,7 @@ import { validationErrorHandler } from '@/shared/lib/utils/validationErrorHandle
 import { routerPaths } from '@/shared/config/router';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 // import { AuthBySocials } from '@/features/auth/AuthBySocials';
 import { RegisterFormData } from '../../../model/types/RegisterFormData';
 import { useAuthActions } from '../../../model/slices/authSlice';
@@ -42,7 +43,14 @@ export const RegisterModal = memo(({ className }: RegisterModalProps) => {
     try {
       await dispatch(signUp.initiate({ ...data, eventId }))
         .unwrap();
-      await sessionFetch();
+      try {
+        const { data: session } = await sessionFetch().unwrap();
+        if (session.user) {
+          sendCustomerDataEvent(session.user);
+        }
+      } catch {
+        // Session refresh failed — analytics is fire-and-forget; registration still proceeds.
+      }
       closeHandler();
       push(routerPaths.office);
     } catch (e) {

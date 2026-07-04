@@ -20,6 +20,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { useRouter } from 'next/router';
 import { useErrorNotification } from '@/shared/ui/Notification';
 import { DateField } from '@/shared/ui/Form/DateField';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 
 interface AuthByGoogleFormProps {
   className?: string;
@@ -41,7 +42,14 @@ export const AuthByGoogleForm = memo(({ className }: AuthByGoogleFormProps) => {
     try {
       await dispatch(signUp.initiate(registerData))
         .unwrap();
-      await sessionFetch();
+      try {
+        const { data: session } = await sessionFetch().unwrap();
+        if (session.user) {
+          sendCustomerDataEvent(session.user);
+        }
+      } catch {
+        // Session refresh failed — analytics is fire-and-forget; registration still proceeds.
+      }
       closeGoogleModal();
       push(routerPaths.office);
     } catch (e) {
