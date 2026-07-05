@@ -11,6 +11,7 @@ import { ErrorMessage } from '@/shared/ui/Form/ErrorMessage';
 import { routerPaths } from '@/shared/config/router';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+import { sendCustomerDataEvent } from '@/features/auth/lib/sendCustomerDataEvent';
 import { useAuthActions } from '../../../model/slices/authSlice';
 import { AuthModalType } from '../../../model/types/AuthSchema';
 import { authSelectors } from '../../../model/selectors/authSelectors';
@@ -52,7 +53,14 @@ export const LoginUserPasswordModal = memo(({ className }: LoginUserPasswordModa
         login: userLogin,
       }))
         .unwrap();
-      await sessionFetch();
+      try {
+        const { data: session } = await sessionFetch().unwrap();
+        if (session.user) {
+          sendCustomerDataEvent(session.user);
+        }
+      } catch {
+        // Session refresh failed — analytics is fire-and-forget; login still proceeds.
+      }
       closeHandler();
       push(routerPaths.office);
     } catch (e) {
