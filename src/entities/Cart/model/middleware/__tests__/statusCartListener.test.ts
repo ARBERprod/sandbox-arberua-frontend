@@ -86,7 +86,6 @@ describe('statusCartListener', () => {
     'addManyProductsToCart',
     'updateProduct',
     'deleteProduct',
-    'deleteCart',
   ];
 
   it.each(endpoints)('emits one StatusCart with a fresh GUID on "%s"', (endpointName) => {
@@ -116,15 +115,29 @@ describe('statusCartListener', () => {
     expect(guids).toEqual(['guid-1', 'guid-2']);
   });
 
-  it('emits an empty items array when the cart is cleared', () => {
+  it('emits an empty items array when the last item is removed (deleteProduct → cart emptied)', () => {
     const store = makeStore();
 
-    store.dispatch(fulfilledAction('deleteCart', { ...CART, items: [] }));
+    store.dispatch(fulfilledAction('deleteProduct', { ...CART, items: [] }));
 
     expect(mockSendEsEvent).toHaveBeenCalledWith('StatusCart', {
       items: [],
       guid: 'guid-1',
     });
+  });
+
+  it('does NOT emit on deleteCart (post-order truncate must not fire StatusCart)', () => {
+    const store = makeStore();
+
+    const action = fulfilledAction('deleteCart', { ...CART, items: [] });
+    // Sanity: the action is a genuine deleteCart-fulfilled — it simply must be
+    // ignored by the listener now that the matcher excludes deleteCart.
+    expect((cartApi.endpoints as any).deleteCart.matchFulfilled(action)).toBe(true);
+
+    store.dispatch(action);
+
+    expect(mockSendEsEvent).not.toHaveBeenCalled();
+    expect(mockNextCartGuid).not.toHaveBeenCalled();
   });
 
   it('falls back to the variant id when parent_id is missing', () => {

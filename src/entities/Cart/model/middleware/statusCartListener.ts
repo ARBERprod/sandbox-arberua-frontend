@@ -18,7 +18,12 @@ startListening({
     cartApi.endpoints.addManyProductsToCart.matchFulfilled,
     cartApi.endpoints.updateProduct.matchFulfilled,
     cartApi.endpoints.deleteProduct.matchFulfilled,
-    cartApi.endpoints.deleteCart.matchFulfilled,
+    // deleteCart is deliberately excluded: it is post-order truncate only (the
+    // sole caller is useCheckout.ts's cart cleanup), so firing StatusCart([]) here
+    // is the junk empty-cart event the eSputnik funnel complained about. The
+    // legitimate "cart emptied" signal arrives via deleteProduct of the last item.
+    // If a real "clear whole cart" UI ever reuses deleteCart, route it through
+    // deleteProduct instead so it keeps emitting StatusCart([]).
   ),
   effect: (_action, listenerApi) => {
     if (typeof window === 'undefined') return;
