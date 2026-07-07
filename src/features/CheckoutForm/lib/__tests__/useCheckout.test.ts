@@ -42,6 +42,14 @@ jest.mock('../../api/checkoutApi', () => ({
   useGetPaymentMethodsQuery: () => ({ data: [] }),
 }));
 
+// Purchase-GUID snapshot: the hook must capture the live cart GUID before any
+// navigation (WayForPay URL redirect may not let the effect finish) and before
+// the post-order cart-clear rotates it.
+const mockSnapshotPurchaseGuid = jest.fn();
+jest.mock('@/shared/lib/analytics/esputnikCartGuid', () => ({
+  snapshotPurchaseGuid: () => mockSnapshotPurchaseGuid(),
+}));
+
 // Cart entity barrel: we only need the delete mutation hook and the
 // centralised promocode predicates. The full barrel pulls in cartSlice which
 // would trigger circular init (cartSlice → cartApi → @/entities/Cart),
@@ -241,6 +249,52 @@ describe('useCheckout.submitCheckoutForm', () => {
       // Race toast must NOT fire post-success (the order is already placed).
       expect(getNotify).not.toHaveBeenCalled();
       expect(refetchSession).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('purchase GUID snapshot', () => {
+    it('snapshots the purchase GUID before navigating on the order-id route', async () => {
+      mockCheckoutUnwrap.mockResolvedValueOnce({ redirect: false, order: 'order-42' });
+      mockDeleteCartUnwrap.mockResolvedValueOnce(undefined);
+
+      const { result } = renderHook(() => useCheckout());
+
+      await act(async () => {
+        await result.current.submitCheckoutForm(baseFormData);
+      });
+
+      expect(mockSnapshotPurchaseGuid).toHaveBeenCalledTimes(1);
+      // Order matters more than "before deleteCart": push() may hand off to an
+      // external page, so the snapshot must precede any navigation.
+      expect(mockSnapshotPurchaseGuid.mock.invocationCallOrder[0])
+        .toBeLessThan(mockPush.mock.invocationCallOrder[0]);
+    });
+
+    it('snapshots the purchase GUID before navigating on the url-redirect route', async () => {
+      mockCheckoutUnwrap.mockResolvedValueOnce({ redirect: true, url: 'https://pay.example/abc' });
+      mockDeleteCartUnwrap.mockResolvedValueOnce(undefined);
+
+      const { result } = renderHook(() => useCheckout());
+
+      await act(async () => {
+        await result.current.submitCheckoutForm(baseFormData);
+      });
+
+      expect(mockSnapshotPurchaseGuid).toHaveBeenCalledTimes(1);
+      expect(mockSnapshotPurchaseGuid.mock.invocationCallOrder[0])
+        .toBeLessThan(mockPush.mock.invocationCallOrder[0]);
+    });
+
+    it('does NOT snapshot when checkout fails (every catch branch re-throws first)', async () => {
+      mockCheckoutUnwrap.mockRejectedValueOnce(businessError('OUT_OF_STOCK', 422));
+
+      const { result } = renderHook(() => useCheckout());
+
+      await expect(result.current.submitCheckoutForm(baseFormData)).rejects.toMatchObject({
+        data: { error: { code: 'OUT_OF_STOCK' } },
+      });
+      expect(mockSnapshotPurchaseGuid).not.toHaveBeenCalled();
+      expect(mockPush).not.toHaveBeenCalled();
     });
   });
 });

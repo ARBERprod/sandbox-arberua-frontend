@@ -14,6 +14,7 @@ import { getCheckoutFormErrors } from './getCheckoutFormErrors';
 import { refetchSession } from '@/entities/Session';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getNotify } from '@/shared/ui/Notification';
+import { snapshotPurchaseGuid } from '@/shared/lib/analytics/esputnikCartGuid';
 
 export const useCheckout = () => {
   const { push } = useRouter();
@@ -57,6 +58,12 @@ export const useCheckout = () => {
       // form so the user sees an error state instead of a silent no-op.
       throw e;
     }
+
+    // Capture the live cart GUID before any navigation (WayForPay redirects to an
+    // external URL, after which this effect may not finish) and before the post-order
+    // cart-clear can rotate it, so the success-page PurchasedItems binds to the
+    // pre-clear basket (GUID protocol). Single canonical snapshot point for both routes.
+    snapshotPurchaseGuid();
 
     if (isCheckoutResponseUrlDto(response)) {
       await push(response.url);
