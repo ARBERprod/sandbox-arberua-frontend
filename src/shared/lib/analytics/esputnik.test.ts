@@ -183,10 +183,10 @@ describe('sendEsEvent guard matrix', () => {
     expect(esMock).not.toHaveBeenCalledWith('init');
   });
 
-  it('no-ops when consent is denied', () => {
+  it('sends the event even when cookie consent is denied (tracking is consent-independent)', () => {
     mockedConsent.mockReturnValue(false);
     sendEsEvent('MainPage');
-    expect(esMock).not.toHaveBeenCalled();
+    expect(esMock).toHaveBeenCalledWith('sendEvent', 'MainPage');
   });
 
   it('no-ops when the kill-switch flag is not "true"', () => {

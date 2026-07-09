@@ -37,7 +37,7 @@ describe('ExternalScripts — eSputnik injection', () => {
     delete (window as any).eS;
   });
 
-  it('loads eS.js for the site id and sets up the eS queue (init) when consent + flag are on', () => {
+  it('loads eS.js for the site id and sets up the eS queue (init) when flag + site id are set', () => {
     render(<ExternalScripts />);
 
     const script = screen.getByTestId('esputnik-webtracking');
@@ -57,11 +57,11 @@ describe('ExternalScripts — eSputnik injection', () => {
     expect(screen.queryByTestId('esputnik-webtracking')).not.toBeInTheDocument();
   });
 
-  it('does not inject eS.js when consent is denied', () => {
+  it('loads eS.js even when cookie consent is denied (tracking is consent-independent)', () => {
     mockedConsent.mockReturnValue(false);
     render(<ExternalScripts />);
 
-    expect(screen.queryByTestId('esputnik-webtracking')).not.toBeInTheDocument();
+    expect(screen.getByTestId('esputnik-webtracking')).toBeInTheDocument();
   });
 
   it('does not inject eS.js when the site id env var is unset', () => {

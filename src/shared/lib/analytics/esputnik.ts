@@ -1,5 +1,3 @@
-import { cookieModalManager } from '@/features/CookieModal/lib/CookieModalManager';
-
 // Typed input payload per event (FE-native number/boolean). Single source of truth —
 // do NOT re-declare via `declare module` in feature files; add new events here.
 // `productKey` is always the parent product id (= feed <g:id>).
@@ -121,7 +119,7 @@ type EsQueueStub = ((...args: unknown[]) => void) & { q: unknown[]; c: (...args:
 // so a landing page's mount event would fire while window.eS is undefined and be dropped.
 // Install the queue stub on demand so those events buffer until eS.js drains them; `init` is
 // enqueued first so eS.js initializes before it replays any sendEvent. Idempotent; caller gates
-// on consent + flag (never enqueue before consent).
+// on the kill-switch flag (consent-independent by product decision).
 export function ensureEsQueue(): void {
   if (typeof window === 'undefined') return;
   if (typeof window.eS === 'function') return;
@@ -133,14 +131,14 @@ export function ensureEsQueue(): void {
   window.eS('init');
 }
 
-// Fire-and-forget eSputnik web-tracking event. Guards in order: SSR → kill-switch flag →
-// consent; then ensureEsQueue() guarantees window.eS (buffered until eS.js loads). Payload is
-// mapped to the documented wire shape. Never throws into the render path.
+// Fire-and-forget eSputnik web-tracking event. Guards in order: SSR → kill-switch flag; then
+// ensureEsQueue() guarantees window.eS (buffered until eS.js loads). Payload is mapped to the
+// documented wire shape. Never throws into the render path. Consent-independent by product
+// decision — the cookie banner does not gate tracking.
 export function sendEsEvent<E extends EsEventName>(name: E, ...args: EsEventArgs<E>): void {
   try {
     if (typeof window === 'undefined') return;
     if (process.env.NEXT_PUBLIC_ESPUTNIK_TRACKING_ENABLED !== 'true') return;
-    if (!cookieModalManager.isCookiesAccepted()) return;
 
     ensureEsQueue();
     const { eS } = window;
