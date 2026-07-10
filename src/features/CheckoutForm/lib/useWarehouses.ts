@@ -23,7 +23,14 @@ export const useWarehouses = ({
   );
   const { data, isLoading } = useGetWarehousesQuery(
     { city_id: cityId, type: deliveryMethod?.code },
-    { skip: !deliveryMethod || !cityId || deliveryMethod.type !== 'storage' },
+    {
+      // `store` is decoupled onto getPickupPoints (Step 3.2) — keep this legacy
+      // Nova-Poshta warehouses query for new_post* methods only.
+      skip: !deliveryMethod
+        || !cityId
+        || deliveryMethod.type !== 'storage'
+        || deliveryMethod.code === 'store',
+    },
   );
 
   useEffect(() => {

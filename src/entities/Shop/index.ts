@@ -4,4 +4,5 @@ export { mockSlides } from './constants/mockSlides';
 export { ShopDetails } from './ui/ShopDetails';
 export { mockShops, getMockShop } from './__mock__/mockShops';
 export { ShopList } from './ui/ShopList';
+export { ShopItem } from './ui/ShopItem';
 export * from './api/shopApi';

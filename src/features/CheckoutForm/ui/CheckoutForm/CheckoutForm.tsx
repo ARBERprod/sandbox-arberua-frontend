@@ -18,7 +18,9 @@ import { getInitialState } from '../../lib/getInitialState';
 import styles from './CheckoutForm.module.scss';
 import { CitySearchField } from '@/entities/Location';
 import { useWarehouses } from '../../lib/useWarehouses';
+import { usePickupPoints } from '../../lib/usePickupPoints';
 import { warehouseFilterOption } from '../../lib/warehouseFilterOption';
+import { PickupPointSelect } from '../PickupPointSelect';
 import { useSelector } from 'react-redux';
 import { cartSelectors } from '@/entities/Cart';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
@@ -85,6 +87,11 @@ export const CheckoutForm = memo(({
 
   const showNewPostWarehouses = chosenDeliveryMethod?.type === 'storage' && chosenDeliveryMethod.code !== 'store';
   const showStoreWarehouses = chosenDeliveryMethod?.type === 'storage' && chosenDeliveryMethod.code === 'store';
+
+  const { points: pickupPoints, isLoading: pickupLoading } = usePickupPoints({
+    cityId: formState.city_id.value,
+    enabled: showStoreWarehouses,
+  });
 
   const price = cartData?.total || cartData?.totals.reduce(
     (min, total) => (total.price.value < min.value ? total.price : min),
@@ -178,12 +185,11 @@ export const CheckoutForm = memo(({
           />
         )}
         {showStoreWarehouses && (
-          <SelectField
+          <PickupPointSelect
             {...field('warehouse_id')}
-            options={warehousesOptions}
-            isLoading={wareHousesLoading}
+            points={pickupPoints}
+            isLoading={pickupLoading}
             label={t('store-address')}
-            placeholder={t('select-store-address')}
           />
         )}
         {chosenDeliveryMethod?.type === 'address' && (

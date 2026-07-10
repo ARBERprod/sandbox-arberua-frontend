@@ -13,13 +13,18 @@ import { Shop } from '../../model/types';
 interface ShopItemProps {
   className?: string;
   shop: Shop;
+  // Checkout reuses this card as a pickup-point row where navigating to the
+  // store page makes no sense — hide the arrow-Link, keep the rest of the card.
+  hideLink?: boolean;
 }
 
-export const ShopItem = memo(({ shop, className }:ShopItemProps) => (
+export const ShopItem = memo(({ shop, className, hideLink }:ShopItemProps) => (
   <div className={cn(styles.root, className)}>
-    <Link href={shop.url} className={styles.arrow}>
-      <Svg width={12} height={12} Icon={ChevronRightIcon} />
-    </Link>
+    {!hideLink && (
+      <Link href={shop.url} className={styles.arrow}>
+        <Svg width={12} height={12} Icon={ChevronRightIcon} />
+      </Link>
+    )}
     <Typography variant="body-3" color="grey-dark">{shop.pickup_address}</Typography>
     <Typography variant="body-2">{shop.title}</Typography>
     <FlexCol gap="6">

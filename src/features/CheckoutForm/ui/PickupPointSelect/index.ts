@@ -1,0 +1,1 @@
+export { PickupPointSelect } from './PickupPointSelect';
