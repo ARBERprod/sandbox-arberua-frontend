@@ -105,3 +105,32 @@ describe('store decoupling from useWarehouses (Step 3.2)', () => {
     await waitFor(() => expect(warehousesHits).toBe(1));
   });
 });
+
+// The store method is routed through getPickupPoints, so the warehouses
+// onEmptyResults auto-switch (which flips delivery_method_id to address) can
+// never fire for store — an empty pickup list is a diagnostics case, not a
+// technical-empty that should bounce the shopper off store (Step 3.3 / 4.2).
+describe('no auto-switch away from store on empty pickup (Step 3.3 / 4.2)', () => {
+  it('does NOT invoke onEmptyResults for the store method even though warehouses is empty', async () => {
+    const onEmptyResults = jest.fn();
+    renderHook(
+      () => useWarehouses({ deliveryMethod: storeMethod, cityId: 'kyiv', onEmptyResults }),
+      { wrapper },
+    );
+
+    // Give RTK Query a window to (not) dispatch and settle.
+    await new Promise((r) => { setTimeout(r, 30); });
+    expect(warehousesHits).toBe(0);
+    expect(onEmptyResults).not.toHaveBeenCalled();
+  });
+
+  it('still invokes onEmptyResults for new_post technical-empty (auto-switch preserved)', async () => {
+    const onEmptyResults = jest.fn();
+    renderHook(
+      () => useWarehouses({ deliveryMethod: newPostMethod, cityId: 'kyiv', onEmptyResults }),
+      { wrapper },
+    );
+
+    await waitFor(() => expect(onEmptyResults).toHaveBeenCalledTimes(1));
+  });
+});
