@@ -1,4 +1,5 @@
 import { SuccessApiResponse } from '@/shared/types/api';
+import { Shop } from '@/entities/Shop';
 
 export interface PaymentMethod {
   id: string;
@@ -16,6 +17,23 @@ export interface Warehouse {
 
 export type DeliveryMethodType = 'storage' | 'address';
 export type DeliveryMethodCode = 'store' | 'new_post_courier' | 'new_post_pochtomat' | 'new_post';
+
+// A cart item that cannot be picked up from ANY store (hard blocker, Decision 6).
+export interface PickupBlockedItem {
+  product_id: string;
+  title: string;
+  slug: string;
+}
+
+// GET /v2/checkout/pickup-points body (inside {success,data}). Canonical shape
+// lives in the design contract; keep this and the MSW mocks in lockstep with it.
+// Invariant: stock_check_unavailable=true ⇒ the other fields stay empty (Decision 8).
+export interface PickupPointsData {
+  points: Shop[];
+  unavailable_items: PickupBlockedItem[];
+  no_common_store: boolean;
+  stock_check_unavailable: boolean;
+}
 
 export interface DeliveryMethod {
   id: string;
@@ -69,3 +87,4 @@ export type PayPlaceFormDto = SuccessApiResponse<string>;
 export type PaymentMethodsDto = SuccessApiResponse<PaymentMethod[]>;
 export type DeliveryMethodsDto = SuccessApiResponse<DeliveryMethod[]>;
 export type WarehousesDto = SuccessApiResponse<Warehouse[]>;
+export type PickupPointsDto = SuccessApiResponse<PickupPointsData>;
