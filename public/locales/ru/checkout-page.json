@@ -40,5 +40,9 @@
   "promocode.error.PROMOCODE_ALREADY_USED": "Вы уже использовали этот промокод",
   "promocode.error.PROMOCODE_EXPIRED": "Срок действия промокода истёк",
   "promocode.error.PROMOCODE_NO_ELIGIBLE_ITEMS": "Промокод не действует на товары в корзине",
-  "promocode.error.unknown": "Не удалось применить промокод"
+  "promocode.error.unknown": "Не удалось применить промокод",
+  "pickup.unavailable.stock_check": "Самовывоз временно недоступен, попробуйте позже или выберите другой способ.",
+  "pickup.unavailable.hard_blocker": "Некоторые товары недоступны для самовывоза ни в одной точке. Удалите их или выберите доставку Новой Почтой / курьером.",
+  "pickup.unavailable.no_common_store": "Нет точки, где есть все товары одновременно. Выберите доставку Новой Почтой или оформите товары отдельными заказами.",
+  "pickup.unavailable.default": "Самовывоз сейчас недоступен для этой корзины."
 }

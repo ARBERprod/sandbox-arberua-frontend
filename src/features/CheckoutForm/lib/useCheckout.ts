@@ -86,6 +86,13 @@ export const useCheckout = () => {
     return deliveryMethods.map(checkoutOptionsMapper.mapDeliveryMethodToOptions);
   }, [deliveryMethods]);
 
+  // Exposed so the form can proactively query pickup availability and inject
+  // `disabled` onto this option (Step 3.3) even before store is selected.
+  const storeDeliveryMethod = useMemo(
+    () => deliveryMethods?.find((method) => method.type === 'storage' && method.code === 'store'),
+    [deliveryMethods],
+  );
+
   const getChosenDeliveryMethod = (methodId: string) => deliveryMethods?.find((method) => method.id === methodId);
 
   const getAddressDeliveryMethodId = () => findDeliveryMethodByType(deliveryMethods, 'address')?.id;
@@ -96,5 +103,6 @@ export const useCheckout = () => {
     deliveryMethodsOptions,
     paymentMethodsOptions,
     getAddressDeliveryMethodId,
+    storeDeliveryMethod,
   };
 };

@@ -1,0 +1,1 @@
+export { PickupDiagnostics } from './PickupDiagnostics';

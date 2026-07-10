@@ -40,5 +40,9 @@
   "promocode.error.PROMOCODE_ALREADY_USED": "Ви вже використовували цей промокод",
   "promocode.error.PROMOCODE_EXPIRED": "Термін дії промокоду минув",
   "promocode.error.PROMOCODE_NO_ELIGIBLE_ITEMS": "Промокод не діє на товари у кошику",
-  "promocode.error.unknown": "Не вдалося застосувати промокод"
+  "promocode.error.unknown": "Не вдалося застосувати промокод",
+  "pickup.unavailable.stock_check": "Самовивіз тимчасово недоступний, спробуйте пізніше або оберіть інший спосіб.",
+  "pickup.unavailable.hard_blocker": "Деякі товари недоступні для самовивозу в жодній точці. Видаліть їх або оберіть доставку Новою Поштою / кур'єром.",
+  "pickup.unavailable.no_common_store": "Немає точки, де є всі товари одночасно. Оберіть доставку Новою Поштою, або оформіть товари окремими замовленнями.",
+  "pickup.unavailable.default": "Самовивіз зараз недоступний для цього кошика."
 }

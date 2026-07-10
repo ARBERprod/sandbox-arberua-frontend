@@ -40,5 +40,9 @@
   "promocode.error.PROMOCODE_ALREADY_USED": "You've already used this promo code",
   "promocode.error.PROMOCODE_EXPIRED": "The promo code has expired",
   "promocode.error.PROMOCODE_NO_ELIGIBLE_ITEMS": "The promo code doesn't apply to items in your cart",
-  "promocode.error.unknown": "Couldn't apply the promo code"
+  "promocode.error.unknown": "Couldn't apply the promo code",
+  "pickup.unavailable.stock_check": "Pickup is temporarily unavailable, please try again later or choose another method.",
+  "pickup.unavailable.hard_blocker": "Some items are unavailable for pickup at any store. Remove them or choose Nova Poshta / courier delivery.",
+  "pickup.unavailable.no_common_store": "There is no single store that has all items at once. Choose Nova Poshta delivery or place the items as separate orders.",
+  "pickup.unavailable.default": "Pickup is currently unavailable for this cart."
 }

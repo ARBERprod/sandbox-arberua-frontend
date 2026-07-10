@@ -1,4 +1,6 @@
-import { memo, ReactElement } from 'react';
+import {
+  memo, ReactElement, useEffect, useMemo,
+} from 'react';
 import cn from 'classnames';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
@@ -19,8 +21,11 @@ import styles from './CheckoutForm.module.scss';
 import { CitySearchField } from '@/entities/Location';
 import { useWarehouses } from '../../lib/useWarehouses';
 import { usePickupPoints } from '../../lib/usePickupPoints';
+import { derivePickupAvailability, isPickupUnavailable } from '../../lib/derivePickupAvailability';
+import { injectStoreDisabled } from '../../lib/injectStoreAvailability';
 import { warehouseFilterOption } from '../../lib/warehouseFilterOption';
 import { PickupPointSelect } from '../PickupPointSelect';
+import { PickupDiagnostics } from '../PickupDiagnostics';
 import { useSelector } from 'react-redux';
 import { cartSelectors } from '@/entities/Cart';
 import { measurementsPost, pushDataLayerEvent } from '@/shared/lib/analytics/dataLayer';
@@ -46,6 +51,7 @@ export const CheckoutForm = memo(({
     getChosenDeliveryMethod,
     submitCheckoutForm,
     getAddressDeliveryMethodId,
+    storeDeliveryMethod,
   } = useCheckout();
   const clientId = useUserId();
 
@@ -88,10 +94,30 @@ export const CheckoutForm = memo(({
   const showNewPostWarehouses = chosenDeliveryMethod?.type === 'storage' && chosenDeliveryMethod.code !== 'store';
   const showStoreWarehouses = chosenDeliveryMethod?.type === 'storage' && chosenDeliveryMethod.code === 'store';
 
-  const { points: pickupPoints, isLoading: pickupLoading } = usePickupPoints({
+  // Query pickup availability whenever a store method exists and a city is set,
+  // not only when store is selected — so the option can be disabled-with-reason
+  // proactively (Step 3.3).
+  const { points: pickupPoints, isLoading: pickupLoading, pickupData } = usePickupPoints({
     cityId: formState.city_id.value,
-    enabled: showStoreWarehouses,
+    enabled: Boolean(storeDeliveryMethod),
   });
+  const pickupAvailability = derivePickupAvailability(pickupData, pickupLoading);
+  const storeUnavailable = isPickupUnavailable(pickupAvailability);
+
+  // Inject `disabled` onto the store option from the availability source without
+  // touching the pure DeliveryMethod→option mapper (variant b).
+  const deliveryOptions = useMemo(
+    () => injectStoreDisabled(deliveryMethodsOptions || [], storeDeliveryMethod?.id, storeUnavailable),
+    [deliveryMethodsOptions, storeDeliveryMethod?.id, storeUnavailable],
+  );
+
+  // If store was selected and became unavailable (city/cart change), drop the
+  // stale point but keep the method selected — show the reason, never auto-switch.
+  useEffect(() => {
+    if (showStoreWarehouses && storeUnavailable && formState.warehouse_id.value) {
+      changeHandler('warehouse_id', '');
+    }
+  }, [showStoreWarehouses, storeUnavailable, formState.warehouse_id.value, changeHandler]);
 
   const price = cartData?.total || cartData?.totals.reduce(
     (min, total) => (total.price.value < min.value ? total.price : min),
@@ -117,7 +143,7 @@ export const CheckoutForm = memo(({
         <CitySearchField {...field('city_id')} onChange={cityChangeHandler} />
 
         <RadioField
-          options={deliveryMethodsOptions || []}
+          options={deliveryOptions}
           {...field('delivery_method_id')}
           onCustomChange={(selectedOption) => {
             const items = cartData?.items.map((item) => ({
@@ -184,7 +210,7 @@ export const CheckoutForm = memo(({
             filterOption={warehouseFilterOption}
           />
         )}
-        {showStoreWarehouses && (
+        {showStoreWarehouses && !storeUnavailable && (
           <PickupPointSelect
             {...field('warehouse_id')}
             points={pickupPoints}
@@ -192,6 +218,7 @@ export const CheckoutForm = memo(({
             label={t('store-address')}
           />
         )}
+        {storeDeliveryMethod && <PickupDiagnostics availability={pickupAvailability} />}
         {chosenDeliveryMethod?.type === 'address' && (
           <>
             <TextField
