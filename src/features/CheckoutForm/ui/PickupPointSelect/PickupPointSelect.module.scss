@@ -8,6 +8,11 @@
   margin-bottom: 4px;
 }
 
+.highlighted .list {
+  border-color: var(--red, #e53935);
+  box-shadow: 0 0 0 2px var(--red, #e53935);
+}
+
 .list {
   display: flex;
   flex-direction: column;

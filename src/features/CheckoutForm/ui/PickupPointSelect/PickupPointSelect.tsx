@@ -16,6 +16,8 @@ interface PickupPointSelectProps {
   isLoading?: boolean;
   label?: string;
   error?: string;
+  // Draws attention to the picker after a pickup_stock_changed 422 forces a re-pick.
+  highlighted?: boolean;
 }
 
 // Pickup-point picker: radio list rendered with the ShopItem card (address +
@@ -32,8 +34,9 @@ export const PickupPointSelect = memo(({
   isLoading,
   label,
   error,
+  highlighted,
 }: PickupPointSelectProps) => (
-  <div className={cn(styles.root, className)}>
+  <div className={cn(styles.root, { [styles.highlighted]: highlighted }, className)}>
     {label && <Label className={styles.label}>{label}</Label>}
     {isLoading
       ? <Loader size={40} />

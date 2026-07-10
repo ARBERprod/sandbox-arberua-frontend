@@ -3,6 +3,8 @@ import { isBusinessError, isValidationError } from '@/shared/types/type-guards';
 import { CheckoutFormData } from '../model/types/CheckoutFormData';
 import { useCheckoutMutation, useGetDeliveryMethodsQuery, useGetPaymentMethodsQuery } from '../api/checkoutApi';
 import { getPromocodeErrorKey, isPromocodeCheckoutRaceCode, useDeleteCartMutation } from '@/entities/Cart';
+import { isPickupCheckoutCode, isPickupStockChangedCode } from '../model/types/pickupCheckoutCodes';
+import { getPickupCheckoutErrorKey } from './getPickupCheckoutErrorKey';
 import { prepareCheckoutData } from './prepareCheckoutData';
 import { useMemo } from 'react';
 import { checkoutOptionsMapper } from './checkoutOptionsMapper';
@@ -16,7 +18,14 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getNotify } from '@/shared/ui/Notification';
 import { snapshotPurchaseGuid } from '@/shared/lib/analytics/esputnikCartGuid';
 
-export const useCheckout = () => {
+type UseCheckoutParams = {
+  // Reaction for the recoverable pickup_stock_changed 422: the component refetches
+  // the point list, drops the stale selection and highlights the picker. Injected
+  // (not owned here) because point query + form state live in CheckoutForm.
+  onPickupStockChanged?: () => void;
+};
+
+export const useCheckout = ({ onPickupStockChanged }: UseCheckoutParams = {}) => {
   const { push } = useRouter();
   const dispatch = useAppDispatch();
   const { data: paymentMethodsOptions } = useGetPaymentMethodsQuery();
@@ -31,25 +40,46 @@ export const useCheckout = () => {
         prepareCheckoutData(data, deliveryMethods),
       ).unwrap();
     } catch (e) {
-      if (isBusinessError(e) && isPromocodeCheckoutRaceCode(e.data.error.code)) {
-        // Race between devices: promocode invalidated server-side after the
-        // cart was rendered. Show a locale-specific message (backend message
-        // as fallback) and pull a fresh cart so the user sees corrected totals
-        // before re-submitting.
+      // General business-error dispatch on the code, BEFORE any code-specific
+      // branch — a pickup code must not fall through to the generic `throw e`.
+      if (isBusinessError(e)) {
         const { code, message } = e.data.error;
-        getNotify({
-          type: 'error',
-          content: i18next.t(getPromocodeErrorKey(code), { defaultValue: message }),
-        }).notify();
-        try {
-          await dispatch(refetchSession()).unwrap();
-        } catch {
-          // Best-effort refresh; cart state remains stale but the user is
-          // already informed via the toast above.
+
+        if (isPickupCheckoutCode(code)) {
+          // Stock verification failed at submit (Decision 5 / Step 2.5). Localise
+          // the message (backend message as fallback), mirror the promocode-race
+          // pattern (handle, then re-throw so the form sees a failure).
+          getNotify({
+            type: 'error',
+            content: i18next.t(getPickupCheckoutErrorKey(code), { defaultValue: message }),
+          }).notify();
+          // pickup_stock_changed is recoverable → re-pick a point (component reaction).
+          // pickup_stock_unavailable is a transient 1C outage → keep the selection.
+          if (isPickupStockChangedCode(code)) {
+            onPickupStockChanged?.();
+          }
+          throw e;
         }
-        // Re-throw so the consuming form treats the submit as failed (keeps
-        // isSubmitting=false, no fake success, no navigation).
-        throw e;
+
+        if (isPromocodeCheckoutRaceCode(code)) {
+          // Race between devices: promocode invalidated server-side after the
+          // cart was rendered. Show a locale-specific message (backend message
+          // as fallback) and pull a fresh cart so the user sees corrected totals
+          // before re-submitting.
+          getNotify({
+            type: 'error',
+            content: i18next.t(getPromocodeErrorKey(code), { defaultValue: message }),
+          }).notify();
+          try {
+            await dispatch(refetchSession()).unwrap();
+          } catch {
+            // Best-effort refresh; cart state remains stale but the user is
+            // already informed via the toast above.
+          }
+          // Re-throw so the consuming form treats the submit as failed (keeps
+          // isSubmitting=false, no fake success, no navigation).
+          throw e;
+        }
       }
       if (isValidationError(e)) {
         throw getCheckoutFormErrors(e);

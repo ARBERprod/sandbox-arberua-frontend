@@ -1,5 +1,5 @@
 import {
-  memo, ReactElement, useEffect, useMemo,
+  memo, ReactElement, useEffect, useMemo, useRef, useState,
 } from 'react';
 import cn from 'classnames';
 import Link from 'next/link';
@@ -45,6 +45,12 @@ export const CheckoutForm = memo(({
 }: CheckoutFormProps) => {
   const { t } = useTranslation(['common', 'checkout-page', 'office-page']);
   const { cartData } = useSelector(cartSelectors.getCart);
+  const [pickupHighlighted, setPickupHighlighted] = useState(false);
+
+  // Late-bound reaction to the recoverable pickup_stock_changed 422. Held in a
+  // ref because it depends on the point-query refetch and form changeHandler,
+  // both defined below — this breaks the render-order cycle with useCheckout.
+  const onPickupStockChangedRef = useRef<() => void>();
   const {
     paymentMethodsOptions,
     deliveryMethodsOptions,
@@ -52,7 +58,7 @@ export const CheckoutForm = memo(({
     submitCheckoutForm,
     getAddressDeliveryMethodId,
     storeDeliveryMethod,
-  } = useCheckout();
+  } = useCheckout({ onPickupStockChanged: () => onPickupStockChangedRef.current?.() });
   const clientId = useUserId();
 
   // Emit eSputnik CustomerData once the authenticated shopper reaches checkout.
@@ -77,6 +83,7 @@ export const CheckoutForm = memo(({
     changeHandler('address.house', '');
     changeHandler('address.flat', '');
     changeHandler(name, value);
+    setPickupHighlighted(false);
   };
 
   const { isLoading: wareHousesLoading, warehousesOptions } = useWarehouses({
@@ -97,12 +104,22 @@ export const CheckoutForm = memo(({
   // Query pickup availability whenever a store method exists and a city is set,
   // not only when store is selected — so the option can be disabled-with-reason
   // proactively (Step 3.3).
-  const { points: pickupPoints, isLoading: pickupLoading, pickupData } = usePickupPoints({
+  const {
+    points: pickupPoints, isLoading: pickupLoading, pickupData, refetch: refetchPickup,
+  } = usePickupPoints({
     cityId: formState.city_id.value,
     enabled: Boolean(storeDeliveryMethod),
   });
   const pickupAvailability = derivePickupAvailability(pickupData, pickupLoading);
   const storeUnavailable = isPickupUnavailable(pickupAvailability);
+
+  // On a recoverable pickup_stock_changed 422: pull a fresh point list, drop the
+  // stale selection and flag the picker so the shopper re-picks (Step 3.4).
+  onPickupStockChangedRef.current = () => {
+    refetchPickup();
+    changeHandler('warehouse_id', '');
+    setPickupHighlighted(true);
+  };
 
   // Inject `disabled` onto the store option from the availability source without
   // touching the pure DeliveryMethod→option mapper (variant b).
@@ -118,6 +135,11 @@ export const CheckoutForm = memo(({
       changeHandler('warehouse_id', '');
     }
   }, [showStoreWarehouses, storeUnavailable, formState.warehouse_id.value, changeHandler]);
+
+  // Drop the re-pick highlight once the shopper actually selects a point.
+  useEffect(() => {
+    if (formState.warehouse_id.value) setPickupHighlighted(false);
+  }, [formState.warehouse_id.value]);
 
   const price = cartData?.total || cartData?.totals.reduce(
     (min, total) => (total.price.value < min.value ? total.price : min),
@@ -216,6 +238,7 @@ export const CheckoutForm = memo(({
             points={pickupPoints}
             isLoading={pickupLoading}
             label={t('store-address')}
+            highlighted={pickupHighlighted}
           />
         )}
         {storeDeliveryMethod && <PickupDiagnostics availability={pickupAvailability} />}

@@ -171,6 +171,56 @@ describe('useCheckout.submitCheckoutForm', () => {
     });
   });
 
+  describe('pickup stock 422 (Step 3.4)', () => {
+    it('pickup_stock_changed: toasts, invokes the re-pick reaction, and re-throws (form not cleared)', async () => {
+      const onPickupStockChanged = jest.fn();
+      mockCheckoutUnwrap.mockRejectedValueOnce(businessError('pickup_stock_changed'));
+
+      const { result } = renderHook(() => useCheckout({ onPickupStockChanged }));
+
+      await expect(result.current.submitCheckoutForm(baseFormData)).rejects.toMatchObject({
+        data: { error: { code: 'pickup_stock_changed' } },
+      });
+
+      expect(getNotify).toHaveBeenCalledTimes(1);
+      expect(getNotify.mock.calls[0][0].type).toBe('error');
+      // Recoverable: steer the shopper back to the picker (refetch + reset selection).
+      expect(onPickupStockChanged).toHaveBeenCalledTimes(1);
+      // Not a promocode race — must not pull a fresh session, must not navigate.
+      expect(refetchSession).not.toHaveBeenCalled();
+      expect(mockPush).not.toHaveBeenCalled();
+      expect(mockDeleteCartTrigger).not.toHaveBeenCalled();
+    });
+
+    it('pickup_stock_unavailable: toasts, KEEPS the selection (no re-pick reaction), re-throws', async () => {
+      const onPickupStockChanged = jest.fn();
+      mockCheckoutUnwrap.mockRejectedValueOnce(businessError('pickup_stock_unavailable'));
+
+      const { result } = renderHook(() => useCheckout({ onPickupStockChanged }));
+
+      await expect(result.current.submitCheckoutForm(baseFormData)).rejects.toMatchObject({
+        data: { error: { code: 'pickup_stock_unavailable' } },
+      });
+
+      expect(getNotify).toHaveBeenCalledTimes(1);
+      // Transient 1C failure — selection stays, nothing to re-pick.
+      expect(onPickupStockChanged).not.toHaveBeenCalled();
+      expect(refetchSession).not.toHaveBeenCalled();
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+
+    it('does not throw when no reaction is wired for pickup_stock_changed (optional handler)', async () => {
+      mockCheckoutUnwrap.mockRejectedValueOnce(businessError('pickup_stock_changed'));
+
+      const { result } = renderHook(() => useCheckout());
+
+      await expect(result.current.submitCheckoutForm(baseFormData)).rejects.toMatchObject({
+        data: { error: { code: 'pickup_stock_changed' } },
+      });
+      expect(getNotify).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('validation error', () => {
     it('throws form-field errors via getCheckoutFormErrors (existing contract)', async () => {
       mockCheckoutUnwrap.mockRejectedValueOnce(validationError());
