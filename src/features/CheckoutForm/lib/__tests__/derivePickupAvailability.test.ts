@@ -54,6 +54,28 @@ describe('derivePickupAvailability', () => {
   it('state 5: all signals empty → unavailable (default fallback)', () => {
     expect(derivePickupAvailability(base, false)).toEqual({ kind: 'unavailable' });
   });
+
+  describe('malformed response (fail-closed, no crash)', () => {
+    it('degrades to unavailable when arrays and flags are missing entirely', () => {
+      expect(derivePickupAvailability({} as any, false)).toEqual({ kind: 'unavailable' });
+    });
+
+    it('still honours stock_check_unavailable precedence when arrays are missing', () => {
+      const result = derivePickupAvailability({ stock_check_unavailable: true } as any, false);
+      expect(result).toEqual({ kind: 'stock_check_unavailable' });
+    });
+
+    it('treats a missing points array as empty and falls through to unavailable_items', () => {
+      const items = [{ product_id: 'p1', title: 'Куртка', slug: 'kurtka' }];
+      const result = derivePickupAvailability({ unavailable_items: items } as any, false);
+      expect(result).toEqual({ kind: 'hard_blocker', items });
+    });
+
+    it('treats a missing unavailable_items array as empty and falls through to no_common_store', () => {
+      const result = derivePickupAvailability({ no_common_store: true } as any, false);
+      expect(result).toEqual({ kind: 'no_common_store' });
+    });
+  });
 });
 
 describe('isPickupUnavailable', () => {

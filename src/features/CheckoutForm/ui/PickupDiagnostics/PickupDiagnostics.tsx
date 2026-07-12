@@ -26,15 +26,18 @@ const MESSAGE_KEY: Partial<Record<PickupAvailability['kind'], PickupMessageKey>>
   unavailable: 'pickup.unavailable.default',
 };
 
-// Variant (b): the disable-with-reason block rendered UNDER the delivery radio
-// group; the store radio itself is only `disabled`.
+// The disable-with-reason block rendered UNDER the delivery radio group; the
+// store radio itself is only `disabled`.
 export const PickupDiagnostics = memo(({ className, availability }: PickupDiagnosticsProps) => {
   const { t } = useTranslation('checkout-page');
   const messageKey = MESSAGE_KEY[availability.kind];
   if (!messageKey) return null;
 
+  // role="status" (polite) not "alert": this surfaces proactively on every
+  // availability change (including before store is selected), so it must not
+  // assertively interrupt the shopper.
   return (
-    <div role="alert" className={cn(styles.root, className)}>
+    <div role="status" className={cn(styles.root, className)}>
       <Typography variant="body-2" color="grey-dark">{t(messageKey)}</Typography>
       {availability.kind === 'hard_blocker' && (
         <ul className={styles.items}>

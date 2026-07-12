@@ -5,9 +5,10 @@ type UsePickupPointsOptions = {
   enabled: boolean;
 };
 
-// Store pickup data source (replaces getWarehouses?type=store, Decision 2).
-// Query is gated on `enabled` (a store method is relevant) + a chosen city;
-// availability derivation for the disable-with-reason UI lives in Step 3.3.
+// Store pickup data source (replaces getWarehouses?type=store per the pickup
+// design contract). Query is gated on `enabled` (a store method is relevant) + a
+// chosen city; availability derivation for the disable-with-reason UI lives in
+// derivePickupAvailability.
 export const usePickupPoints = ({ cityId, enabled }: UsePickupPointsOptions) => {
   const {
     data, isLoading, isFetching, refetch,

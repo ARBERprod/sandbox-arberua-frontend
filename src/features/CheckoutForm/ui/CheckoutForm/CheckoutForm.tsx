@@ -103,7 +103,7 @@ export const CheckoutForm = memo(({
 
   // Query pickup availability whenever a store method exists and a city is set,
   // not only when store is selected — so the option can be disabled-with-reason
-  // proactively (Step 3.3).
+  // proactively.
   const {
     points: pickupPoints, isLoading: pickupLoading, pickupData, refetch: refetchPickup,
   } = usePickupPoints({
@@ -114,15 +114,19 @@ export const CheckoutForm = memo(({
   const storeUnavailable = isPickupUnavailable(pickupAvailability);
 
   // On a recoverable pickup_stock_changed 422: pull a fresh point list, drop the
-  // stale selection and flag the picker so the shopper re-picks (Step 3.4).
-  onPickupStockChangedRef.current = () => {
-    refetchPickup();
-    changeHandler('warehouse_id', '');
-    setPickupHighlighted(true);
-  };
+  // stale selection and flag the picker so the shopper re-picks. Kept in a ref and
+  // updated post-commit (canonical latest-ref pattern) so the submit-time callback
+  // in useCheckout always invokes the current closure without a render-body side-effect.
+  useEffect(() => {
+    onPickupStockChangedRef.current = () => {
+      refetchPickup();
+      changeHandler('warehouse_id', '');
+      setPickupHighlighted(true);
+    };
+  }, [refetchPickup, changeHandler]);
 
   // Inject `disabled` onto the store option from the availability source without
-  // touching the pure DeliveryMethod→option mapper (variant b).
+  // touching the pure DeliveryMethod→option mapper.
   const deliveryOptions = useMemo(
     () => injectStoreDisabled(deliveryMethodsOptions || [], storeDeliveryMethod?.id, storeUnavailable),
     [deliveryMethodsOptions, storeDeliveryMethod?.id, storeUnavailable],

@@ -5,6 +5,7 @@ import { useCheckoutMutation, useGetDeliveryMethodsQuery, useGetPaymentMethodsQu
 import { getPromocodeErrorKey, isPromocodeCheckoutRaceCode, useDeleteCartMutation } from '@/entities/Cart';
 import { isPickupCheckoutCode, isPickupStockChangedCode } from '../model/types/pickupCheckoutCodes';
 import { getPickupCheckoutErrorKey } from './getPickupCheckoutErrorKey';
+import { getDeliveryMethodById } from './getDeliveryMethodById';
 import { prepareCheckoutData } from './prepareCheckoutData';
 import { useMemo } from 'react';
 import { checkoutOptionsMapper } from './checkoutOptionsMapper';
@@ -34,6 +35,18 @@ export const useCheckout = ({ onPickupStockChanged }: UseCheckoutParams = {}) =>
   const [deleteCart] = useDeleteCartMutation();
 
   const submitCheckoutForm = async (data: CheckoutFormData) => {
+    // A storage method (in-store pickup or a Nova Poshta branch) can't be ordered
+    // without a chosen point. Guard here rather than in validatorConfig — useForm
+    // builds its validator once and can't swap rules on the selected method — so
+    // block the submit and surface a warehouse_id field error instead of leaning on
+    // the backend 422. In the store-UNAVAILABLE case the picker is hidden and the
+    // diagnostics block already explains why, so this simply stops the submit there.
+    const chosenMethod = getDeliveryMethodById(deliveryMethods, data.delivery_method_id);
+    if (chosenMethod?.type === 'storage' && !data.warehouse_id) {
+      const warehouseError = { warehouse_id: i18next.t('validation.required') };
+      throw warehouseError;
+    }
+
     let response;
     try {
       response = await checkout(
@@ -46,8 +59,8 @@ export const useCheckout = ({ onPickupStockChanged }: UseCheckoutParams = {}) =>
         const { code, message } = e.data.error;
 
         if (isPickupCheckoutCode(code)) {
-          // Stock verification failed at submit (Decision 5 / Step 2.5). Localise
-          // the message (backend message as fallback), mirror the promocode-race
+          // Stock verification failed at submit (per the pickup design contract).
+          // Localise the message (backend message as fallback), mirror the promocode-race
           // pattern (handle, then re-throw so the form sees a failure).
           getNotify({
             type: 'error',
@@ -117,7 +130,7 @@ export const useCheckout = ({ onPickupStockChanged }: UseCheckoutParams = {}) =>
   }, [deliveryMethods]);
 
   // Exposed so the form can proactively query pickup availability and inject
-  // `disabled` onto this option (Step 3.3) even before store is selected.
+  // `disabled` onto this option even before store is selected.
   const storeDeliveryMethod = useMemo(
     () => deliveryMethods?.find((method) => method.type === 'storage' && method.code === 'store'),
     [deliveryMethods],

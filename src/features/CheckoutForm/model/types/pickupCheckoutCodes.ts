@@ -1,6 +1,6 @@
 // Single source of truth for pickup business-error codes the backend returns on
-// order submit (design contract Decision 5 / backend Step 2.5). Every branch on
-// a pickup code must import from this module — mirrors promocodeCodes.ts.
+// order submit (per the pickup design contract). Every branch on a pickup code
+// must import from this module — mirrors promocodeCodes.ts.
 
 export const PICKUP_CHECKOUT_CODES = [
   // Selected point lost stock between checkout render and submit — recoverable:

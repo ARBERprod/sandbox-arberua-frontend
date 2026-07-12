@@ -10,7 +10,7 @@ export type PickupAvailability =
   | { kind: 'no_common_store' } // state 4
   | { kind: 'unavailable' }; // state 5 — default fallback
 
-// Precedence is contractual (design contract, Step 3.3): stock_check_unavailable
+// Precedence is contractual (per the pickup design contract): stock_check_unavailable
 // MUST be checked first — when 1C is down the backend leaves the other diagnostic
 // fields empty, and showing an unfiltered list would dead-end the checkout.
 export const derivePickupAvailability = (
@@ -20,9 +20,15 @@ export const derivePickupAvailability = (
   if (isLoading) return { kind: 'loading' };
   if (!data) return { kind: 'idle' };
 
+  // Fail-closed against a malformed 1C-backed payload: default missing arrays to
+  // empty (flags read as falsy when absent) so a bad response degrades to the safe
+  // `unavailable` state instead of throwing and crashing the checkout render.
+  const points = data.points ?? [];
+  const unavailableItems = data.unavailable_items ?? [];
+
   if (data.stock_check_unavailable) return { kind: 'stock_check_unavailable' };
-  if (data.points.length > 0) return { kind: 'available', points: data.points };
-  if (data.unavailable_items.length > 0) return { kind: 'hard_blocker', items: data.unavailable_items };
+  if (points.length > 0) return { kind: 'available', points };
+  if (unavailableItems.length > 0) return { kind: 'hard_blocker', items: unavailableItems };
   if (data.no_common_store) return { kind: 'no_common_store' };
   return { kind: 'unavailable' };
 };

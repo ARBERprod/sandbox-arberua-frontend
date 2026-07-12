@@ -23,7 +23,7 @@ interface PickupPointSelectProps {
 // Pickup-point picker: radio list rendered with the ShopItem card (address +
 // schedule). The chosen point id is written into `warehouse_id`
 // (prepareCheckoutData maps it to store_id). Empty/unavailable states are
-// owned by the parent diagnostics block (Step 3.3), not this component.
+// owned by the parent diagnostics block, not this component.
 export const PickupPointSelect = memo(({
   className,
   name,

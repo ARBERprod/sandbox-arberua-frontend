@@ -38,7 +38,13 @@ const mockDeleteCartTrigger = jest.fn(() => ({ unwrap: mockDeleteCartUnwrap }));
 
 jest.mock('../../api/checkoutApi', () => ({
   useCheckoutMutation: () => [mockCheckoutTrigger, { isLoading: false }],
-  useGetDeliveryMethodsQuery: () => ({ data: [{ id: 'storage-np', type: 'storage', code: 'new_post' }] }),
+  useGetDeliveryMethodsQuery: () => ({
+    data: [
+      { id: 'storage-np', type: 'storage', code: 'new_post' },
+      { id: 'storage-store', type: 'storage', code: 'store' },
+      { id: 'addr-courier', type: 'address', code: 'courier' },
+    ],
+  }),
   useGetPaymentMethodsQuery: () => ({ data: [] }),
 }));
 
@@ -218,6 +224,65 @@ describe('useCheckout.submitCheckoutForm', () => {
         data: { error: { code: 'pickup_stock_changed' } },
       });
       expect(getNotify).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('storage method requires a chosen point (submit guard)', () => {
+    it('blocks submit and surfaces a warehouse_id error when a store method has no point', async () => {
+      const { result } = renderHook(() => useCheckout());
+
+      await expect(
+        result.current.submitCheckoutForm({
+          ...baseFormData, delivery_method_id: 'storage-store', warehouse_id: '',
+        }),
+      ).rejects.toEqual(expect.objectContaining({ warehouse_id: expect.anything() }));
+
+      // The checkout mutation must never fire — no reliance on the backend 422.
+      expect(mockCheckoutTrigger).not.toHaveBeenCalled();
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+
+    it('blocks submit for a new_post branch method with no warehouse selected', async () => {
+      const { result } = renderHook(() => useCheckout());
+
+      await expect(
+        result.current.submitCheckoutForm({
+          ...baseFormData, delivery_method_id: 'storage-np', warehouse_id: '',
+        }),
+      ).rejects.toEqual(expect.objectContaining({ warehouse_id: expect.anything() }));
+
+      expect(mockCheckoutTrigger).not.toHaveBeenCalled();
+    });
+
+    it('submits normally when a storage method has a point set', async () => {
+      mockCheckoutUnwrap.mockResolvedValueOnce({ redirect: false, order: 'order-store' });
+      mockDeleteCartUnwrap.mockResolvedValueOnce(undefined);
+
+      const { result } = renderHook(() => useCheckout());
+
+      await act(async () => {
+        await result.current.submitCheckoutForm({
+          ...baseFormData, delivery_method_id: 'storage-store', warehouse_id: 'store-7',
+        });
+      });
+
+      expect(mockCheckoutTrigger).toHaveBeenCalledTimes(1);
+      expect(mockPush).toHaveBeenCalledTimes(1);
+    });
+
+    it('does NOT block an address method that legitimately has no warehouse_id', async () => {
+      mockCheckoutUnwrap.mockResolvedValueOnce({ redirect: false, order: 'order-addr' });
+      mockDeleteCartUnwrap.mockResolvedValueOnce(undefined);
+
+      const { result } = renderHook(() => useCheckout());
+
+      await act(async () => {
+        await result.current.submitCheckoutForm({
+          ...baseFormData, delivery_method_id: 'addr-courier', warehouse_id: '',
+        });
+      });
+
+      expect(mockCheckoutTrigger).toHaveBeenCalledTimes(1);
     });
   });
 

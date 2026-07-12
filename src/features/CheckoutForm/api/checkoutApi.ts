@@ -47,8 +47,8 @@ const checkoutApi = rtkApi.injectEndpoints({
       }),
       transformResponse: (response: WarehousesDto) => response.data,
     }),
-    // Pickup store points filtered by live cart stock (Decision 2). Geo param is
-    // `city_id` — NOT the legacy `is_city_id` of getWarehouses (contract-fixed).
+    // Pickup store points filtered by live cart stock. Geo param is `city_id` —
+    // NOT the legacy `is_city_id` of getWarehouses (contract-fixed).
     getPickupPoints: build.query<PickupPointsData, { city_id?: string }>({
       query: ({ city_id }) => ({
         url: `${process.env.NEXT_PUBLIC_API_URL_V2}/checkout/pickup-points`,

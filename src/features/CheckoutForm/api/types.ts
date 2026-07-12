@@ -18,7 +18,7 @@ export interface Warehouse {
 export type DeliveryMethodType = 'storage' | 'address';
 export type DeliveryMethodCode = 'store' | 'new_post_courier' | 'new_post_pochtomat' | 'new_post';
 
-// A cart item that cannot be picked up from ANY store (hard blocker, Decision 6).
+// A cart item that cannot be picked up from ANY store (hard blocker).
 export interface PickupBlockedItem {
   product_id: string;
   title: string;
@@ -27,7 +27,7 @@ export interface PickupBlockedItem {
 
 // GET /v2/checkout/pickup-points body (inside {success,data}). Canonical shape
 // lives in the design contract; keep this and the MSW mocks in lockstep with it.
-// Invariant: stock_check_unavailable=true ⇒ the other fields stay empty (Decision 8).
+// Invariant: stock_check_unavailable=true ⇒ the other fields stay empty.
 export interface PickupPointsData {
   points: Shop[];
   unavailable_items: PickupBlockedItem[];
