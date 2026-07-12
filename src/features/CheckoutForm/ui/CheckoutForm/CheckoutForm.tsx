@@ -23,7 +23,7 @@ import { useWarehouses } from '../../lib/useWarehouses';
 import { usePickupPoints } from '../../lib/usePickupPoints';
 import { usePickupItemRemoval } from '../../lib/usePickupItemRemoval';
 import { derivePickupAvailability, isPickupUnavailable } from '../../lib/derivePickupAvailability';
-import { injectStoreDisabled } from '../../lib/injectStoreAvailability';
+import { injectStoreDisabled } from '../../lib/injectStoreDisabled';
 import { warehouseFilterOption } from '../../lib/warehouseFilterOption';
 import { PickupPointSelect } from '../PickupPointSelect';
 import { PickupDiagnostics } from '../PickupDiagnostics';
@@ -255,7 +255,13 @@ export const CheckoutForm = memo(({
           />
         )}
         {storeDeliveryMethod && (
-          <PickupDiagnostics availability={pickupAvailability} onRemoveItem={handleRemovePickupItem} />
+          <PickupDiagnostics
+            availability={pickupAvailability}
+            // Reason is shown proactively (explains the disabled store radio), but the
+            // destructive remove-from-cart action is offered only while store is the
+            // active method — never under an unrelated delivery selection.
+            onRemoveItem={showStoreWarehouses ? handleRemovePickupItem : undefined}
+          />
         )}
         {chosenDeliveryMethod?.type === 'address' && (
           <>
@@ -359,7 +365,18 @@ export const CheckoutForm = memo(({
             {cartSlot}
           </div>
         )}
-      <Button type="submit" className={styles.button} size="large" fullWidth>{t('common:place_order')}</Button>
+      <Button
+        type="submit"
+        className={styles.button}
+        size="large"
+        fullWidth
+        // Store stays selected but unavailable-with-reason (we never auto-switch): the
+        // picker is hidden and the submit guard would reject with a warehouse_id error
+        // that has no field to render — so block the dead-end submit visibly instead.
+        disabled={showStoreWarehouses && storeUnavailable}
+      >
+        {t('common:place_order')}
+      </Button>
       <FlexCol gap="12">
         <Checkbox label={t('checkout-page:checkout.label')} {...field('call_reject')} />
         <Checkbox

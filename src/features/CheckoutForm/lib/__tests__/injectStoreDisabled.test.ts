@@ -1,5 +1,5 @@
 import { RadioOption } from '@/shared/ui/Form/RadioField';
-import { injectStoreDisabled } from '../injectStoreAvailability';
+import { injectStoreDisabled } from '../injectStoreDisabled';
 
 const options: RadioOption[] = [
   { value: 'dm-np', label: 'Нова Пошта' },

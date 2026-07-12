@@ -25,9 +25,9 @@ export interface PickupBlockedItem {
   slug: string;
 }
 
-// GET /v2/checkout/pickup-points body (inside {success,data}). Canonical shape
-// lives in the design contract; keep this and the MSW mocks in lockstep with it.
-// Invariant: stock_check_unavailable=true ⇒ the other fields stay empty.
+// GET /v2/checkout/pickup-points body (inside {success,data}). Keep this and the
+// MSW mocks in lockstep. Invariant: stock_check_unavailable=true ⇒ the other
+// fields stay empty.
 export interface PickupPointsData {
   points: Shop[];
   unavailable_items: PickupBlockedItem[];

@@ -40,6 +40,15 @@ describe('derivePickupAvailability', () => {
     expect(result).toEqual({ kind: 'stock_check_unavailable' });
   });
 
+  it('points win over unavailable_items when the backend sends both (precedence, not mutual exclusion)', () => {
+    const result = derivePickupAvailability({
+      ...base,
+      points: [shop],
+      unavailable_items: [{ product_id: 'p1', title: 'T', slug: 't' }],
+    }, false);
+    expect(result).toEqual({ kind: 'available', points: [shop] });
+  });
+
   it('state 3: empty points + unavailable_items → hard_blocker with items', () => {
     const items = [{ product_id: 'p1', title: 'Куртка', slug: 'kurtka' }];
     const result = derivePickupAvailability({ ...base, unavailable_items: items }, false);

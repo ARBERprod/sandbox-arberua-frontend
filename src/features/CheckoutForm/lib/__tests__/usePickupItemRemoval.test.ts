@@ -90,4 +90,23 @@ describe('usePickupItemRemoval', () => {
     expect(getNotify).toHaveBeenCalledTimes(1);
     expect(getNotify.mock.calls[0][0].type).toBe('error');
   });
+
+  it('refetches AND toasts on partial failure when one of several variant deletes rejects', async () => {
+    // Two cart variants share one blocked parent product_id → two delete calls.
+    const variants = [cartItem('offer-1a', 'prod-1'), cartItem('offer-1b', 'prod-1')];
+    mockDeleteUnwrap.mockResolvedValueOnce(undefined).mockRejectedValueOnce(new Error('network'));
+    const onRemoved = jest.fn();
+    const { result } = renderHook(() => usePickupItemRemoval({ cartItems: variants, onRemoved }));
+
+    await act(async () => {
+      await result.current('prod-1');
+    });
+
+    expect(mockDeleteTrigger).toHaveBeenCalledTimes(2);
+    // One variant left the cart → availability must be refetched off the smaller cart.
+    expect(onRemoved).toHaveBeenCalledTimes(1);
+    // The failed variant still surfaces an error so the shopper can retry it.
+    expect(getNotify).toHaveBeenCalledTimes(1);
+    expect(getNotify.mock.calls[0][0].type).toBe('error');
+  });
 });

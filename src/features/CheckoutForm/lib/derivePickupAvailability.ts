@@ -10,9 +10,9 @@ export type PickupAvailability =
   | { kind: 'no_common_store' } // state 4
   | { kind: 'unavailable' }; // state 5 — default fallback
 
-// Precedence is contractual (per the pickup design contract): stock_check_unavailable
-// MUST be checked first — when 1C is down the backend leaves the other diagnostic
-// fields empty, and showing an unfiltered list would dead-end the checkout.
+// Precedence is contractual: stock_check_unavailable MUST be checked first — when 1C
+// is down the backend leaves the other diagnostic fields empty, and showing an
+// unfiltered list would dead-end the checkout.
 export const derivePickupAvailability = (
   data: PickupPointsData | undefined,
   isLoading: boolean,

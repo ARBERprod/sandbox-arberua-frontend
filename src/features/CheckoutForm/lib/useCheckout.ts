@@ -59,9 +59,9 @@ export const useCheckout = ({ onPickupStockChanged }: UseCheckoutParams = {}) =>
         const { code, message } = e.data.error;
 
         if (isPickupCheckoutCode(code)) {
-          // Stock verification failed at submit (per the pickup design contract).
-          // Localise the message (backend message as fallback), mirror the promocode-race
-          // pattern (handle, then re-throw so the form sees a failure).
+          // Stock verification failed at submit. Localise the message (backend message
+          // as fallback), mirror the promocode-race pattern (handle, then re-throw so
+          // the form sees a failure).
           getNotify({
             type: 'error',
             content: i18next.t(getPickupCheckoutErrorKey(code), { defaultValue: message }),

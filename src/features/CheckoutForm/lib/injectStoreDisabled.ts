@@ -1,8 +1,7 @@
 import { RadioOption } from '@/shared/ui/Form/RadioField';
 
 // Inject `disabled` into the store delivery option from a SECOND source
-// (pickup availability), without polluting the pure DeliveryMethod→option
-// mapper (per the pickup design contract).
+// (pickup availability), without polluting the pure DeliveryMethod→option mapper.
 export const injectStoreDisabled = (
   options: RadioOption[],
   storeMethodId: string | undefined,
