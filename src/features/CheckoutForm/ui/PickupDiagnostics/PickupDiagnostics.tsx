@@ -12,11 +12,15 @@ interface PickupDiagnosticsProps {
   // When provided, each hard-blocker item gets a remove-from-cart action so the
   // shopper can drop the blocking item and unblock pickup. Absent → read-only list.
   onRemoveItem?: (productId: string) => void;
+  // Every cart item is a hard blocker → "remove them" advice is pointless, so we
+  // switch to the cart-wide "pickup unavailable" copy and drop the item list.
+  allItemsBlocked?: boolean;
 }
 
 type PickupMessageKey =
   | 'pickup.unavailable.stock_check'
   | 'pickup.unavailable.hard_blocker'
+  | 'pickup.unavailable.hard_blocker_all'
   | 'pickup.unavailable.no_common_store'
   | 'pickup.unavailable.default';
 
@@ -33,11 +37,17 @@ const MESSAGE_KEY: Partial<Record<PickupAvailability['kind'], PickupMessageKey>>
 // The disable-with-reason block rendered UNDER the delivery radio group; the
 // store radio itself is only `disabled`.
 export const PickupDiagnostics = memo(({
-  className, availability, onRemoveItem,
+  className, availability, onRemoveItem, allItemsBlocked,
 }: PickupDiagnosticsProps) => {
   const { t } = useTranslation('checkout-page');
-  const messageKey = MESSAGE_KEY[availability.kind];
+  const messageKey: PickupMessageKey | undefined = availability.kind === 'hard_blocker' && allItemsBlocked
+    ? 'pickup.unavailable.hard_blocker_all'
+    : MESSAGE_KEY[availability.kind];
   if (!messageKey) return null;
+
+  // With every cart item blocked the per-item list/remove is noise — show the
+  // cart-wide message only; keep the actionable list for a partial blocker.
+  const showBlockerList = availability.kind === 'hard_blocker' && !allItemsBlocked;
 
   // role="status" (polite) not "alert": this surfaces proactively on every
   // availability change (including before store is selected), so it must not
@@ -45,7 +55,7 @@ export const PickupDiagnostics = memo(({
   return (
     <div role="status" className={cn(styles.root, className)}>
       <Typography variant="body-2" color="grey-dark">{t(messageKey)}</Typography>
-      {availability.kind === 'hard_blocker' && (
+      {showBlockerList && availability.kind === 'hard_blocker' && (
         <ul className={styles.items}>
           {availability.items.map((item) => (
             <li key={item.product_id} className={styles.item}>

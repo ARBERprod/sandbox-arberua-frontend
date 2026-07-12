@@ -43,6 +43,7 @@
   "promocode.error.unknown": "Couldn't apply the promo code",
   "pickup.unavailable.stock_check": "Pickup is temporarily unavailable, please try again later or choose another method.",
   "pickup.unavailable.hard_blocker": "Some items are unavailable for pickup at any store. Remove them or choose Nova Poshta / courier delivery.",
+  "pickup.unavailable.hard_blocker_all": "Pickup is unavailable for the items in this cart. Choose Nova Poshta / courier delivery.",
   "pickup.unavailable.no_common_store": "There is no single store that has all items at once. Choose Nova Poshta delivery or place the items as separate orders.",
   "pickup.unavailable.default": "Pickup is currently unavailable for this cart.",
   "pickup.remove_item": "Remove",

@@ -79,4 +79,26 @@ describe('PickupDiagnostics', () => {
       expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
   });
+
+  describe('all cart items blocked (cart-wide)', () => {
+    it('shows the cart-wide message with no item list / remove buttons when allItemsBlocked', () => {
+      renderComponent(
+        <PickupDiagnostics availability={hardBlocker} allItemsBlocked onRemoveItem={jest.fn()} />,
+      );
+
+      expect(screen.getByRole('status')).toHaveTextContent(/недоступний для товарів у цьому кошику/i);
+      expect(screen.queryByText('Куртка зимова')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
+
+    it('keeps the per-item list + remove for a partial blocker (allItemsBlocked=false)', () => {
+      renderComponent(
+        <PickupDiagnostics availability={hardBlocker} allItemsBlocked={false} onRemoveItem={jest.fn()} />,
+      );
+
+      expect(screen.getByRole('status')).toHaveTextContent(/недоступні для самовивозу в жодній точці/i);
+      expect(screen.getByText('Куртка зимова')).toBeInTheDocument();
+      expect(screen.getAllByRole('button', { name: 'Видалити' })).toHaveLength(2);
+    });
+  });
 });

@@ -114,6 +114,15 @@ export const CheckoutForm = memo(({
   const pickupAvailability = derivePickupAvailability(pickupData, pickupLoading);
   const storeUnavailable = isPickupUnavailable(pickupAvailability);
 
+  // Every cart line is a hard blocker → pickup is impossible for this cart, so the
+  // diagnostics drop the "remove them" per-item list for a single cart-wide message.
+  const pickupAllItemsBlocked = useMemo(() => {
+    if (pickupAvailability.kind !== 'hard_blocker') return false;
+    const blocked = new Set(pickupAvailability.items.map((item) => item.product_id));
+    const items = cartData?.items ?? [];
+    return items.length > 0 && items.every((item) => blocked.has(item.id) || blocked.has(item.parent_id));
+  }, [pickupAvailability, cartData?.items]);
+
   // Drop a hard-blocker item from the cart, then refetch pickup: the availability
   // query is keyed by city_id (cart read server-side), so it won't auto-refresh
   // on cart mutation — refetch re-derives the state machine off the smaller cart.
@@ -257,6 +266,7 @@ export const CheckoutForm = memo(({
         {storeDeliveryMethod && (
           <PickupDiagnostics
             availability={pickupAvailability}
+            allItemsBlocked={pickupAllItemsBlocked}
             // Reason is shown proactively (explains the disabled store radio), but the
             // destructive remove-from-cart action is offered only while store is the
             // active method — never under an unrelated delivery selection.
