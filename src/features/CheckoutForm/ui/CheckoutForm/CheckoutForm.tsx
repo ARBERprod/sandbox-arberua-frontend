@@ -244,6 +244,19 @@ export const CheckoutForm = memo(({
             });
           }}
         />
+        {storeDeliveryMethod && (
+          // Rendered directly under the radio group — "На магазин" is its last
+          // option, so the reason sits right beneath the option it explains
+          // instead of drifting under an unrelated Nova Poshta field below.
+          <PickupDiagnostics
+            availability={pickupAvailability}
+            allItemsBlocked={pickupAllItemsBlocked}
+            // Reason is shown proactively (explains the disabled store radio), but the
+            // destructive remove-from-cart action is offered only while store is the
+            // active method — never under an unrelated delivery selection.
+            onRemoveItem={showStoreWarehouses ? handleRemovePickupItem : undefined}
+          />
+        )}
         {showNewPostWarehouses && (
           <SelectField
             {...field('warehouse_id')}
@@ -261,16 +274,6 @@ export const CheckoutForm = memo(({
             isLoading={pickupLoading}
             label={t('store-address')}
             highlighted={pickupHighlighted}
-          />
-        )}
-        {storeDeliveryMethod && (
-          <PickupDiagnostics
-            availability={pickupAvailability}
-            allItemsBlocked={pickupAllItemsBlocked}
-            // Reason is shown proactively (explains the disabled store radio), but the
-            // destructive remove-from-cart action is offered only while store is the
-            // active method — never under an unrelated delivery selection.
-            onRemoveItem={showStoreWarehouses ? handleRemovePickupItem : undefined}
           />
         )}
         {chosenDeliveryMethod?.type === 'address' && (

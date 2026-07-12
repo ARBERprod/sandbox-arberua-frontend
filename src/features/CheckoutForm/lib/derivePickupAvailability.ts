@@ -8,7 +8,15 @@ export type PickupAvailability =
   | { kind: 'stock_check_unavailable' } // state 1 — 1C down, fail-closed
   | { kind: 'hard_blocker'; items: PickupBlockedItem[] } // state 3
   | { kind: 'no_common_store' } // state 4
-  | { kind: 'unavailable' }; // state 5 — default fallback
+  // state 5 — default fallback. Verified against StoreRepository::getPickupStoresForCart
+  // (backend): the points/hard-blocker/no_common_store intersection is computed
+  // NATIONWIDE first; city_id is applied afterwards, in the controller, as a plain
+  // filter on the already-finalized `points`. So this state means "a fulfilling
+  // store exists somewhere in Ukraine, just not in the selected city" — never
+  // ambiguous with the other three states, which are all city-independent by
+  // construction. Message copy (pickup.unavailable.no_store_in_city) relies on
+  // this being true; re-verify against the backend before changing the wording.
+  | { kind: 'unavailable' };
 
 // Precedence is contractual: stock_check_unavailable MUST be checked first — when 1C
 // is down the backend leaves the other diagnostic fields empty, and showing an

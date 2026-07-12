@@ -22,7 +22,7 @@ type PickupMessageKey =
   | 'pickup.unavailable.hard_blocker'
   | 'pickup.unavailable.hard_blocker_all'
   | 'pickup.unavailable.no_common_store'
-  | 'pickup.unavailable.default';
+  | 'pickup.unavailable.no_store_in_city';
 
 // checkout-page i18n keys per unavailable state (precedence handled upstream by
 // derivePickupAvailability). Selectable states (idle/loading/available) map to
@@ -31,7 +31,7 @@ const MESSAGE_KEY: Partial<Record<PickupAvailability['kind'], PickupMessageKey>>
   stock_check_unavailable: 'pickup.unavailable.stock_check',
   hard_blocker: 'pickup.unavailable.hard_blocker',
   no_common_store: 'pickup.unavailable.no_common_store',
-  unavailable: 'pickup.unavailable.default',
+  unavailable: 'pickup.unavailable.no_store_in_city',
 };
 
 // The disable-with-reason block rendered UNDER the delivery radio group; the

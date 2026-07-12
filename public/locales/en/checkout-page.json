@@ -45,7 +45,7 @@
   "pickup.unavailable.hard_blocker": "Some items are unavailable for pickup at any store. Remove them or choose Nova Poshta / courier delivery.",
   "pickup.unavailable.hard_blocker_all": "Pickup is unavailable for the items in this cart. Choose Nova Poshta / courier delivery.",
   "pickup.unavailable.no_common_store": "There is no single store that has all items at once. Choose Nova Poshta delivery or place the items as separate orders.",
-  "pickup.unavailable.default": "Pickup is currently unavailable for this cart.",
+  "pickup.unavailable.no_store_in_city": "There's no pickup point in the selected city with your full cart in stock. Choose Nova Poshta / courier delivery, or try another city.",
   "pickup.remove_item": "Remove",
   "pickup.remove_item_error": "Couldn't remove the item, please try again",
   "pickup.error.pickup_stock_changed": "Stock at the selected store has changed, please choose another",

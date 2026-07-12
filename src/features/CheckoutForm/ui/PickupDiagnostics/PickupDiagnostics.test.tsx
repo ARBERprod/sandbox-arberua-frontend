@@ -42,10 +42,10 @@ describe('PickupDiagnostics', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/немає точки, де є всі товари/i);
   });
 
-  it('state 5: renders the neutral fallback for unavailable', () => {
+  it('state 5: renders the city-specific fallback for unavailable', () => {
     renderComponent(<PickupDiagnostics availability={{ kind: 'unavailable' }} />);
 
-    expect(screen.getByRole('status')).toHaveTextContent(/зараз недоступний для цього кошика/i);
+    expect(screen.getByRole('status')).toHaveTextContent(/у вибраному місті немає точки/i);
   });
 
   it.each(['idle', 'loading', 'available'])('renders no status for the selectable state %s', (kind) => {
