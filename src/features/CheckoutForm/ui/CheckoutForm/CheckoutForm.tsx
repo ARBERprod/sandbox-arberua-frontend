@@ -21,6 +21,7 @@ import styles from './CheckoutForm.module.scss';
 import { CitySearchField } from '@/entities/Location';
 import { useWarehouses } from '../../lib/useWarehouses';
 import { usePickupPoints } from '../../lib/usePickupPoints';
+import { usePickupItemRemoval } from '../../lib/usePickupItemRemoval';
 import { derivePickupAvailability, isPickupUnavailable } from '../../lib/derivePickupAvailability';
 import { injectStoreDisabled } from '../../lib/injectStoreAvailability';
 import { warehouseFilterOption } from '../../lib/warehouseFilterOption';
@@ -112,6 +113,14 @@ export const CheckoutForm = memo(({
   });
   const pickupAvailability = derivePickupAvailability(pickupData, pickupLoading);
   const storeUnavailable = isPickupUnavailable(pickupAvailability);
+
+  // Drop a hard-blocker item from the cart, then refetch pickup: the availability
+  // query is keyed by city_id (cart read server-side), so it won't auto-refresh
+  // on cart mutation — refetch re-derives the state machine off the smaller cart.
+  const handleRemovePickupItem = usePickupItemRemoval({
+    cartItems: cartData?.items,
+    onRemoved: refetchPickup,
+  });
 
   // On a recoverable pickup_stock_changed 422: pull a fresh point list, drop the
   // stale selection and flag the picker so the shopper re-picks. Kept in a ref and
@@ -245,7 +254,9 @@ export const CheckoutForm = memo(({
             highlighted={pickupHighlighted}
           />
         )}
-        {storeDeliveryMethod && <PickupDiagnostics availability={pickupAvailability} />}
+        {storeDeliveryMethod && (
+          <PickupDiagnostics availability={pickupAvailability} onRemoveItem={handleRemovePickupItem} />
+        )}
         {chosenDeliveryMethod?.type === 'address' && (
           <>
             <TextField

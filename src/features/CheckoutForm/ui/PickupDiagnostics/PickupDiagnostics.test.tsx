@@ -1,6 +1,15 @@
 import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { renderComponent } from '@/shared/lib/test/renderComponent';
 import { PickupDiagnostics } from './PickupDiagnostics';
+
+const hardBlocker = {
+  kind: 'hard_blocker' as const,
+  items: [
+    { product_id: 'p1', title: 'Куртка зимова', slug: 'kurtka' },
+    { product_id: 'p2', title: 'Шапка вовняна', slug: 'shapka' },
+  ],
+};
 
 describe('PickupDiagnostics', () => {
   it('state 1: renders the temporary "1C down" message for stock_check_unavailable', () => {
@@ -43,5 +52,31 @@ describe('PickupDiagnostics', () => {
     renderComponent(<PickupDiagnostics availability={{ kind, points: [] } as any} />);
 
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+
+  describe('hard_blocker remove action', () => {
+    it('renders a remove button per blocker item when onRemoveItem is provided', () => {
+      renderComponent(<PickupDiagnostics availability={hardBlocker} onRemoveItem={jest.fn()} />);
+
+      expect(screen.getAllByRole('button', { name: 'Видалити' })).toHaveLength(2);
+    });
+
+    it('calls onRemoveItem with the clicked item product_id', async () => {
+      const onRemoveItem = jest.fn();
+      renderComponent(<PickupDiagnostics availability={hardBlocker} onRemoveItem={onRemoveItem} />);
+
+      const buttons = screen.getAllByRole('button', { name: 'Видалити' });
+      await userEvent.click(buttons[1]);
+
+      expect(onRemoveItem).toHaveBeenCalledTimes(1);
+      expect(onRemoveItem).toHaveBeenCalledWith('p2');
+    });
+
+    it('renders no remove button when onRemoveItem is absent (back-compat)', () => {
+      renderComponent(<PickupDiagnostics availability={hardBlocker} />);
+
+      expect(screen.getByText('Куртка зимова')).toBeInTheDocument();
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
   });
 });

@@ -9,10 +9,18 @@
 
 .items {
   margin: 0;
-  padding-left: 18px;
-  list-style: disc;
+  padding: 0;
+  list-style: none;
+}
 
-  li {
-    margin-bottom: 2px;
-  }
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.remove {
+  flex-shrink: 0;
 }

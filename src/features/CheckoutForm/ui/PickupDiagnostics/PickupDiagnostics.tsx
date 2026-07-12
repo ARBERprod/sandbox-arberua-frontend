@@ -2,12 +2,16 @@ import { memo } from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Typography } from '@/shared/ui/Typography';
+import { Button } from '@/shared/ui/Button';
 import { PickupAvailability } from '../../lib/derivePickupAvailability';
 import styles from './PickupDiagnostics.module.scss';
 
 interface PickupDiagnosticsProps {
   className?: string;
   availability: PickupAvailability;
+  // When provided, each hard-blocker item gets a remove-from-cart action so the
+  // shopper can drop the blocking item and unblock pickup. Absent → read-only list.
+  onRemoveItem?: (productId: string) => void;
 }
 
 type PickupMessageKey =
@@ -28,7 +32,9 @@ const MESSAGE_KEY: Partial<Record<PickupAvailability['kind'], PickupMessageKey>>
 
 // The disable-with-reason block rendered UNDER the delivery radio group; the
 // store radio itself is only `disabled`.
-export const PickupDiagnostics = memo(({ className, availability }: PickupDiagnosticsProps) => {
+export const PickupDiagnostics = memo(({
+  className, availability, onRemoveItem,
+}: PickupDiagnosticsProps) => {
   const { t } = useTranslation('checkout-page');
   const messageKey = MESSAGE_KEY[availability.kind];
   if (!messageKey) return null;
@@ -42,8 +48,18 @@ export const PickupDiagnostics = memo(({ className, availability }: PickupDiagno
       {availability.kind === 'hard_blocker' && (
         <ul className={styles.items}>
           {availability.items.map((item) => (
-            <li key={item.product_id}>
+            <li key={item.product_id} className={styles.item}>
               <Typography as="span" variant="body-2">{item.title}</Typography>
+              {onRemoveItem && (
+                <Button
+                  color="light-tertiary"
+                  size="xsmall"
+                  className={styles.remove}
+                  onClick={() => onRemoveItem(item.product_id)}
+                >
+                  {t('pickup.remove_item')}
+                </Button>
+              )}
             </li>
           ))}
         </ul>
