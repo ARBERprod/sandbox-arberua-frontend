@@ -54,7 +54,7 @@ export const PickupDiagnostics = memo(({
   // assertively interrupt the shopper.
   return (
     <div role="status" className={cn(styles.root, className)}>
-      <Typography variant="body-2" color="grey-dark">{t(messageKey)}</Typography>
+      <Typography variant="body-3" color="grey-dark">{t(messageKey)}</Typography>
       {showBlockerList && availability.kind === 'hard_blocker' && (
         <ul className={styles.items}>
           {availability.items.map((item) => (
