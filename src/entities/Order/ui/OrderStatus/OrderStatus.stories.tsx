@@ -15,8 +15,7 @@ export const OrderStatusDefault: Story = {
   args: {
     orderId: 123123213,
     status: {
-      color: 'red',
-      title: 'Отменен',
+      title: 'Скасовано',
     },
   },
 };

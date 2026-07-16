@@ -31,7 +31,7 @@ export const OrderDetailsTable = memo(({
             <th
               className={cn(styles.th, styles.paddedTd)}
             >
-              {order.status && <div className={styles.statusCircle} style={{ backgroundColor: order.status.color }} />}
+              {order.status && <div className={styles.statusCircle} />}
             </th>
             <th className={styles.th}>
               <Typography variant="body-3" className={cn(styles.bold, styles.left)}>{order.status?.title ?? ORDER_VALUE_MISSING}</Typography>

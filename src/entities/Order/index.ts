@@ -8,3 +8,4 @@ export {
 } from './__mock__/mockOrderData';
 export { useGetOrdersQuery, getSuccessOrderInfo } from './api/orderApi';
 export type { OrderDto } from './api/types';
+export { ORDER_VALUE_MISSING } from './config/constants';

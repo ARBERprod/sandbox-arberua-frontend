@@ -9,7 +9,7 @@ import { displayPrice } from '@/shared/lib/utils/displayPrice';
 export const tableColumns: (t: TFunction) => TableColumn<Order>[] = (t) => [
   {
     header: '',
-    accessor: ({ status }) => (status ? <OrderStatusCircle color={status.color} /> : null),
+    accessor: ({ status }) => (status ? <OrderStatusCircle /> : null),
     data: {
       cellAlign: 'right',
     },

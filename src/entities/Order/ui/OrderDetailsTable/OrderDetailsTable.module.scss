@@ -8,6 +8,7 @@
 .statusCircle {
   @include square-size(8px);
   @include rounded-centered;
+  background-color: var(--red);
 }
 .bold {
   font-weight: 500;

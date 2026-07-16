@@ -6,6 +6,7 @@
 .statusCircle {
   @include rounded-centered;
   @include square-size(8px);
+  background-color: var(--red);
 }
 
 

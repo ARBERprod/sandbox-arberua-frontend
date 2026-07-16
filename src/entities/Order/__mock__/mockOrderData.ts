@@ -29,7 +29,6 @@ export const getMockOrderProducts = (length = 5) => new Array(length).fill(0).ma
 export const getMockOrderTotalItem = (): OrderTotalItem => ({
   title: faker.commerce.productName(),
   value: faker.datatype.number(),
-  id: faker.datatype.string(),
 });
 
 export const getMockCity = (): City => ({
@@ -44,7 +43,6 @@ export const getMockOrder = (): Order => ({
   date: new Date(faker.date.past()).toLocaleDateString(),
   count: faker.datatype.number({ min: 1, max: 10 }),
   status: {
-    color: faker.color.rgb(),
     title: faker.word.adverb(),
   },
   total_price: getMockPrice(),

@@ -13,7 +13,7 @@ import { routerPaths } from '@/shared/config/router';
 import DoneIcon from '@/shared/assets/icons/check-2.svg';
 import { Svg } from '@/shared/ui/Svg';
 import styles from './CheckoutSuccesView.module.scss';
-import { OrderDto } from '@/entities/Order';
+import { ORDER_VALUE_MISSING, OrderDto } from '@/entities/Order';
 import { ClothesItem, SmallProductCard } from '@/entities/Product';
 import { getUserDataForAnalytics } from '@/views/OfficeView/analytics/getUserDataForAnalytics';
 import { useAuth, useUserId } from '@/entities/Session';
@@ -55,17 +55,21 @@ export const CheckoutSuccessView = memo(
         bonus_balance: 0,
         sex: null,
         birthday: null,
-        addresses: [
-          {
-            id: order.address?.id || '',
-            index: '',
-            house: order.address?.house || '',
-            flat: order.address?.flat || '',
-            street: order.address?.street || '',
-            city: order.city || {},
-            country: (order.address as any)?.country || undefined,
-          },
-        ],
+        // Analytics only reads city/country off the address, so an order whose city the backend
+        // blanked contributes nothing — better no address than a `{}` masquerading as a City.
+        addresses: order.city
+          ? [
+            {
+              id: order.address?.id || '',
+              index: '',
+              house: order.address?.house || '',
+              flat: order.address?.flat || '',
+              street: order.address?.street || '',
+              city: order.city,
+              country: (order.address as any)?.country || undefined,
+            },
+          ]
+          : [],
         user_id: order.customer.id || '',
       };
 
@@ -221,7 +225,7 @@ export const CheckoutSuccessView = memo(
                   {t('checkout.success.order_address_delivery')}
                 </Typography>
                 <Typography variant="body-2" weight={600}>
-                  {[order.city?.title, order.delivery_method?.title].filter(Boolean).join(', ')}
+                  {[order.city?.title, order.delivery_method?.title].filter(Boolean).join(', ') || ORDER_VALUE_MISSING}
                 </Typography>
               </Flex>
 

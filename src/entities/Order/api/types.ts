@@ -18,7 +18,6 @@ export interface OrderProductDto {
   quantity: number;
   title: string;
   url: string;
-  wishlist_count: number;
   // Named `options` by the backend (OrderItemResource); the domain model calls them `properties`.
   options: OrderProductProperty[];
   bonus_deduction: number;
@@ -29,7 +28,6 @@ export interface OrderProductDto {
 }
 
 export type OrderTotalItem = {
-  id: string;
   title: string;
   value: number;
 };
@@ -49,15 +47,14 @@ export type OrderAddress = {
   flat: string;
 }
 
-// delivery_method / payment_method / status are nullOnDelete FKs on the backend `orders` table:
-// removing a method or a status in admin blanks them on every historical order, so old orders do arrive without them.
+// city / delivery_method / payment_method / status are nullOnDelete FKs on the backend `orders` table:
+// removing a method, a city or a status in admin blanks it on every historical order, so old orders do arrive without them.
 export interface OrderDto {
   id: string;
-  city: City;
+  city: City | null;
   cost: Price;
   created_at: string;
   delivery_method: OrderDeliveryMethod | null;
-  do_not_call: boolean;
   products: OrderProductDto[];
   note: string;
   order_number: number;
@@ -67,7 +64,5 @@ export interface OrderDto {
   address: OrderAddress | null
   totals: OrderTotalItem[];
   customer: OrderCustomer;
-  count: number;
-  total_price: Price | false;
   deduct_bonus: number | null;
 }

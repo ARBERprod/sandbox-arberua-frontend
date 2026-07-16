@@ -4,7 +4,6 @@ import { City } from '@/entities/Location';
 
 export interface OrderStatus {
   title: string;
-  color: string;
 }
 
 export type OrderProductProperty = {

@@ -25,12 +25,7 @@ export const orderMapper = (orderDto: OrderDto): Order => {
     payment_method: payment_method?.title ?? null,
     note,
     count: products.reduce((acc, product) => acc + product.quantity, 0),
-    status: status
-      ? {
-        color: 'red',
-        title: status.title,
-      }
-      : null,
+    status: status ? { title: status.title } : null,
     total_price: cost,
     cost,
     histories: histories || [],

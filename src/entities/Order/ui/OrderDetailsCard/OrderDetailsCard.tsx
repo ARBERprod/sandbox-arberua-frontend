@@ -105,7 +105,7 @@ export const OrderDetailsCard = memo(({ order, className }:OrderDetailsCardProps
             :
           </Typography>
           <Flex as="span" gap="8" align="center">
-            {order.status && <div className={styles.statusCircle} style={{ backgroundColor: order.status.color }} />}
+            {order.status && <div className={styles.statusCircle} />}
             <Typography variant="body-3" color="grey-dark">
               {order.status?.title ?? ORDER_VALUE_MISSING}
             </Typography>
