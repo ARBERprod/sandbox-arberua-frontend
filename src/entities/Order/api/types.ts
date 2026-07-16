@@ -2,8 +2,13 @@ import { ImageType, Price } from '@/shared/types/common';
 import { City } from '@/entities/Location';
 import {
   OrderDeliveryMethod, OrderHistory, OrderPaymentMethod, OrderProductProperty,
-  OrderStatus,
 } from '../model/types';
+
+// The API sends `{id, title}`; `color` is a frontend-only decoration added by orderMapper.
+export interface OrderStatusDto {
+  id: string;
+  title: string;
+}
 
 export interface OrderProductDto {
   id: string;
@@ -14,7 +19,8 @@ export interface OrderProductDto {
   title: string;
   url: string;
   wishlist_count: number;
-  properties: OrderProductProperty[];
+  // Named `options` by the backend (OrderItemResource); the domain model calls them `properties`.
+  options: OrderProductProperty[];
   bonus_deduction: number;
   brand: string;
   category: string;
@@ -43,18 +49,20 @@ export type OrderAddress = {
   flat: string;
 }
 
+// delivery_method / payment_method / status are nullOnDelete FKs on the backend `orders` table:
+// removing a method or a status in admin blanks them on every historical order, so old orders do arrive without them.
 export interface OrderDto {
   id: string;
   city: City;
   cost: Price;
   created_at: string;
-  delivery_method: OrderDeliveryMethod;
+  delivery_method: OrderDeliveryMethod | null;
   do_not_call: boolean;
   products: OrderProductDto[];
   note: string;
   order_number: number;
-  payment_method: OrderPaymentMethod;
-  status: OrderStatus;
+  payment_method: OrderPaymentMethod | null;
+  status: OrderStatusDto | null;
   histories?: OrderHistory[];
   address: OrderAddress | null
   totals: OrderTotalItem[];

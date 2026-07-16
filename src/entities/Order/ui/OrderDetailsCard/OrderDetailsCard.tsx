@@ -9,6 +9,7 @@ import { useTranslation } from 'next-i18next';
 import { OrderProductCard } from '../OrderProductCard';
 import styles from './OrderDetailsCard.module.scss';
 import { Order } from '../../model/types';
+import { ORDER_VALUE_MISSING } from '../../config/constants';
 import { displayPrice } from '@/shared/lib/utils/displayPrice';
 
 interface OrderDetailsCardProps {
@@ -44,19 +45,19 @@ export const OrderDetailsCard = memo(({ order, className }:OrderDetailsCardProps
               {t('checkout-page:checkout.payment')}
               :
               {' '}
-              <Typography variant="body-3" weight={500} as="span">{order.payment_method}</Typography>
+              <Typography variant="body-3" weight={500} as="span">{order.payment_method ?? ORDER_VALUE_MISSING}</Typography>
             </Typography>
             <Typography variant="body-3" weight={500}>
               {t('common:office.status')}
               :
               {' '}
-              <Typography variant="body-3" weight={500} as="span">{order.status.title}</Typography>
+              <Typography variant="body-3" weight={500} as="span">{order.status?.title ?? ORDER_VALUE_MISSING}</Typography>
             </Typography>
             <Typography variant="body-3" weight={500}>
               {t('checkout-page:checkout.delivery')}
               :
               {' '}
-              <Typography variant="body-3" weight={500} as="span">{order.delivery_method}</Typography>
+              <Typography variant="body-3" weight={500} as="span">{order.delivery_method ?? ORDER_VALUE_MISSING}</Typography>
             </Typography>
             {order.address && (
               <Typography variant="body-3" weight={500}>
@@ -104,9 +105,9 @@ export const OrderDetailsCard = memo(({ order, className }:OrderDetailsCardProps
             :
           </Typography>
           <Flex as="span" gap="8" align="center">
-            <div className={styles.statusCircle} style={{ backgroundColor: order.status.color }} />
+            {order.status && <div className={styles.statusCircle} style={{ backgroundColor: order.status.color }} />}
             <Typography variant="body-3" color="grey-dark">
-              {order.status.title}
+              {order.status?.title ?? ORDER_VALUE_MISSING}
             </Typography>
           </Flex>
         </Flex>

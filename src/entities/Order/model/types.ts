@@ -34,12 +34,12 @@ export interface Order {
   order_number: number;
   cost: Price;
   note: string | null;
-  status: OrderStatus;
+  status: OrderStatus | null;
   date: string;
   count: number;
   total_price: Price | false;
-  delivery_method: string;
-  payment_method: string;
+  delivery_method: string | null;
+  payment_method: string | null;
   products: OrderProduct[];
   histories?: OrderHistory[];
   deduct_bonus: number | null;

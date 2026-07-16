@@ -221,10 +221,7 @@ export const CheckoutSuccessView = memo(
                   {t('checkout.success.order_address_delivery')}
                 </Typography>
                 <Typography variant="body-2" weight={600}>
-                  {order.city.title}
-                  ,
-                  {' '}
-                  {order.delivery_method.title}
+                  {[order.city?.title, order.delivery_method?.title].filter(Boolean).join(', ')}
                 </Typography>
               </Flex>
 

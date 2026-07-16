@@ -21,14 +21,16 @@ export const orderMapper = (orderDto: OrderDto): Order => {
   } = orderDto;
   return {
     id,
-    delivery_method: delivery_method.title,
-    payment_method: payment_method.title,
+    delivery_method: delivery_method?.title ?? null,
+    payment_method: payment_method?.title ?? null,
     note,
     count: products.reduce((acc, product) => acc + product.quantity, 0),
-    status: {
-      color: 'red',
-      title: status.title,
-    },
+    status: status
+      ? {
+        color: 'red',
+        title: status.title,
+      }
+      : null,
     total_price: cost,
     cost,
     histories: histories || [],
@@ -41,7 +43,7 @@ export const orderMapper = (orderDto: OrderDto): Order => {
       url: product.url,
       price: product.price,
       quantity: product.quantity,
-      properties: product.properties,
+      properties: product.options ?? [],
       bonus_deduction: product?.bonus_deduction || 0,
     })),
     address,

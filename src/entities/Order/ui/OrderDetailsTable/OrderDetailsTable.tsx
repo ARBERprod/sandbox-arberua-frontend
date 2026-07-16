@@ -5,6 +5,7 @@ import { Button } from '@/shared/ui/Button';
 import { useTranslation } from 'next-i18next';
 import styles from './OrderDetailsTable.module.scss';
 import { Order } from '../../model/types';
+import { ORDER_VALUE_MISSING } from '../../config/constants';
 import { OrderProductCard } from '../OrderProductCard';
 import { displayPrice } from '@/shared/lib/utils/displayPrice';
 import { OrderHistoryModal } from '../OrderHistoryModal';
@@ -30,10 +31,10 @@ export const OrderDetailsTable = memo(({
             <th
               className={cn(styles.th, styles.paddedTd)}
             >
-              <div className={styles.statusCircle} style={{ backgroundColor: order.status.color }} />
+              {order.status && <div className={styles.statusCircle} style={{ backgroundColor: order.status.color }} />}
             </th>
             <th className={styles.th}>
-              <Typography variant="body-3" className={cn(styles.bold, styles.left)}>{order.status.title}</Typography>
+              <Typography variant="body-3" className={cn(styles.bold, styles.left)}>{order.status?.title ?? ORDER_VALUE_MISSING}</Typography>
             </th>
             <th className={styles.th}>
               <Typography variant="body-3">{order.date}</Typography>
@@ -126,7 +127,7 @@ export const OrderDetailsTable = memo(({
                   :
                   {' '}
                 </span>
-                {order.payment_method}
+                {order.payment_method ?? ORDER_VALUE_MISSING}
               </Typography>
             </td>
             <td>
@@ -145,7 +146,7 @@ export const OrderDetailsTable = memo(({
                   :
                   {' '}
                 </span>
-                {order.status.title}
+                {order.status?.title ?? ORDER_VALUE_MISSING}
               </Typography>
             </td>
             <td>
@@ -163,7 +164,7 @@ export const OrderDetailsTable = memo(({
                   :
                   {' '}
                 </span>
-                {order.delivery_method}
+                {order.delivery_method ?? ORDER_VALUE_MISSING}
               </Typography>
             </td>
             <td>
