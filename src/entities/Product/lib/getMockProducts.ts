@@ -17,7 +17,11 @@ export const getMockSku = (): ProductSku => ({
 
 export const getMockSkus = mockArrayFactory(getMockSku);
 
-export const getMockProduct = (options?: { sale?: true, id?: string }): Product => ({
+export const getMockProduct = (options?: {
+  sale?: true,
+  id?: string,
+  collaboration?: Product['collaboration'],
+}): Product => ({
   id: options?.id || faker.datatype.uuid(),
   url: faker.internet.url(),
   price: getMockPrice(),
@@ -33,6 +37,9 @@ export const getMockProduct = (options?: { sale?: true, id?: string }): Product 
   category: faker.commerce.department(),
   brand: faker.company.name(),
   parent_id: faker.datatype.uuid(),
+  // Most products carry no collaboration; faker must not randomise this one, the sticker is
+  // exactly what the card tests assert on.
+  collaboration: options?.collaboration ?? null,
 });
 
 export const getMockSmallProduct = (options?: { sale?: true, id?: string }): SmallProduct => ({
