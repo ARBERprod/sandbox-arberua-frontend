@@ -1,5 +1,8 @@
 import { GalleryImage, ImageType, Price } from '@/shared/types/common';
 import { Shop } from '@/entities/Shop';
+// `import type` on both ends of the Product↔Collaboration link: the barrels reference each other
+// and both carry runtime exports, so a value import would put the cycle into the bundle graph.
+import type { ProductCollaboration } from '@/entities/Collaboration';
 
 export type SizingType = 'man' | 'woman' | 'shoes';
 
@@ -43,6 +46,7 @@ export interface Product {
   brand: string;
   category: string;
   discount?: string;
+  collaboration?: ProductCollaboration | null;
 }
 
 export type ProductColorVariant = {
