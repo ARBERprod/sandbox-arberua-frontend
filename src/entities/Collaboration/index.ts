@@ -6,3 +6,4 @@ export type {
 } from './api/types';
 
 export * from './api/collaborationApi';
+export { collaborationsServerCache } from './api/collaborationsServerCache';

@@ -15,6 +15,8 @@ export type MenuLinkView =
   | 'button';
 
 export interface MenuLink {
+  // Collaboration items share the title of their section, so the list key cannot be the title.
+  id?: string;
   title: string;
   url?: string;
   href?: string;

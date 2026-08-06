@@ -29,6 +29,7 @@ import { Language } from '@/shared/config/lang';
 import { useEffect } from 'react';
 import { $api } from '@/shared/api/api';
 import { sendEsEvent } from '@/shared/lib/analytics/esputnik';
+import { collaborationApi, collaborationsServerCache, getCollaborations } from '@/entities/Collaboration';
 
 const inter = localFont({
   src: [
@@ -125,9 +126,28 @@ function App({
 }
 
 App.getInitialProps = wrapper.getInitialAppProps((store) => async (ctx) => {
-  const { req, res } = ctx.ctx;
+  const { req, res, locale } = ctx.ctx;
   const cookiesService = new CookieService({ req, res });
   store.dispatch(UIActions.setView(cookiesService.get(COOKIE_VIEW_KEY) || CardView.BIG));
+
+  // Server only. getInitialProps runs on every client navigation too, where this block would make
+  // each transition wait for the request and pile up unsubscribed RTK Query entries.
+  if (req) {
+    // Same locale source baseQuery uses for X-localization, so the key matches the payload.
+    const localeKey = locale ?? '';
+    const cached = collaborationsServerCache.get(localeKey);
+
+    if (cached) {
+      // Replaying a hit through upsertQueryData leaves the header hook reading it exactly as a live fetch.
+      await store.dispatch(collaborationApi.util.upsertQueryData('getCollaborations', undefined, cached));
+    } else {
+      // No try/catch: RTK Query returns HTTP failures in the result instead of throwing, and the
+      // failure that would actually hurt every page — a hung API — is covered by the endpoint timeout.
+      const { data } = await store.dispatch(getCollaborations.initiate());
+      if (data) collaborationsServerCache.set(localeKey, data);
+    }
+  }
+
   return {
     pageProps: {
       ...(await NextApp.getInitialProps(ctx)).pageProps,

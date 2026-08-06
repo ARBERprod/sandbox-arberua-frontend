@@ -62,7 +62,7 @@ export const HeaderMenuListItems = memo(({
 
         return (
           <HeaderMenuItem
-            key={item.title}
+            key={item.id ?? item.title}
             href={finalHref}
             onClick={onClick}
             type={type as MenuLinkView}
