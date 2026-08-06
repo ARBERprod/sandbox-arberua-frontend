@@ -34,4 +34,36 @@ describe('stripTags', () => {
   it('Should leave plain text as it is', () => {
     expect(stripTags('ARBER × Partner')).toBe('ARBER × Partner');
   });
+
+  describe('entities', () => {
+    it('Should decode the named entities a WYSIWYG produces', () => {
+      expect(stripTags('<p>ARBER &amp; Partner</p>')).toBe('ARBER & Partner');
+      expect(stripTags('<p>&quot;Колаборація&quot;</p>')).toBe('"Колаборація"');
+      expect(stripTags('<p>&laquo;Партнер&raquo; &mdash; 2026</p>')).toBe('«Партнер» — 2026');
+    });
+
+    // &nbsp; is what a WYSIWYG leaves between words; a meta description wants an ordinary space.
+    it('Should turn a non-breaking space into a plain one', () => {
+      expect(stripTags('<p>ARBER&nbsp;&times;&nbsp;Partner</p>')).toBe('ARBER × Partner');
+    });
+
+    it('Should decode numeric entities in both notations', () => {
+      expect(stripTags('<p>it&#39;s</p>')).toBe("it's");
+      expect(stripTags('<p>it&#x27;s</p>')).toBe("it's");
+    });
+
+    // Decoding runs after the tags are gone, so an escaped tag stays text instead of turning into
+    // markup that the next pass would eat.
+    it('Should keep an escaped tag as text', () => {
+      expect(stripTags('<p>&lt;b&gt;bold&lt;/b&gt;</p>')).toBe('<b>bold</b>');
+    });
+
+    it('Should not decode twice', () => {
+      expect(stripTags('&amp;nbsp;')).toBe('&nbsp;');
+    });
+
+    it('Should leave an unknown or malformed entity alone', () => {
+      expect(stripTags('<p>&unknown; &amp</p>')).toBe('&unknown; &amp');
+    });
+  });
 });

@@ -1,6 +1,8 @@
 import { memo } from 'react';
 import cn from 'classnames';
 import { Typography } from '@/shared/ui/Typography';
+import { AppImage } from '@/shared/ui/AppImage';
+import { toImageHost } from '@/shared/lib/utils/toImageHost';
 import type { CollaborationDetails } from '@/entities/Collaboration';
 import styles from './CollaborationHeader.module.scss';
 
@@ -17,14 +19,18 @@ const FETCH_PRIORITY_HIGH: Record<string, string> = { fetchpriority: 'high' };
 export const CollaborationHeader = memo(({ className, collaboration }: CollaborationHeaderProps) => {
   // All three images are nullable by contract: mobile falls back to the horizontal banner, and
   // <picture> is skipped altogether when neither exists — an <img> without src renders broken.
-  const banner = collaboration.banner_vertical ?? collaboration.banner_horizontal;
+  // The banner keeps <picture> for art direction (a different image per breakpoint, which
+  // next/image cannot express), so the move to the image host AppImage does for its own src is
+  // done here by hand, once per source.
+  const horizontal = collaboration.banner_horizontal && toImageHost(collaboration.banner_horizontal);
+  const banner = collaboration.banner_vertical ? toImageHost(collaboration.banner_vertical) : horizontal;
 
   return (
     <div className={cn(styles.root, className)}>
       {banner && (
         <picture className={styles.banner}>
-          {collaboration.banner_horizontal && (
-            <source media="(min-width: 768px)" srcSet={collaboration.banner_horizontal} />
+          {horizontal && (
+            <source media="(min-width: 768px)" srcSet={horizontal} />
           )}
           <img
             {...FETCH_PRIORITY_HIGH}
@@ -37,10 +43,12 @@ export const CollaborationHeader = memo(({ className, collaboration }: Collabora
       )}
       <div className={styles.heading}>
         {collaboration.logo && (
-          <img
+          <AppImage
             className={styles.logo}
             src={collaboration.logo}
-            alt={collaboration.title}
+            // Decorative: the title it sits next to says the same thing, and a screen reader
+            // would otherwise read the name twice.
+            alt=""
             width={160}
             height={80}
           />

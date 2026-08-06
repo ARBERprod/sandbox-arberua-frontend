@@ -96,6 +96,58 @@ describe('collaborationApi.getCollaborations', () => {
   }, 10000);
 });
 
+describe('collaborationApi.getCollaboration query string', () => {
+  const captureSearch = () => {
+    const captured = { value: '' };
+    server.use(rest.get('*/collaborations/:id', (req, res, ctx) => {
+      captured.value = req.url.search;
+      return res(ctx.json(singleDto('c-1', [])));
+    }));
+    return captured;
+  };
+
+  // An empty filter string used to leave a dangling separator behind — `?&sort=`, and `?&` with
+  // nothing selected at all.
+  it('sends no query at all when nothing is selected', async () => {
+    const search = captureSearch();
+
+    await makeStore().dispatch(getCollaboration.initiate({
+      collaboration_id: 'c-1',
+      filters: '',
+      sort: '',
+    })).unwrap();
+
+    expect(search.value).toBe('');
+  });
+
+  it('opens the query with sort when there are no filters', async () => {
+    const search = captureSearch();
+
+    await makeStore().dispatch(getCollaboration.initiate({
+      collaboration_id: 'c-1',
+      filters: '',
+      sort: 'price_asc',
+      page: 2,
+    })).unwrap();
+
+    expect(search.value).toBe('?sort=price_asc&page=2');
+  });
+
+  // The filter string is assembled by FilterUtils and joins values with commas: it has to reach
+  // the API exactly as it is, commas included.
+  it('passes the filter string through untouched', async () => {
+    const search = captureSearch();
+
+    await makeStore().dispatch(getCollaboration.initiate({
+      collaboration_id: 'c-1',
+      filters: 'color=red,blue&size=m',
+      sort: 'price_asc',
+    })).unwrap();
+
+    expect(search.value).toBe('?color=red,blue&size=m&sort=price_asc');
+  });
+});
+
 describe('collaborationApi.getCollaboration', () => {
   it('keeps the raw envelope so that meta.page stays reachable', async () => {
     const products = [getMockProduct()];

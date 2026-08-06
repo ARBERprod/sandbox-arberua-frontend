@@ -8,6 +8,7 @@ import { getPageFromQuery } from '@/widgets/CatalogPagination';
 import { FilterUtils } from '@/entities/Filter';
 import { getInitSortValue } from '@/features/ProductSort';
 import { stripTags } from '@/shared/lib/utils/stripTags';
+import { isNotFoundError } from '@/shared/types/type-guards';
 
 interface CollaborationCatalogPageProps {
   dynamicMeta: DynamicMeta;
@@ -23,7 +24,11 @@ const CollaborationCatalogPage = ({ dynamicMeta }: CollaborationCatalogPageProps
 export const getServerSideProps = wrapper.getServerSideProps<CollaborationCatalogPageProps>(
   (store) => async (ctx) => {
     const { query, locale } = ctx;
-    const { isError, data } = await store.dispatch(getCollaboration.initiate({
+    const {
+      isError,
+      data,
+      error,
+    } = await store.dispatch(getCollaboration.initiate({
       collaboration_id: query.id as string,
       filters: FilterUtils.getFilterStringFromQueryArray(query.filters as string[]),
       page: getPageFromQuery(query),
@@ -32,7 +37,13 @@ export const getServerSideProps = wrapper.getServerSideProps<CollaborationCatalo
 
     // A disabled or unknown collaboration must answer an honest HTTP 404: the redirect to /404
     // used by catalog and product pages is a 307 followed by a 200, i.e. a soft 404.
-    if (isError || !data) return { notFound: true };
+    if (isNotFoundError(error)) return { notFound: true };
+
+    // Any other failure is a broken backend, so let it be a 500. Serving 404 to a 5xx or a network
+    // blip tells Google the whole section is gone (docs/runbooks/diagnose-product-404.md).
+    if (isError || !data) {
+      throw new Error(`Collaboration ${query.id as string} request failed`, { cause: error });
+    }
 
     await Promise.all(store.dispatch(getRunningQueriesThunk()));
 

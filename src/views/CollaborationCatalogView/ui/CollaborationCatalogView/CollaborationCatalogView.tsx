@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react';
 import cn from 'classnames';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { Container } from '@/shared/ui/Container';
@@ -33,6 +34,7 @@ export const CollaborationCatalogView = memo(({ className }: CollaborationCatalo
     page,
   } = usePaginate();
 
+  const { t } = useTranslation('common');
   const view = useSelector(UISelectors.getGlobalView);
   const { setView } = useUIActions();
 
@@ -61,7 +63,7 @@ export const CollaborationCatalogView = memo(({ className }: CollaborationCatalo
   }, [setView]);
 
   if (isLoading) return <PageLoader />;
-  if (isError || !data) return <ErrorMessage error="Error" />;
+  if (isError || !data) return <ErrorMessage error={t('error')} />;
 
   const {
     collaboration,

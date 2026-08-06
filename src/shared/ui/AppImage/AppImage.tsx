@@ -4,6 +4,7 @@ import {
 import Image, { ImageProps } from 'next/image';
 import { ImageType } from '@/shared/types/common';
 import fallbackImage from '@/shared/assets/images/image-placeholder.jpg';
+import { toImageHost } from '@/shared/lib/utils/toImageHost';
 import cn from 'classnames';
 import styles from './AppImage.module.scss';
 
@@ -44,16 +45,7 @@ export const AppImage = memo(({
     }
   }, [loaded]);
 
-  const convertSrc = (source: string) => {
-    // @ts-ignore
-    if (source.startsWith(process.env.NEXT_PUBLIC_API_URL_BASE)) {
-      // @ts-ignore
-      return source.replace(process.env.NEXT_PUBLIC_API_URL_BASE, process.env.NEXT_PUBLIC_IMG_URL);
-    }
-    return source;
-  };
-
-  const processedSrc = typeof src === 'string' ? convertSrc(src) : src;
+  const processedSrc = typeof src === 'string' ? toImageHost(src) : src;
 
   const getWebpSrc = (url: string) => {
     if (!url) return '';

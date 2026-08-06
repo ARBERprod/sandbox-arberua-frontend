@@ -135,16 +135,19 @@ App.getInitialProps = wrapper.getInitialAppProps((store) => async (ctx) => {
   if (req) {
     // Same locale source baseQuery uses for X-localization, so the key matches the payload.
     const localeKey = locale ?? '';
-    const cached = collaborationsServerCache.get(localeKey);
-
-    if (cached) {
-      // Replaying a hit through upsertQueryData leaves the header hook reading it exactly as a live fetch.
-      await store.dispatch(collaborationApi.util.upsertQueryData('getCollaborations', undefined, cached));
-    } else {
+    // The cache owns the request: a hit skips the API, a miss fires one request that concurrent
+    // renders share, and a failure is remembered briefly so a dead API is not re-dialled per page.
+    const collaborations = await collaborationsServerCache.resolve(localeKey, async () => {
       // No try/catch: RTK Query returns HTTP failures in the result instead of throwing, and the
       // failure that would actually hurt every page — a hung API — is covered by the endpoint timeout.
       const { data } = await store.dispatch(getCollaborations.initiate());
-      if (data) collaborationsServerCache.set(localeKey, data);
+      return data ?? null;
+    });
+
+    if (collaborations) {
+      // Written into this store explicitly because the payload may come from another render's
+      // store; upsertQueryData leaves the header hook reading it exactly as it reads a live fetch.
+      await store.dispatch(collaborationApi.util.upsertQueryData('getCollaborations', undefined, collaborations));
     }
   }
 

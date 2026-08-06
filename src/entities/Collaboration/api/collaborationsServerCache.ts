@@ -11,8 +11,19 @@ import type { CollaborationsData } from './types';
  */
 export const COLLABORATIONS_CACHE_TTL_MS = 60_000;
 
+/**
+ * A miss is remembered too, and this is the whole point of the negative entry: a cache that only
+ * stores successes leaves every single SSR page paying the endpoint timeout again while the API is
+ * down. Kept short so the menu returns on the first render after recovery.
+ *
+ * It doubles as the ceiling on how long an in-flight request stays shared (see `resolve`), which
+ * only works because it is comfortably above the endpoint timeout in collaborationApi.
+ */
+export const COLLABORATIONS_FAILURE_TTL_MS = 5_000;
+
 type CacheEntry = {
-  data: CollaborationsData;
+  /** The request, not its result: concurrent renders join it instead of firing their own. */
+  request: Promise<CollaborationsData | null>;
   expiresAt: number;
 };
 
@@ -20,23 +31,36 @@ type CacheEntry = {
 const entries = new Map<string, CacheEntry>();
 
 export const collaborationsServerCache = {
-  get(locale: string): CollaborationsData | null {
-    const entry = entries.get(locale);
-    if (!entry) return null;
+  /**
+   * Single-flight per locale: returns the stored payload, the request another render already
+   * started, or a fresh one. `load` reports a failure as `null` — the caller never sees it throw.
+   */
+  resolve(
+    locale: string,
+    load: () => Promise<CollaborationsData | null>,
+  ): Promise<CollaborationsData | null> {
+    const live = entries.get(locale);
+    if (live && live.expiresAt > Date.now()) return live.request;
 
-    if (entry.expiresAt <= Date.now()) {
-      entries.delete(locale);
-      return null;
-    }
+    const request = load()
+      .catch(() => null)
+      .then((data) => {
+        const entry = entries.get(locale);
+        // Only ever rewrite our own slot: clear() or a newer request must not be resurrected.
+        if (entry?.request === request) {
+          entry.expiresAt = Date.now() + (data ? COLLABORATIONS_CACHE_TTL_MS : COLLABORATIONS_FAILURE_TTL_MS);
+        }
+        return data;
+      });
 
-    return entry.data;
-  },
-
-  set(locale: string, data: CollaborationsData): void {
+    // The in-flight slot carries the failure TTL until the outcome is known, so a request that
+    // never settles expires instead of holding every later render on a dead promise.
     entries.set(locale, {
-      data,
-      expiresAt: Date.now() + COLLABORATIONS_CACHE_TTL_MS,
+      request,
+      expiresAt: Date.now() + COLLABORATIONS_FAILURE_TTL_MS,
     });
+
+    return request;
   },
 
   clear(): void {

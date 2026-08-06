@@ -70,6 +70,18 @@ export function isBusinessError<TCode extends string = string>(
   );
 }
 
+/**
+ * True only for an HTTP 404 answer. Everything else RTK Query reports — 5xx, `FETCH_ERROR`,
+ * `TIMEOUT_ERROR`, an aborted request — is a broken backend, and serving those as "page not found"
+ * de-indexes live pages (docs/runbooks/diagnose-product-404.md).
+ */
+export function isNotFoundError(error: unknown): boolean {
+  if (error === null || error === undefined) return false;
+  if (typeof error !== 'object') return false;
+
+  return ('status' in error) && error.status === StatusCode.NOT_FOUND;
+}
+
 export const isFunction = (
   arg: unknown,
 ): arg is AnyFunction => typeof arg === 'function';
