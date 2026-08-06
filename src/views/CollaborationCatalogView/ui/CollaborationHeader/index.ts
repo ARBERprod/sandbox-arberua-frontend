@@ -1,0 +1,1 @@
+export { CollaborationHeader } from './CollaborationHeader';
