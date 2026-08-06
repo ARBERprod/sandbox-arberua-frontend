@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  align-items: center;
+
+  // Height matches .sale in Card, but as a minimum: the admin panel caps the string at 18
+  // characters, the layout does not, so the plate grows to a second line instead of the card.
+  min-height: 26px;
+  padding: 4px 8px;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.94px;
+  text-align: left;
+
+  color: var(--black);
+  background: var(--white);
+
+  // Without the outline a white plate disappears on a light product photo.
+  border: 1px solid var(--black);
+
+  overflow-wrap: anywhere;
+}

@@ -30,6 +30,23 @@ export const ProductCardDiscount: Story = {
   ],
 };
 
+export const ProductCardWithCollaboration: Story = {
+  args: {
+    product: {
+      ...getMockProduct({ sale: true }),
+      collaboration: {
+        id: 'c-1',
+        title: 'Kyivstyles',
+        label: 'ARBER × Kyivstyles',
+        url: '/collaboration/c-1',
+      },
+    },
+  },
+  decorators: [
+    (Story) => <div style={{ maxWidth: '400px' }}><Story /></div>,
+  ],
+};
+
 export const ProductCardWithLikes: Story = {
   args: {
     product: getMockProduct(),

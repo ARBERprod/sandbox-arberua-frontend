@@ -6,6 +6,7 @@ import { Product, ProductSku } from '../../model/types';
 import { Flex, FlexCol } from '@/shared/ui/Flex';
 import { ItemPrice } from '@/shared/ui/ItemPrice';
 import { Card, CardImagesCarousel, CardProps } from '@/shared/ui/Card';
+import { LabelCollaboration } from '@/shared/ui/LabelCollaboration';
 import { CardView } from '@/shared/types/common';
 import styles from './ProductCard.module.scss';
 import { getItemPrices, ProductSkus } from '@/entities/Product';
@@ -63,6 +64,9 @@ export const ProductCard = memo(({
         title={product.title}
         href={product.url}
         sale={sale}
+        badges={product.collaboration?.label
+          ? <LabelCollaboration label={product.collaboration.label} />
+          : null}
         className={cn(styles.card, { [styles.hasHover]: false })}
         imageSlot={<CardImagesCarousel pictures={product.pictures.slice(0, 1)} />}
         hoverContent={slots?.cartActions ? (

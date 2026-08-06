@@ -1,0 +1,1 @@
+export { LabelCollaboration } from './LabelCollaboration';
