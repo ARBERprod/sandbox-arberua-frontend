@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Favourites } from '@/shared/ui/Favourites';
-import { LabelDiscount } from '@/shared/ui/LabelDiscount';
 import { Card } from './Card';
 import styles from '@/entities/Product/ui/ProductCard/ProductCard.module.scss';
 import { faker } from '@faker-js/faker';
@@ -22,7 +21,6 @@ const qty = 23;
 export const CardWithFooter: Story = {
   args: {
     title: 'Мужской Look',
-    label: '',
     actions: <div><Favourites quantity={qty} /></div>,
     footer: <div>2 товара</div>,
     imageSlot: <AppImage
@@ -40,7 +38,6 @@ export const CardWithFooter: Story = {
 export const CardWithoutFooter: Story = {
   args: {
     title: 'Мужской Look',
-    label: '',
     actions: <div><Favourites quantity="23" /></div>,
     footer: '',
     imageSlot: <AppImage
@@ -71,20 +68,6 @@ export const CardWithHoverImage: Story = {
             hoverImage={faker.image.imageUrl()}
           />
         )}
-      />
-    </div>
-  ),
-  decorators: [
-    (Story) => <div style={{ maxWidth: '400px' }}><Story /></div>,
-  ],
-};
-
-export const CardWithLabel: Story = {
-  render: () => (
-    <div style={{ width: 400 }}>
-      <Card
-        title="Мужской Look"
-        label={<LabelDiscount discount="100грн" />}
       />
     </div>
   ),

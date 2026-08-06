@@ -45,7 +45,6 @@ export interface Product {
   wishlists_count: number;
   brand: string;
   category: string;
-  discount?: string;
   collaboration?: ProductCollaboration | null;
 }
 

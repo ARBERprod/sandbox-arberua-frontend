@@ -12,7 +12,7 @@ export interface CardProps {
     footerWrap?: string;
   };
   title?: string;
-  label?: ReactNode;
+  badges?: ReactNode;
   actions?: ReactNode;
   footer?: ReactNode;
   view?: CardView;
@@ -27,7 +27,7 @@ export const Card = memo(({
   className,
   classes,
   title = '',
-  label,
+  badges,
   actions,
   footer,
   hoverContent,
@@ -41,18 +41,22 @@ export const Card = memo(({
     data-testid="Card"
     className={cn(styles.root, className)}
   >
-    {!!sale && (
-      <div className={styles.sale}>
-        -
-        {sale}
-        %
+    {(!!sale || badges) && (
+      <div className={cn(styles.badges, styles[view])}>
+        {!!sale && (
+          <span className={styles.sale}>
+            -
+            {sale}
+            %
+          </span>
+        )}
+        {badges}
       </div>
     )}
     <div className={styles.wrap}>
       <Link href={href} className={styles.image}>
         {imageSlot}
       </Link>
-      {label && <div className={styles.label}>{label}</div>}
       {actions && <div className={cn(styles.actions, styles[view])}>{actions}</div>}
     </div>
     <footer className={cn(styles.footerWrap, classes?.footerWrap)}>

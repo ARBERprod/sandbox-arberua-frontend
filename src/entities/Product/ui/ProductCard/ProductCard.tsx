@@ -7,7 +7,6 @@ import { Flex, FlexCol } from '@/shared/ui/Flex';
 import { ItemPrice } from '@/shared/ui/ItemPrice';
 import { Card, CardImagesCarousel, CardProps } from '@/shared/ui/Card';
 import { CardView } from '@/shared/types/common';
-import { LabelDiscount } from '@/shared/ui/LabelDiscount';
 import styles from './ProductCard.module.scss';
 import { getItemPrices, ProductSkus } from '@/entities/Product';
 import { QuickViewModal } from '@/entities/Product/ui/QuickViewModal';
@@ -85,10 +84,6 @@ export const ProductCard = memo(({
           </div>
         ) : null}
         actions={slots?.productActions?.(product.id)}
-        label={product.discount
-          && (
-            <LabelDiscount discount={product.discount} />
-          )}
         footer={(
           <Flex fullWidth>
             <FlexCol gap="4" align="center">

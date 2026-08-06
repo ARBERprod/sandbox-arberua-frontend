@@ -8,6 +8,27 @@
     @include aspect-ratio-wrap(448px, 573px);
   }
 
+  .badges {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    max-width: 70%;
+
+    // .actions (wishlist and friends) sit lower in the stacking order — without this a wide
+    // badge swallows clicks on them. Badges are non-clickable by decision, nothing is lost.
+    pointer-events: none;
+
+    &.small {
+      max-width: 60%;
+    }
+  }
+
   .sale {
     font-size: 14px;
     font-weight: 400;
@@ -22,19 +43,6 @@
     justify-content: center;
 
     background: #E63147;
-
-    position: absolute;
-    top: 8px;
-    left: 0;
-
-    z-index: 2;
-  }
-
-  .label {
-    position: absolute;
-    left: 0;
-    top: 8px;
-    z-index: 1;
   }
 
   .actions {

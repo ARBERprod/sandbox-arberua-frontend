@@ -20,7 +20,6 @@ export const getMockSkus = mockArrayFactory(getMockSku);
 export const getMockProduct = (options?: { sale?: true, id?: string }): Product => ({
   id: options?.id || faker.datatype.uuid(),
   url: faker.internet.url(),
-  discount: options?.sale ? `${faker.datatype.number(100)}%` : undefined,
   price: getMockPrice(),
   title: faker.commerce.productName(),
   old_price: options?.sale ? getMockPrice() : false,
