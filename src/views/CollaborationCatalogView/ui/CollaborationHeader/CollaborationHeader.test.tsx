@@ -68,6 +68,14 @@ describe('CollaborationHeader images', () => {
     expect(decodeURIComponent(logo?.getAttribute('src') ?? '')).toContain(`${imageHost}/storage/logo.png`);
   });
 
+  // Partners hand over vector logos, and those reach the browser only untouched: the image host
+  // has none of them and the next/image optimizer rejects them — see isSvgUrl.
+  it('serves an SVG logo straight from the API host', () => {
+    const { logo } = renderHeader({ logo: `${apiHost}/storage/logo.svg` });
+
+    expect(logo).toHaveAttribute('src', `${apiHost}/storage/logo.svg`);
+  });
+
   // The title right next to it carries the same text; an alt would make a screen reader say it twice.
   it('leaves the logo out of the accessibility tree', () => {
     const { logo } = renderHeader({ logo: `${apiHost}/storage/logo.png` });

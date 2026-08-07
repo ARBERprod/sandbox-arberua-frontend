@@ -5,6 +5,7 @@ import Image, { ImageProps } from 'next/image';
 import { ImageType } from '@/shared/types/common';
 import fallbackImage from '@/shared/assets/images/image-placeholder.jpg';
 import { toImageHost } from '@/shared/lib/utils/toImageHost';
+import { isSvgUrl } from '@/shared/lib/utils/isSvgUrl';
 import cn from 'classnames';
 import styles from './AppImage.module.scss';
 
@@ -79,6 +80,9 @@ export const AppImage = memo(({
     return processedSrc;
   })();
 
+  // Vectors skip the optimizer — see isSvgUrl.
+  const unoptimized = typeof srcToUse === 'string' && isSvgUrl(srcToUse);
+
   if (lazy) {
     return (
       <div className={cn(styles.root, { [styles.loaded]: loaded }, className)}>
@@ -87,6 +91,7 @@ export const AppImage = memo(({
           alt={alt}
           width={widthRender}
           height={heightRender}
+          unoptimized={unoptimized}
           className={cn(styles.image, className)}
           onError={(event) => {
             setError(true);
@@ -107,6 +112,7 @@ export const AppImage = memo(({
       alt={alt}
       width={widthRender}
       height={heightRender}
+      unoptimized={unoptimized}
       className={className}
       onError={(event) => {
         setError(true);

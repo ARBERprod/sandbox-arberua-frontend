@@ -15,6 +15,12 @@ describe('toImageHost', () => {
     expect(toImageHost(`${apiHost}/storage/logo.png?v=2`)).toBe(`${imgHost}/storage/logo.png?v=2`);
   });
 
+  // The image host is a raster resizer and answers 404 for a vector — see isSvgUrl.
+  it('Should leave a vector on the API host', () => {
+    const logo = `${apiHost}/storage/collaborations/logo.svg`;
+    expect(toImageHost(logo)).toBe(logo);
+  });
+
   it('Should leave a foreign host alone', () => {
     expect(toImageHost('https://cdn.example.com/banner.jpg')).toBe('https://cdn.example.com/banner.jpg');
   });
