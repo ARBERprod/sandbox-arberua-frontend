@@ -31,5 +31,9 @@
 }
 
 .header {
-  margin-bottom: 20px;
+  margin-bottom: 32px;
+
+  @include breakpoint(desktop) {
+    margin-bottom: 48px;
+  }
 }

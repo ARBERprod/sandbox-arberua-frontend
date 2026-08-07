@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import cn from 'classnames';
 import { Typography } from '@/shared/ui/Typography';
 import { AppImage } from '@/shared/ui/AppImage';
 import { toImageHost } from '@/shared/lib/utils/toImageHost';
@@ -26,7 +25,7 @@ export const CollaborationHeader = memo(({ className, collaboration }: Collabora
   const banner = collaboration.banner_vertical ? toImageHost(collaboration.banner_vertical) : horizontal;
 
   return (
-    <div className={cn(styles.root, className)}>
+    <div className={className}>
       {banner && (
         <picture className={styles.banner}>
           {horizontal && (
@@ -49,8 +48,10 @@ export const CollaborationHeader = memo(({ className, collaboration }: Collabora
             // Decorative: the title it sits next to says the same thing, and a screen reader
             // would otherwise read the name twice.
             alt=""
-            width={160}
-            height={80}
+            // The box the stylesheet clamps the logo into; the aspect ratio of the file itself is
+            // unknown here, so these only reserve the space until it loads.
+            width={240}
+            height={72}
           />
         )}
         <Typography variant="title-2" centered className={styles.title}>

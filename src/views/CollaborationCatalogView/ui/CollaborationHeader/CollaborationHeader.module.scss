@@ -1,12 +1,10 @@
 @import '@/styles/mixins';
 
-.root {
-  margin-bottom: 20px;
-}
-
+// The gap to the catalog below belongs to the page, not to the header — the view owns it through
+// its own class, and a second margin-bottom here would fight it at equal specificity.
 .banner {
   display: block;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 
   img {
     width: 100%;
@@ -14,7 +12,7 @@
   }
 
   @include breakpoint(tablet) {
-    margin-bottom: 24px;
+    margin-bottom: 40px;
   }
 }
 
@@ -22,21 +20,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
+// Height is fixed and width follows the logo: partners hand over anything from a wide wordmark to
+// a square emblem, and only a common height makes them look like the same element of the layout.
+// `contain` covers the wide ones, where max-width clamps the width and would otherwise squash them.
 .logo {
-  max-width: 160px;
-  height: auto;
+  width: auto;
+  height: 56px;
+  max-width: 240px;
   object-fit: contain;
+
+  @include breakpoint(tablet) {
+    height: 72px;
+  }
 }
 
 .title {
   margin: 0;
 }
 
+// Admin-written prose, so its length is unknown; a measure cap keeps a long one readable instead
+// of stretching it across the full catalog width.
 .description {
-  margin-top: 16px;
+  max-width: 720px;
+  margin: 16px auto 0;
   text-align: center;
   color: var(--grey-dark);
 
