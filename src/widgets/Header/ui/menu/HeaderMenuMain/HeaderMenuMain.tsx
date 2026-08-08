@@ -23,7 +23,9 @@ export const HeaderMenuMain = ({ className, onClick }:HeaderMenuMainProps) => {
   const items = useMemo(() => {
     const collaborationItems: MenuLink[] = (data?.collaborations ?? []).map((collaboration) => ({
       id: collaboration.id,
-      title: collaboration.label,
+      // The sticker doubles as the menu caption, but it is optional in the admin panel — an empty
+      // one would leave the item unlabelled, so the collaboration name stands in.
+      title: collaboration.label || collaboration.title,
       // Straight from the API, locale prefix included: next/link does not add a second one, and a
       // change of the URL scheme must stay a backend-only edit.
       url: collaboration.url,

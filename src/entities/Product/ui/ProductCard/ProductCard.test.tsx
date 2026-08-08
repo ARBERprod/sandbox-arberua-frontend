@@ -79,6 +79,18 @@ describe('ProductCard collaboration sticker', () => {
     expect(stack).toBeNull();
   });
 
+  // What the API actually ships for a collaboration whose sticker was left empty in the admin.
+  it('renders no sticker for a collaboration with a null label', () => {
+    const { stack } = renderCard(makeProduct({
+      collaboration: {
+        ...collaboration,
+        label: null,
+      },
+    }));
+
+    expect(stack).toBeNull();
+  });
+
   it('keeps the discount alone in its old place when there is no collaboration', () => {
     const { stack } = renderCard(makeProduct({
       old_price: oldPrice,

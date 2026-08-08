@@ -7,8 +7,9 @@
 export interface ProductCollaboration {
   id: string;
   title: string;
-  // Ready-to-render string from the admin panel (≤18 chars), not assembled on the client.
-  label: string;
+  // Ready-to-render string from the admin panel (≤25 chars), not assembled on the client.
+  // Optional there: `null` means this collaboration shows no sticker at all.
+  label: string | null;
   url: string;
 }
 
@@ -16,7 +17,7 @@ export interface ProductCollaboration {
 export interface Collaboration {
   id: string;
   title: string;
-  label: string;
+  label: string | null;
   url: string;
   logo: string | null;
 }
