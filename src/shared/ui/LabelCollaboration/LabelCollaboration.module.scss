@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
 
-  // Height matches .sale in Card, but as a minimum: the admin panel caps the string at 18
+  // Height matches .sale in Card, but as a minimum: the admin panel caps the string at 25
   // characters, the layout does not, so the plate grows to a second line instead of the card.
   min-height: 26px;
   padding: 4px 8px;

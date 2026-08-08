@@ -22,7 +22,7 @@ export const LabelCollaborationDefault: Story = {
 };
 
 // The tightest corner in the app: CardView.SMALL caps the badge stack at 60% of the card,
-// so the longest string the admin panel allows (18 chars) has to wrap here, not stretch the card.
+// so the longest string the admin panel allows (25 chars) has to wrap here, not stretch the card.
 export const LabelCollaborationLongOnSmallCard: Story = {
   render: () => (
     <div style={{ width: 180 }}>
@@ -30,7 +30,7 @@ export const LabelCollaborationLongOnSmallCard: Story = {
         view={CardView.SMALL}
         title="Сорочка"
         sale={30}
-        badges={<LabelCollaboration label="ARBER × Kyivstyles" />}
+        badges={<LabelCollaboration label="ARBER × Kyivstyles Studio" />}
         imageSlot={(
           <AppImage
             src={faker.image.imageUrl()}
