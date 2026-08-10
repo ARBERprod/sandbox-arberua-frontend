@@ -1,0 +1,46 @@
+name: CI
+
+# КОГДА запускать
+on:
+  pull_request:
+    branches: [main]        # любой PR, нацеленный в main
+  push:
+    branches: [main, test]  # и прямые пуши в main/test
+  workflow_dispatch:        # + кнопка "Run" вручную во вкладке Actions
+
+jobs:
+  ci:
+    name: Typecheck, build, lint & test
+    runs-on: ubuntu-latest        # чистая Ubuntu-виртуалка от GitHub
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4  # выкачать код репо на раннер
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18         # как в ваших деплой-скриптах
+          cache: npm               # кэш зависимостей между прогонами
+
+      - name: Install dependencies
+        run: npm ci                # строгая установка по package-lock
+
+      - name: Provide .env for build
+        run: if [ -f .env.example ]; then cp .env.example .env; fi
+
+      # --- ЖЁСТКИЕ проверки: красное => job падает => гейт закрыт ---
+      - name: Typecheck
+        run: npm run lint:types    # tsc --noEmit
+
+      - name: Build
+        run: npm run build         # next build
+
+      # --- МЯГКИЕ проверки: показывают проблемы, но пока не блокируют ---
+      - name: Lint
+        run: npm run lint:ts
+        continue-on-error: true
+
+      - name: Unit tests
+        run: npx jest --ci --passWithNoTests
+        continue-on-error: true
+
