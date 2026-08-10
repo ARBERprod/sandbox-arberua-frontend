@@ -2,7 +2,14 @@ name: CI
 
 on:
   pull_request:
- https://api.example.com
+    branches: [main]
+  push:
+    branches: [main, test]
+  workflow_dispatch:
+
+env:
+  NEXT_PUBLIC_IMG_URL: https://img.example.com
+  NEXT_PUBLIC_API_URL: https://api.example.com
   NEXT_PUBLIC_API_URL_BASE: https://api.example.com
   NEXT_PUBLIC_API_URL_V2: https://api.example.com/v2
 
@@ -19,7 +26,12 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-setup-node@v4
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
@@ -34,7 +46,20 @@ setup-node@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-int:types
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint:types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint:types
 
   tests:
     name: Unit tests (non-blocking)
