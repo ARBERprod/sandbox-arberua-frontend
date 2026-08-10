@@ -7,9 +7,17 @@ on:
     branches: [main, test]
   workflow_dispatch:
 
+env:
+  # NEXT_PUBLIC_* инлайнятся при сборке и НЕ секретны.
+  # Для CI хватает валидных по синтаксису URL; реальные значения — в секретах при деплое.
+  NEXT_PUBLIC_IMG_URL: https://img.example.com
+  NEXT_PUBLIC_API_URL: https://api.example.com
+  NEXT_PUBLIC_API_URL_BASE: https://api.example.com
+  NEXT_PUBLIC_API_URL_V2: https://api.example.com/v2
+
 jobs:
   ci:
-    name: CI (baseline — пока ничего не блокирует)
+    name: CI (baseline v2)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,34 +25,95 @@ jobs:
         with:
           node-version: 18
           cache: npm
+      - name: InstallFor more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+  2026-08-10T11:25:07.8675534Z ##[group]Run ac
+  2026-08-10T11:25:07.8676313Z with:
+  2026-08-10T11:25:07.8676812Z   repos
+  ──── (760 lines hidden) ─────────────────────────────────────────────────────────────────────────────────────────────
+  eb81123a1be3f584af1511eed5223e7654ee4f0dd148
+  2026-08-10T11:28:29.5379833Z Node 20 is beins running with Node 24 by default. If youre\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+  2026-08-10T11:28:29.6709063Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+  2026-08-10T11:28:29.6737641Z http.https://github.com/.extraheader
+  2026-08-10T11:28:29.6749598Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+  2026-08-10T11:28:29.6786427Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local
+  --name-only --get-regexp 'http\.https\:\/\/g git config --local --unset-all'http.https://github.com/.extraheader' || :"
+  2026-08-10T11:28:29.7061348Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+  2026-08-10T11:28:29.7102212Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin
+  --name-only --get-regexp remote.origin.url
 
+Огромный лог — но картина как раз проясняется. Давай сведу весь базлайн в таблицу, потому что почти вся краснота сводится к ОДНОЙ причине.
+
+Табло базлайна
+
+┌─────────────────┬───────────────────┬──────────────────────────┐
+│    Проверка     │       Итог        │                        Причина                        │
+├─────────────────┼───────────────────┼───────────────────────────────────────────────────────┤
+│ npm ci          │ ✅                │ зависимости ставятся                                  │
+├─────────────────┼───────────────────┼──────────────────────────┤
+──────────┴───────────────────────────────────────────────────────┘
+
+Приятный сюрприз: lint фактически зелёный (0 ошибок, только предупреждения). А главный блокер — один.
+
+Корень: images.domains = [null, null]
+
+Смотри next.config.js:
+const imgHost = getHostFromUrl(process.env.NEXT_PUBLIC_IMG_URL);      // → null
+const apiHost = getHostFromUrl(process.env.NEXT_PUBLIC_API_URL_BASE); // → null
+...
+images: { domains: [imgHost, apiHost] }   // [null, null] → Next ругается и падает
+getHostFromUrl возвращает null, если URL невалидный. Мы в CI скопировали .env.example, где:
+- NEXT_PUBLIC_API_URL_BASE=tobemodified — эт
+- NEXT_PUBLIC_IMG_URL — вообще отсутствует в .env.example → undefined → null.
+
+Итог: конфиг Next невалиден → build падает сгрузит тот же конфиг → тоже падает. То естьэто не код, а конфигурация окружения.
+
+Два ценных побочных вывода (это работа DevOps — находить такое):
+1. .env.example неполный — в нём нет NEXT_PUBLIC_IMG_URL, хотя сборка его требует. Новый разработчик не соберёт проект «из коробки». → в список правок боевого репо.
+2. NEXT_PUBLIC_* — по комментарию в самом .env.example — инлайнятся в бандл и не являются секретами. Значит для
+CI-проверки сборки достаточно синтаксически ьные значения не нужны.
+
+Фикс: дать CI валидные dummy-URL
+
+Задаём переменные прямо в workflow (на уровне job — видят все шаги). Убираем костыль с cp .env.example .env. Замени ci.yml на это:
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, test]
+  workflow_dispatch:
+
+env:
+  # NEXT_PUBLIC_* инлайнятся при сборке и НЕ секретны.
+  # Для CI хватает валидных по синтаксису URетах при деплое.
+  NEXT_PUBLIC_IMG_URL: https://img.example.com
+  NEXT_PUBLIC_API_URL: https://api.example.com
+  NEXT_PUBLIC_API_URL_BASE: https://api.exam
+  NEXT_PUBLIC_API_URL_V2: https://api.example.com/v2
+
+jobs:
+  ci:
+    name: CI (baseline v2)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
       - name: Install
-        run: npm ci        # единственный жёсткий шаг: без зависимостей смысла нет
-
-      - name: Build (генерит next-env.d.ts и собирает прод-бандл)
+        run: npm ci
+      - name: Build (собирает бандл и генерит next-env.d.ts)
         continue-on-error: true
-        run: |
-          cp .env.example .env 2>/dev/null || true
-          npm run build
-
-
-      - name: Install
-        run: npm ci        # единственный жёсткий шаг: без зависимостей смысла нет
-
-      - name: Build (генерит next-env.d.ts и собирает прод-бандл)
-        continue-on-error: true
-        run: |
-          cp .env.example .env 2>/dev/null || true
-          npm run build
-
-      - name: Typecheck (tsc --noEmit)
+        run: npm run build
+      - name: Typecheck (tsc --noEmit) — после build, чтобы появился next-env.d.ts
         continue-on-error: true
         run: npm run lint:types
-
       - name: Lint
         continue-on-error: true
         run: npm run lint:ts
-
       - name: Unit tests
         continue-on-error: true
         run: npx jest --ci --passWithNoTests
