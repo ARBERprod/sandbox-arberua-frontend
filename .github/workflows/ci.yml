@@ -14,8 +14,8 @@ env:
   NEXT_PUBLIC_API_URL_V2: https://api.example.com/v2
 
 jobs:
-  ci:
-    name: CI (baseline v2)
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,17 +23,88 @@ jobs:
         with:
           node-version: 18
           cache: npm
-      - name: Install
-        run: npm ci
-      - name: Build (собирает бандл и генерит next-env.d.ts)
-        continue-on-error: true
-        run: npm run build
-      - name: Typecheck (tsc --noEmit) — после build, чтобы появился next-env.d.ts
-        continue-on-error: true
-        run: npm run lint:types
-      - name: Lint
-        continue-on-error: true
-        run: npm run lint:ts
-      - name: Unit tests
-        continue-on-error: true
-        run: npx jest --ci --passWithNoTests
+      - run: npm ci
+      - run: npm run build
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - run: npm run lint:ts
+├───────────┼────────────────────────────────────────────────────────────────────────┤
+│ Typecheck │ ❌ красный, но чистый         │ «ассетный» шум (~190) исчез! Осталось 13 настоящих ошибок — все в   │
+│           │                               │ тест-файлах                                                         │
+├───────────┼───────────────────────────────┼─────────────────────────────────────────────────────────────────────┤
+│ Unit      │ ❌ красный, но почти весь      (1 упавший suite)                       │
+
+Ключевой инсайт (подтвердилась теория)
+
+Build-first убрал весь ассетный шум в tsc: next build сгенерил next-env.d.ts, и сотни TS2307 про .svg/.png испарились. Осталось ровно то, что реально сломано — и это 13 ошибок типов в тестах (useAddToCart, BuyInOneClick, TimerBlocks) + 3 падающих теста. Мелкий, конкретный, чинибельный бэклог, а не «тысяча проблем».
+
+Решение по гейту
+
+- Жёсткие (обязательные) гейты: Build + Lint — детерминированно зелёные.
+- Мягкие (не блокируют, в бэклог на чистку):sts (3 из 740).
+
+Проблема текущей структуры и как чинить
+
+Сейчас всё в одном job на continue-on-error → на PR одна общая зелёная галка, которая врёт (прячет реальные падения). Чтобы гейт был честным и выборочным (обязателен build+lint, а tsc/tests — видимы, но не блокируют), правильно
+разложить на отдельные jobs: каждый станет остным ✓/✗. Никакого continue-on-error —вместо этого в Уроке 4 мы просто пометим обязательными только build и lint.
+
+Замени ci.yml на это (чистый ASCII, без коммь при вставке; в редакторе Ctrl+A → Delete →вставь → Ctrl+S):
+
+name: CI
+
+on:
+  pull_request:
+ https://api.example.com
+  NEXT_PUBLIC_API_URL_BASE: https://api.example.com
+  NEXT_PUBLIC_API_URL_V2: https://api.example.com/v2
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - run: npm run lint:ts
+
+  typecheck:
+    name: Typecheck (non-blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+int:types
+
+  tests:
+    name: Unit tests (non-blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - run: npx jest --ci
