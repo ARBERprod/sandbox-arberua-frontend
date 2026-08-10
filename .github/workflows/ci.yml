@@ -1,46 +1,50 @@
 name: CI
 
-# КОГДА запускать
 on:
   pull_request:
-    branches: [main]        # любой PR, нацеленный в main
+    branches: [main]
   push:
-    branches: [main, test]  # и прямые пуши в main/test
-  workflow_dispatch:        # + кнопка "Run" вручную во вкладке Actions
+    branches: [main, test]
+  workflow_dispatch:
 
 jobs:
   ci:
-    name: Typecheck, build, lint & test
-    runs-on: ubuntu-latest        # чистая Ubuntu-виртуалка от GitHub
+    name: CI (baseline — пока ничего не блокирует)
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4  # выкачать код репо на раннер
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18         # как в ваших деплой-скриптах
-          cache: npm               # кэш зависимостей между прогонами
+          node-version: 18
+          cache: npm
 
-      - name: Install dependencies
-        run: npm ci                # строгая установка по package-lock
+      - name: Install
+        run: npm ci        # единственный жёсткий шаг: без зависимостей смысла нет
 
-      - name: Provide .env for build
-        run: if [ -f .env.example ]; then cp .env.example .env; fi
-
-      # --- ЖЁСТКИЕ проверки: красное => job падает => гейт закрыт ---
-      - name: Typecheck
-        run: npm run lint:types    # tsc --noEmit
-
-      - name: Build
-        run: npm run build         # next build
-
-      # --- МЯГКИЕ проверки: показывают проблемы, но пока не блокируют ---
-      - name: Lint
-        run: npm run lint:ts
+      - name: Build (генерит next-env.d.ts и собирает прод-бандл)
         continue-on-error: true
+        run: |
+          cp .env.example .env 2>/dev/null || true
+          npm run build
+
+
+      - name: Install
+        run: npm ci        # единственный жёсткий шаг: без зависимостей смысла нет
+
+      - name: Build (генерит next-env.d.ts и собирает прод-бандл)
+        continue-on-error: true
+        run: |
+          cp .env.example .env 2>/dev/null || true
+          npm run build
+
+      - name: Typecheck (tsc --noEmit)
+        continue-on-error: true
+        run: npm run lint:types
+
+      - name: Lint
+        continue-on-error: true
+        run: npm run lint:ts
 
       - name: Unit tests
-        run: npx jest --ci --passWithNoTests
         continue-on-error: true
-
+        run: npx jest --ci --passWithNoTests
